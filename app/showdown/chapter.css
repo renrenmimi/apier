@@ -1,0 +1,694 @@
+/* 终章专属样式(前缀 sd-)。通用样式一律来自 globals.css,这里只放本章特有的。 */
+
+/* — 阵营色:蓝方 REST / 粉方 GraphQL(终章主题色是金,双方用固定色) — */
+[data-ch="showdown"] {
+  --sd-blue: oklch(74% 0.12 196);
+  --sd-blue-soft: oklch(74% 0.12 196 / 0.12);
+  --sd-blue-border: oklch(74% 0.12 196 / 0.38);
+  --sd-pink: oklch(75% 0.14 330);
+  --sd-pink-soft: oklch(75% 0.14 330 / 0.12);
+  --sd-pink-border: oklch(75% 0.14 330 / 0.38);
+}
+[data-theme="light"] [data-ch="showdown"] {
+  --sd-blue: oklch(48% 0.12 196);
+  --sd-blue-soft: oklch(48% 0.12 196 / 0.1);
+  --sd-blue-border: oklch(48% 0.12 196 / 0.35);
+  --sd-pink: oklch(51% 0.15 330);
+  --sd-pink-soft: oklch(51% 0.15 330 / 0.1);
+  --sd-pink-border: oklch(51% 0.15 330 / 0.35);
+}
+
+/* ================= hero 裁判席 ================= */
+
+.sd-arena {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  max-width: 620px;
+  margin: 26px 0 10px;
+}
+
+.sd-corner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+}
+
+.sd-corner-rest {
+  border-color: var(--sd-blue-border);
+  animation: sd-glow-blue 5s ease-in-out infinite;
+}
+.sd-corner-gql {
+  border-color: var(--sd-pink-border);
+  animation: sd-glow-pink 5s ease-in-out infinite;
+  text-align: right;
+  align-items: flex-end;
+}
+
+@keyframes sd-glow-blue {
+  0%, 45%, 100% { box-shadow: none; }
+  18% { box-shadow: 0 0 26px var(--sd-blue-soft), 0 0 0 1px var(--sd-blue-border); }
+}
+@keyframes sd-glow-pink {
+  0%, 55%, 100% { box-shadow: none; }
+  72% { box-shadow: 0 0 26px var(--sd-pink-soft), 0 0 0 1px var(--sd-pink-border); }
+}
+
+.sd-corner-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.sd-corner-rest .sd-corner-tag { color: var(--sd-blue); }
+.sd-corner-gql .sd-corner-tag { color: var(--sd-pink); }
+
+.sd-corner-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.2;
+}
+.sd-corner-rest .sd-corner-name { color: var(--sd-blue); }
+.sd-corner-gql .sd-corner-name { color: var(--sd-pink); }
+
+.sd-corner-desc {
+  font-size: 11.5px;
+  color: var(--text-3);
+}
+
+.sd-bench {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 104px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px dashed var(--acc-border);
+  background: var(--acc-soft);
+}
+.sd-bench-ico { font-size: 24px; line-height: 1.3; }
+.sd-bench-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--acc-ink);
+}
+.sd-bench-you {
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--text);
+}
+
+@media (max-width: 560px) {
+  .sd-arena { flex-direction: column; }
+  .sd-corner-gql { text-align: left; align-items: flex-start; }
+  .sd-bench { flex-direction: row; gap: 10px; }
+}
+
+/* ================= §01 对决表 ================= */
+
+.sd-vs {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  overflow: hidden;
+  margin: 16px 0;
+}
+
+.sd-vs-head {
+  display: grid;
+  grid-template-columns: 118px 1fr 1fr;
+  gap: 12px;
+  padding: 12px 18px;
+  background: var(--panel-2);
+  border-bottom: 1px solid var(--border-strong);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.sd-head-rest { color: var(--sd-blue); }
+.sd-head-gql { color: var(--sd-pink); }
+
+.sd-vs-row + .sd-vs-row .sd-vs-line {
+  border-top: 1px solid var(--border);
+}
+
+.sd-vs-line {
+  display: grid;
+  grid-template-columns: 118px 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  padding: 13px 18px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.sd-vs-line:hover { background: var(--acc-soft); }
+.sd-vs-row.open .sd-vs-line { background: var(--panel-2); }
+
+.sd-vs-dim {
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--text);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.sd-vs-caret {
+  font-size: 9px;
+  color: var(--text-3);
+  transition: transform 0.2s;
+}
+.sd-vs-row.open .sd-vs-caret { transform: rotate(180deg); }
+
+.sd-vs-side {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 1px 6px;
+  border-radius: 5px;
+  margin-right: 7px;
+  vertical-align: 1.5px;
+}
+.sd-vs-side[data-side="rest"] {
+  color: var(--sd-blue);
+  background: var(--sd-blue-soft);
+}
+.sd-vs-side[data-side="gql"] {
+  color: var(--sd-pink);
+  background: var(--sd-pink-soft);
+}
+
+.sd-vs-detail {
+  padding: 2px 18px 16px;
+  font-size: 13px;
+  color: var(--text-2);
+  background: var(--panel-2);
+}
+.sd-vs-detail p {
+  margin: 8px 0 0;
+  line-height: 1.85;
+  max-width: 76ch;
+}
+
+.sd-lean {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+.sd-lean[data-lean="rest"] {
+  color: var(--sd-blue);
+  background: var(--sd-blue-soft);
+  border: 1px solid var(--sd-blue-border);
+}
+.sd-lean[data-lean="gql"] {
+  color: var(--sd-pink);
+  background: var(--sd-pink-soft);
+  border: 1px solid var(--sd-pink-border);
+}
+.sd-lean[data-lean="tie"] {
+  color: var(--text-2);
+  background: var(--panel-2);
+  border: 1px solid var(--border-strong);
+}
+
+.sd-vs-score {
+  padding: 12px 18px;
+  border-top: 1px dashed var(--border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+@media (max-width: 760px) {
+  .sd-vs-head { display: none; }
+  .sd-vs-line {
+    grid-template-columns: 1fr;
+    gap: 7px;
+    padding: 13px 14px;
+  }
+  .sd-vs-detail { padding: 2px 14px 14px; }
+}
+
+/* ================= §02 决策室 ================= */
+
+.sd-dr {
+  border-radius: 20px;
+  border: 1px solid var(--border-strong);
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      oklch(var(--acc-l) var(--acc-c) var(--hue) / 0.06),
+      transparent 70%
+    ),
+    var(--panel);
+  padding: 22px;
+  margin: 20px 0;
+}
+
+.sd-dr-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 18px;
+}
+.sd-dr-head-ico { font-size: 16px; }
+
+.sd-dr-q { margin-bottom: 16px; }
+
+.sd-dr-qt {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 9px;
+}
+.sd-dr-qn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--acc-ink);
+}
+
+.sd-dr-opts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sd-dr-opt {
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all 0.18s;
+  text-align: left;
+}
+.sd-dr-opt:hover {
+  border-color: var(--acc-border);
+  color: var(--text);
+}
+.sd-dr-opt.on {
+  border-color: var(--acc);
+  background: var(--acc-soft);
+  color: var(--acc-ink);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px var(--acc-border);
+}
+
+.sd-dr-pending {
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+.sd-dr-result {
+  margin-top: 6px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sd-dr-bars {
+  display: grid;
+  gap: 8px;
+}
+.sd-dr-bar {
+  display: grid;
+  grid-template-columns: 74px 1fr 30px;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-2);
+}
+.sd-dr-bar-name { font-weight: 700; color: var(--text); }
+.sd-dr-bar-val { text-align: right; color: var(--text-3); }
+.sd-dr-track {
+  display: block;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.sd-dr-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.5s var(--ease-spring);
+}
+.sd-dr-fill[data-c="rest"] { background: var(--sd-blue); }
+.sd-dr-fill[data-c="graphql"] { background: var(--sd-pink); }
+.sd-dr-fill[data-c="trpc"] { background: var(--acc); }
+.sd-dr-fill[data-c="grpc"] { background: var(--ok); }
+
+.sd-dr-verdict {
+  border-radius: 16px;
+  border: 1px solid var(--acc-border);
+  background: var(--acc-soft);
+  padding: 16px 18px;
+}
+.sd-dr-verdict h4 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: var(--text);
+}
+.sd-dr-verdict > p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.85;
+  color: var(--text-2);
+}
+
+.sd-dr-reasons {
+  margin: 10px 0 0;
+  padding: 0 0 0 18px;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--text-2);
+}
+.sd-dr-reasons li { margin: 3px 0; }
+.sd-dr-reasons li::marker { color: var(--acc-ink); }
+
+.sd-dr-counter {
+  margin-top: 12px;
+  border-left: 3px solid var(--risk);
+  background: var(--risk-bg);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-2);
+}
+
+.sd-dr-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* ================= §03 采用率横条 ================= */
+
+.sd-poll {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  padding: 18px 20px;
+}
+
+.sd-poll-row {
+  display: grid;
+  grid-template-columns: 104px 1fr 48px;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+.sd-poll-name { font-weight: 700; color: var(--text); }
+.sd-poll-val {
+  text-align: right;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.sd-poll-track {
+  display: block;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.sd-poll-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  animation: sd-poll-grow 0.9s var(--ease-spring) both;
+  transform-origin: left center;
+}
+.sd-poll-fill[data-tone="rest"] { background: var(--sd-blue); }
+.sd-poll-fill[data-tone="gql"] { background: var(--sd-pink); }
+.sd-poll-fill[data-tone="dim"] { background: var(--border-strong); }
+
+@keyframes sd-poll-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.sd-poll-cap {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+
+/* ================= §04 混合架构示意 ================= */
+
+.sd-hybrid {
+  display: grid;
+  grid-template-columns: 1fr auto 1.15fr auto 1fr;
+  grid-template-areas:
+    "c1 l1 f1 l3 core"
+    "c2 l2 f2 l4 core";
+  gap: 16px 10px;
+  align-items: center;
+  margin: 18px 0;
+  border-radius: 20px;
+  border: 1px solid var(--border-strong);
+  background: var(--panel);
+  padding: 22px;
+}
+
+.sd-hy-c1 { grid-area: c1; }
+.sd-hy-c2 { grid-area: c2; }
+.sd-hy-f1 { grid-area: f1; }
+.sd-hy-f2 { grid-area: f2; }
+.sd-hy-l1 { grid-area: l1; }
+.sd-hy-l2 { grid-area: l2; }
+.sd-hy-l3 { grid-area: l3; }
+.sd-hy-l4 { grid-area: l4; }
+.sd-hy-core { grid-area: core; }
+
+.sd-hy-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  border-radius: 14px;
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  padding: 13px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+}
+.sd-hy-node small {
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--text-3);
+}
+.sd-hy-ico { font-size: 20px; line-height: 1.2; }
+
+.sd-hy-rest {
+  border-color: var(--sd-blue-border);
+  box-shadow: 0 0 20px var(--sd-blue-soft);
+}
+.sd-hy-rest > small { color: var(--sd-blue); }
+.sd-hy-gql {
+  border-color: var(--sd-pink-border);
+  box-shadow: 0 0 20px var(--sd-pink-soft);
+}
+.sd-hy-gql > small { color: var(--sd-pink); }
+
+.sd-hy-core {
+  align-self: stretch;
+  justify-content: center;
+  border-color: var(--acc-border);
+  background: var(--acc-soft);
+}
+
+.sd-hy-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-3);
+  text-align: center;
+}
+.sd-hy-proto {
+  white-space: nowrap;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+}
+.sd-hy-proto[data-side="rest"] {
+  color: var(--sd-blue);
+  border-color: var(--sd-blue-border);
+}
+.sd-hy-proto[data-side="gql"] {
+  color: var(--sd-pink);
+  border-color: var(--sd-pink-border);
+}
+.sd-hy-arrow {
+  font-size: 15px;
+  color: var(--text-3);
+}
+
+@media (max-width: 860px) {
+  .sd-hybrid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "c1"
+      "l1"
+      "f1"
+      "c2"
+      "l2"
+      "f2"
+      "l3"
+      "core";
+    gap: 10px;
+    padding: 18px;
+  }
+  .sd-hy-l4 { display: none; }
+  .sd-hy-arrow { transform: rotate(90deg); }
+  .sd-hy-proto { white-space: normal; }
+  .sd-hy-core { align-self: auto; }
+}
+
+/* ================= §05 复习卡片墙 ================= */
+
+.sd-wall {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.sd-wall-card {
+  /* 每张卡用自己章节的色相,就地重算派生色(inline style 提供 --hue) */
+  --acc: oklch(var(--acc-l) var(--acc-c) var(--hue));
+  --acc-ink: oklch(from var(--acc) calc(l + 0.08) calc(c - 0.03) h);
+  --acc-soft: oklch(var(--acc-l) var(--acc-c) var(--hue) / 0.13);
+  --acc-border: oklch(var(--acc-l) var(--acc-c) var(--hue) / 0.34);
+  --acc-glow: oklch(var(--acc-l) var(--acc-c) var(--hue) / 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-decoration: none;
+  color: inherit;
+  border-left: 3px solid var(--acc);
+  padding: 16px 18px;
+}
+[data-theme="light"] .sd-wall-card {
+  --acc-ink: oklch(from var(--acc) calc(l - 0.06) c h);
+}
+
+.sd-wall-num {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--acc-ink);
+}
+.sd-wall-title {
+  font-weight: 700;
+  font-size: 14.5px;
+}
+.sd-wall-soul {
+  font-size: 12.5px;
+  color: var(--text-2);
+  line-height: 1.7;
+}
+.sd-wall-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+.sd-wall-keys .chip { font-size: 10.5px; }
+
+@media (max-width: 1100px) {
+  .sd-wall { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 680px) {
+  .sd-wall { grid-template-columns: 1fr; }
+}
+
+/* ================= §08 毕业寄语收尾 ================= */
+
+.sd-farewell {
+  position: relative;
+  border-radius: 18px;
+  border: 1px solid var(--acc-border);
+  background: linear-gradient(
+    135deg,
+    oklch(var(--acc-l) var(--acc-c) var(--hue) / 0.09),
+    transparent 70%
+  );
+  padding: 22px 24px;
+  margin: 20px 0 6px;
+  font-size: 14px;
+  line-height: 1.95;
+  color: var(--text-2);
+  overflow: hidden;
+}
+.sd-farewell b { color: var(--text); }
+.sd-farewell p { margin: 0; }
+.sd-farewell p + p { margin-top: 10px; }
+.sd-farewell-mark {
+  position: absolute;
+  right: 14px;
+  top: 4px;
+  font-size: 56px;
+  line-height: 1;
+  color: var(--acc);
+  opacity: 0.14;
+  pointer-events: none;
+}

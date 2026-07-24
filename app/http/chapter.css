@@ -1,0 +1,415 @@
+/* 第 01 章 · HTTP 专属样式(前缀 ht-)。通用样式一律来自 globals.css。 */
+
+/* — hero:一封写给服务器的信 — */
+.ht-letter {
+  position: relative;
+  max-width: 540px;
+  margin: 26px 0 10px;
+  padding: 22px 20px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  background: var(--panel-2);
+  overflow: hidden;
+}
+.ht-letter::before {
+  /* 航空信封边条 */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--risk) 0 10px,
+    transparent 10px 20px,
+    var(--info) 20px 30px,
+    transparent 30px 40px
+  );
+  opacity: 0.55;
+}
+.ht-letter-stamp {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-family: var(--font-jb), monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--acc-ink);
+  background: var(--acc-soft);
+  border: 1px dashed var(--acc-border);
+  border-radius: 6px;
+  padding: 5px 8px;
+  transform: rotate(6deg);
+}
+.ht-letter-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 3px 0;
+}
+.ht-letter-row.blank {
+  border-bottom: 1px dashed var(--border-strong);
+  margin-bottom: 4px;
+}
+.ht-letter-code {
+  font-family: var(--font-jb), monospace;
+  font-size: 12.5px;
+  color: var(--text);
+}
+.ht-letter-code.start {
+  color: var(--acc-ink);
+  font-weight: 700;
+}
+.ht-letter-code.dim {
+  color: var(--text-3);
+}
+.ht-letter-tag {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+/* — §01 URL 解剖台 — */
+.ht-url {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 14px;
+  align-items: stretch;
+  margin: 14px 0;
+}
+.ht-url-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: baseline;
+  padding: 20px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--border-strong);
+  background: var(--code-bg);
+  font-family: var(--font-jb), monospace;
+  font-size: 15px;
+  line-height: 2.1;
+}
+.ht-url-seg {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  padding: 1px 2px;
+  color: var(--seg, var(--code-text));
+  border-bottom: 2px solid color-mix(in oklab, var(--seg) 45%, transparent);
+  transition: background 0.15s, border-color 0.15s;
+}
+.ht-url-seg:hover {
+  background: var(--code-hl);
+}
+.ht-url-seg.on {
+  background: color-mix(in oklab, var(--seg) 20%, transparent);
+  border-bottom-color: var(--seg);
+}
+.ht-url-seg[data-k="proto"] { --seg: var(--tk-kw); }
+.ht-url-seg[data-k="host"]  { --seg: var(--tk-type); }
+.ht-url-seg[data-k="ver"]   { --seg: var(--tk-com); }
+.ht-url-seg[data-k="coll"]  { --seg: var(--tk-fn); }
+.ht-url-seg[data-k="id"]    { --seg: var(--tk-num); }
+.ht-url-seg[data-k="q1"],
+.ht-url-seg[data-k="q2"]    { --seg: var(--tk-str); }
+.ht-url-info {
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ht-url-info-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.ht-url-info-head b {
+  font-size: 14px;
+}
+.ht-url-info-code {
+  font-family: var(--font-jb), monospace;
+  font-size: 12.5px;
+  color: var(--acc-ink);
+  background: var(--acc-soft);
+  border: 1px solid var(--acc-border);
+  border-radius: 8px;
+  padding: 5px 10px;
+}
+.ht-url-info p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--text-2);
+}
+.ht-url-info b {
+  color: var(--text);
+}
+@media (max-width: 880px) {
+  .ht-url {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* — §03 方法表:安全/幂等勾叉 — */
+.ht-yes {
+  color: var(--ok);
+  font-weight: 700;
+}
+.ht-no {
+  color: var(--risk);
+  font-weight: 700;
+}
+
+/* — §03 场景选方法 — */
+.ht-mp-score {
+  margin-left: auto;
+  font-size: 12px;
+}
+.ht-mp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ht-mp-item {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  padding: 14px 16px;
+  transition: border-color 0.2s;
+}
+.ht-mp-item.solved {
+  border-color: color-mix(in oklab, var(--ok) 45%, transparent);
+}
+.ht-mp-q {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 10px;
+  font-size: 14px;
+}
+.ht-mp-n {
+  font-family: var(--font-jb), monospace;
+  font-size: 11px;
+  color: var(--acc-ink);
+  border: 1px solid var(--acc-border);
+  border-radius: 6px;
+  padding: 1px 7px;
+  flex-shrink: 0;
+}
+.ht-mp-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ht-mp-btn {
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  border-radius: 10px;
+  padding: 6px 9px;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s, background 0.15s;
+}
+.ht-mp-btn:hover {
+  border-color: var(--acc-border);
+  transform: translateY(-1px);
+}
+.ht-mp-btn.right {
+  border-color: color-mix(in oklab, var(--ok) 60%, transparent);
+  background: var(--ok-bg);
+}
+.ht-mp-btn.wrong {
+  border-color: color-mix(in oklab, var(--risk) 60%, transparent);
+  background: var(--risk-bg);
+}
+.ht-mp-fb {
+  margin-top: 10px;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--text-2);
+}
+.ht-mp-fb b,
+.ht-mp-fb code {
+  color: var(--text);
+}
+.ht-mp-fb.ok {
+  background: var(--ok-bg);
+  border-left: 3px solid var(--ok);
+}
+.ht-mp-fb.no {
+  background: var(--warn-bg);
+  border-left: 3px solid var(--warn);
+}
+.ht-mp-again {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+/* — §04 状态码五大家族 — */
+.ht-fam-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin: 14px 0;
+}
+.ht-fam {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  padding: 14px 14px 12px;
+}
+.ht-fam-code {
+  font-family: var(--font-jb), monospace;
+  font-weight: 800;
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+.ht-fam[data-x="1"] .ht-fam-code { color: var(--text-2); }
+.ht-fam[data-x="2"] .ht-fam-code { color: var(--ok); }
+.ht-fam[data-x="3"] .ht-fam-code { color: var(--info); }
+.ht-fam[data-x="4"] .ht-fam-code { color: var(--warn); }
+.ht-fam[data-x="5"] .ht-fam-code { color: var(--risk); }
+.ht-fam-name {
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+.ht-fam p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--text-2);
+}
+@media (max-width: 880px) {
+  .ht-fam-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* — §04 状态码格子墙 — */
+.ht-st {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 14px;
+  align-items: start;
+  margin: 14px 0;
+}
+.ht-st-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.ht-st-cell {
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  border-radius: 10px;
+  padding: 10px 4px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.ht-st-cell:hover {
+  transform: translateY(-1px);
+  border-color: var(--acc-border);
+}
+.ht-st-cell b {
+  display: block;
+  font-family: var(--font-jb), monospace;
+  font-size: 15.5px;
+}
+.ht-st-cell span {
+  display: block;
+  margin-top: 2px;
+  font-size: 9px;
+  letter-spacing: 0.02em;
+  color: var(--text-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 2px;
+}
+.ht-st-cell[data-x="2"] b { color: var(--ok); }
+.ht-st-cell[data-x="3"] b { color: var(--info); }
+.ht-st-cell[data-x="4"] b { color: var(--warn); }
+.ht-st-cell[data-x="5"] b { color: var(--risk); }
+.ht-st-cell.on {
+  border-color: var(--acc-border);
+  box-shadow: 0 0 0 1px var(--acc-border), 0 0 18px var(--acc-glow);
+}
+.ht-st-detail {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  padding: 16px 18px;
+  position: sticky;
+  top: 76px;
+}
+.ht-st-detail-head {
+  margin-bottom: 10px;
+}
+.ht-st-human {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+.ht-st-scene {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--text-2);
+}
+.ht-st-scene b {
+  color: var(--text);
+}
+@media (max-width: 880px) {
+  .ht-st {
+    grid-template-columns: 1fr;
+  }
+  .ht-st-detail {
+    position: static;
+  }
+}
+
+/* — §05 Header 常客卡片 — */
+.ht-hdr-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 14px 0;
+}
+.ht-hdr-ex {
+  margin-top: 10px;
+  font-family: var(--font-jb), monospace;
+  font-size: 12px;
+  background: var(--code-bg);
+  color: var(--code-text);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 8px 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.ht-hdr-ex .hn {
+  color: var(--tk-type);
+}
+.ht-hdr-ex .hv {
+  color: var(--tk-str);
+}
+@media (max-width: 720px) {
+  .ht-hdr-grid {
+    grid-template-columns: 1fr;
+  }
+}

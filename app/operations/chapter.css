@@ -1,0 +1,367 @@
+/* 第 09 章 · 查询、变更与订阅 专属样式(前缀 op-)。
+   通用样式一律来自 globals.css,这里只放本章特有的。 */
+
+/* — hero 三操作卡 — */
+.op-hero {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 26px 0 10px;
+}
+.op-hero-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 20px;
+  border-radius: 14px;
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  min-width: 148px;
+  animation: op-hero-glow 3.6s ease-in-out infinite;
+}
+@keyframes op-hero-glow {
+  0%, 28%, 100% { border-color: var(--border-strong); box-shadow: none; }
+  10% {
+    border-color: var(--acc-border);
+    box-shadow: 0 0 0 1px var(--acc-border), 0 0 22px var(--acc-glow);
+  }
+}
+.op-hero-zh {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.op-hero-kw {
+  font-family: var(--font-jb), monospace;
+  font-size: 12.5px;
+  color: var(--acc-ink);
+}
+.op-hero-desc {
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+/* — 工具箱小节 — */
+.op-tool {
+  margin: 22px 0;
+}
+.op-tool-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.op-tool-num {
+  font-family: var(--font-jb), monospace;
+  font-size: 11px;
+  color: var(--acc-ink);
+  letter-spacing: 0.1em;
+}
+.op-tool-title {
+  font-size: 16.5px;
+  font-weight: 750;
+  margin: 0;
+}
+.op-tool > p {
+  margin: 6px 0 12px;
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--text-2);
+}
+.op-tool > p b {
+  color: var(--text);
+}
+
+/* — QueryAnatomy / ErrorAnatomy 解剖台(结构承自序章 JsonAnatomy)— */
+.op-qa {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 14px;
+  align-items: stretch;
+  margin: 14px 0;
+}
+.op-qa-win {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  background: var(--code-bg);
+}
+.op-qa-body {
+  padding: 10px 0 14px;
+  overflow-x: auto;
+}
+.op-qa-line {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: var(--code-text);
+  font-family: var(--font-jb), monospace;
+  font-size: 12.5px;
+  line-height: 1.9;
+  padding: 0 14px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  white-space: pre;
+  transition: background 0.15s, border-color 0.15s;
+}
+.op-qa-line:hover {
+  background: var(--code-hl);
+}
+.op-qa-line.on {
+  background: var(--code-hl);
+  border-left-color: var(--acc);
+}
+.op-qa-line.dead {
+  cursor: default;
+  color: var(--code-ln);
+}
+.op-qa-line.dead:hover {
+  background: transparent;
+}
+.op-qa-line.ok {
+  color: var(--ok);
+}
+.op-qa-line.bad {
+  color: var(--risk);
+}
+.op-qa-info {
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.op-qa-tag {
+  font-family: var(--font-jb), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--acc-ink);
+}
+.op-qa-tag.ok { color: var(--ok); }
+.op-qa-tag.bad { color: var(--risk); }
+.op-qa-code {
+  font-family: var(--font-jb), monospace;
+  font-size: 12px;
+  color: var(--acc-ink);
+  background: var(--acc-soft);
+  border: 1px solid var(--acc-border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  align-self: flex-start;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.op-qa-info p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--text-2);
+}
+.op-qa-info b { color: var(--text); }
+@media (max-width: 880px) {
+  .op-qa { grid-template-columns: 1fr; }
+}
+
+/* — 订阅通道舞台 — */
+.op-sub {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-width: 520px;
+  min-height: 150px;
+  padding: 8px 4px;
+}
+.op-sub .flow-node {
+  min-width: 128px;
+}
+.op-sub-mid {
+  flex: 1;
+  position: relative;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.op-sub-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 2px dashed var(--border-strong);
+  transition: border-color 0.3s;
+}
+.op-sub-mid.on .op-sub-line {
+  border-top-style: solid;
+  border-color: var(--acc);
+  box-shadow: 0 0 12px var(--acc-glow);
+}
+.op-sub-mid.closed .op-sub-line {
+  border-color: var(--border);
+}
+.op-sub-label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-jb), monospace;
+  font-size: 11px;
+  color: var(--text-3);
+  background: var(--panel-solid);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+.op-sub-mid.on .op-sub-label {
+  color: var(--acc-ink);
+  border-color: var(--acc-border);
+}
+.op-sub-packet {
+  animation: op-sub-push 1.6s ease-in-out infinite;
+}
+@keyframes op-sub-push {
+  0% { transform: translateX(46%); opacity: 0; }
+  18% { opacity: 1; }
+  82% { transform: translateX(-46%); opacity: 1; }
+  100% { transform: translateX(-46%); opacity: 0; }
+}
+.op-sub-inbox {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+  max-width: 180px;
+}
+.op-sub-mail {
+  font-size: 11px;
+  font-weight: 400;
+  text-align: left;
+  color: var(--text-2);
+  background: var(--ok-bg);
+  border: 1px solid color-mix(in oklab, var(--ok) 30%, transparent);
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+.op-sub-event {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--warn);
+  background: var(--warn-bg);
+  border: 1px solid color-mix(in oklab, var(--warn) 30%, transparent);
+  border-radius: 8px;
+  padding: 4px 8px;
+  margin-top: 6px;
+}
+
+/* — 非空冒泡舞台 — */
+.op-bub {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  width: 100%;
+  min-width: 520px;
+  padding: 10px 4px;
+  flex-wrap: wrap;
+}
+.op-bub-box {
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  background: var(--panel-2);
+  padding: 12px 14px;
+  transition: border-color 0.3s, background 0.3s, opacity 0.3s;
+}
+.op-bub-box.null {
+  border-color: color-mix(in oklab, var(--risk) 45%, transparent);
+  background: var(--risk-bg);
+}
+.op-bub-box.boom {
+  border-color: var(--risk);
+  background: var(--risk-bg);
+  box-shadow: 0 0 18px color-mix(in oklab, var(--risk) 35%, transparent);
+}
+.op-bub-box.gone {
+  opacity: 0.45;
+}
+.op-bub-name {
+  font-family: var(--font-jb), monospace;
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.op-bub-box.post > .op-bub-name {
+  color: var(--acc-ink);
+}
+.op-bub-kids {
+  display: flex;
+  gap: 10px;
+}
+.op-bub-box.leaf {
+  padding: 8px 10px;
+  min-width: 120px;
+}
+.op-bub-val {
+  font-family: var(--font-jb), monospace;
+  font-size: 11px;
+  color: var(--text-2);
+}
+.op-bub-side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 300px;
+}
+.op-bub-schema,
+.op-bub-result {
+  font-size: 11.5px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-strong);
+  background: var(--code-bg);
+  color: var(--code-text);
+  white-space: pre-wrap;
+}
+.op-bub-schema {
+  color: var(--tk-type);
+}
+
+/* — cursor 分页舞台 — */
+.op-pg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-width: 520px;
+  padding: 8px 4px;
+}
+.op-pg-req {
+  font-size: 12.5px;
+  color: var(--acc-ink);
+  background: var(--acc-soft);
+  border: 1px solid var(--acc-border);
+  border-radius: 999px;
+  padding: 5px 14px;
+}
+.op-pg-row {
+  display: flex;
+  gap: 8px;
+}
+.op-pg-info {
+  font-size: 12px;
+  color: var(--text-2);
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  border-radius: 10px;
+  padding: 8px 14px;
+}
+.op-pg-info b { color: var(--acc-ink); }
+.op-pg-info b.yes { color: var(--ok); }
+.op-pg-info b.no { color: var(--risk); }

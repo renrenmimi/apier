@@ -1,0 +1,255 @@
+/* 第 08 章 · Schema 与类型系统 专属样式(前缀 sc-)。
+   通用样式一律来自 globals.css,这里只放本章特有的。 */
+
+/* — hero:前端 — 契约 — 后端 — */
+.sc-hero {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 640px;
+  margin: 26px 0 10px;
+}
+.sc-hero-link {
+  flex: 1;
+  min-width: 28px;
+  border-top: 2px dashed var(--acc-border);
+}
+.sc-hero-doc {
+  position: relative;
+  border-radius: 14px;
+  border: 1px solid var(--acc-border);
+  background: var(--code-bg);
+  padding: 12px 16px 14px;
+  box-shadow: 0 0 24px var(--acc-glow);
+  animation: sc-doc-glow 3.2s ease-in-out infinite;
+}
+@keyframes sc-doc-glow {
+  0%, 100% { box-shadow: 0 0 14px var(--acc-glow); }
+  50% { box-shadow: 0 0 32px var(--acc-glow); }
+}
+.sc-hero-doc-name {
+  font-family: var(--font-jb), monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 6px;
+}
+.sc-hero-doc pre {
+  margin: 0;
+  font-family: var(--font-jb), monospace;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--code-text);
+  white-space: pre;
+}
+.sc-hero-seal {
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px dashed var(--border);
+  font-size: 10.5px;
+  color: var(--acc-ink);
+}
+@media (max-width: 640px) {
+  .sc-hero { flex-wrap: wrap; }
+  .sc-hero-link { display: none; }
+}
+
+/* — ModifierLab — */
+.sc-mod-seg {
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.sc-mod-seg .seg-btn {
+  font-family: var(--font-jb), monospace;
+  font-size: 12px;
+}
+.sc-mod-panel {
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sc-mod-sig {
+  align-self: flex-start;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--acc-ink);
+  background: var(--acc-soft);
+  border: 1px solid var(--acc-border);
+  border-radius: 8px;
+  padding: 6px 12px;
+}
+.sc-mod-read {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--text-2);
+}
+.sc-mod-switches {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.sc-mod-samples {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.sc-mod-sample {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  font-size: 12.5px;
+}
+.sc-mod-sample .mono {
+  font-size: 12.5px;
+  color: var(--text);
+}
+.sc-mod-sample.ok {
+  border-color: color-mix(in oklab, var(--ok) 35%, transparent);
+  background: var(--ok-bg);
+}
+.sc-mod-sample.bad {
+  border-color: color-mix(in oklab, var(--risk) 35%, transparent);
+  background: var(--risk-bg);
+}
+.sc-mod-verdict {
+  font-family: var(--font-jb), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.sc-mod-sample.ok .sc-mod-verdict { color: var(--ok); }
+.sc-mod-sample.bad .sc-mod-verdict { color: var(--risk); }
+.sc-mod-note {
+  grid-column: 1 / -1;
+  font-size: 11.5px;
+  color: var(--text-3);
+}
+@media (max-width: 720px) {
+  .sc-mod-samples { grid-template-columns: 1fr; }
+}
+
+/* — SchemaGraph — */
+.sc-sg-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.sc-sg-svgwrap {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.sc-sg-svg {
+  display: block;
+  width: 100%;
+  min-width: 440px;
+  height: auto;
+}
+.sc-sg-node rect {
+  fill: var(--panel-2);
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.sc-sg-node:hover rect {
+  stroke: var(--acc-border);
+}
+.sc-sg-node.on rect {
+  fill: var(--acc-soft);
+  stroke: var(--acc);
+  stroke-width: 2;
+}
+.sc-sg-node:focus-visible {
+  outline: none;
+}
+.sc-sg-node:focus-visible rect {
+  stroke: var(--acc);
+  stroke-dasharray: 4 3;
+}
+.sc-sg-name {
+  font-family: var(--font-jb), monospace;
+  font-size: 14px;
+  font-weight: 700;
+  fill: var(--text);
+  cursor: pointer;
+}
+.sc-sg-node.on .sc-sg-name {
+  fill: var(--acc-ink);
+}
+.sc-sg-sub {
+  font-size: 10px;
+  fill: var(--text-3);
+  cursor: pointer;
+}
+.sc-sg-lab {
+  font-family: var(--font-jb), monospace;
+  font-size: 11px;
+  fill: var(--text-3);
+  transition: fill 0.2s;
+}
+.sc-sg-lab.on {
+  fill: var(--acc-ink);
+  font-weight: 700;
+}
+.sc-sg-panel {
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  padding: 14px 16px;
+}
+.sc-sg-panel .codewin { margin: 12px 0 0; }
+.sc-sg-head {
+  align-self: flex-start;
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--acc-ink);
+  background: var(--acc-soft);
+  border: 1px solid var(--acc-border);
+  border-radius: 8px;
+  padding: 5px 11px;
+}
+.sc-sg-panel > p {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-2);
+}
+@media (max-width: 980px) {
+  .sc-sg-grid { grid-template-columns: 1fr; }
+}
+
+/* — 类型工具箱小标题 — */
+.sc-tool-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 26px 0 4px;
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+.sc-tool-h:first-of-type {
+  margin-top: 8px;
+}
+.sc-tool-h .mono {
+  font-size: 13.5px;
+  color: var(--acc-ink);
+  background: var(--acc-soft);
+  border: 1px solid var(--acc-border);
+  border-radius: 7px;
+  padding: 2px 9px;
+}

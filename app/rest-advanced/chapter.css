@@ -1,0 +1,299 @@
+/* 05 · REST 进阶模式 专属样式(前缀 ra-)。通用样式一律来自 globals.css。 */
+
+/* — hero:毛坯房逐项通水电 — */
+.ra-utils {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 26px 0 10px;
+  max-width: 640px;
+}
+.ra-util {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: ra-util-in 0.55s ease forwards;
+}
+.ra-util .ico {
+  font-size: 17px;
+  line-height: 1;
+}
+.ra-util small {
+  display: block;
+  font-family: var(--font-jb), monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+@keyframes ra-util-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* — §01 分页舞台 — */
+.ra-pg {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 2px 24px;
+}
+.ra-pg-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  min-height: 26px;
+}
+.ra-pg-url {
+  font-family: var(--font-jb), monospace;
+  font-size: 12px;
+  color: var(--acc-ink);
+}
+.ra-pg-time {
+  font-family: var(--font-jb), monospace;
+  font-size: 11.5px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  color: var(--ok);
+  background: var(--ok-bg);
+}
+.ra-pg-time.bad {
+  color: var(--risk);
+  background: var(--risk-bg);
+}
+.ra-pg-rows {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.ra-pgcell {
+  position: relative;
+  min-width: 46px;
+  height: 40px;
+  padding: 0 6px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--panel-2);
+  font-family: var(--font-jb), monospace;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ra-pgcell[data-st="take"] {
+  border-color: var(--acc);
+  background: var(--acc-soft);
+  color: var(--acc-ink);
+  box-shadow: 0 0 14px var(--acc-glow);
+  transform: translateY(-3px);
+}
+.ra-pgcell[data-st="skip"] {
+  opacity: 0.35;
+  border-style: dashed;
+}
+.ra-pgcell[data-st="new"] {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+  color: var(--ok);
+  transform: translateY(-3px);
+}
+.ra-pgcell[data-st="dup"] {
+  border-color: var(--risk);
+  background: var(--risk-bg);
+  color: var(--risk);
+}
+.ra-pgcell-tail {
+  border-style: dashed;
+  color: var(--text-3);
+}
+.ra-pgcell-tail.lit {
+  opacity: 1;
+  border-color: var(--warn);
+  color: var(--warn);
+  background: var(--warn-bg);
+}
+.ra-pgcell-pos {
+  position: absolute;
+  bottom: -20px;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.ra-pgcell-mark {
+  position: absolute;
+  top: -15px;
+  right: -7px;
+  font-size: 14px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* — §02 URL 解剖台 — */
+.ra-url {
+  margin: 14px 0;
+}
+.ra-url-win {
+  border-radius: 14px;
+  border: 1px solid var(--border-strong);
+  background: var(--code-bg);
+  overflow: hidden;
+}
+.ra-url-line {
+  padding: 16px 16px 14px;
+  font-family: var(--font-jb), monospace;
+  font-size: 13px;
+  line-height: 2.2;
+  word-break: break-all;
+  color: var(--code-text);
+}
+.ra-url-meth {
+  color: var(--info);
+  font-weight: 700;
+}
+.ra-url-sep {
+  color: var(--text-3);
+  padding: 0 1px;
+}
+.ra-url-seg {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 2px 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  border-bottom: 2px dashed var(--border-strong);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.ra-url-seg:hover {
+  background: var(--code-hl);
+}
+.ra-url-seg.on {
+  background: var(--acc-soft);
+  color: var(--acc-ink);
+  border-bottom-style: solid;
+  border-bottom-color: var(--acc);
+}
+.ra-url-info {
+  margin-top: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  padding: 15px 18px;
+}
+.ra-url-info p {
+  margin: 9px 0 0;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--text-2);
+}
+.ra-url-info b {
+  color: var(--text);
+}
+
+/* — §04/§05 双端舞台(浏览器↔服务器 / 客户端↔支付服务器)— */
+.ra-duo {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 560px;
+  padding: 6px 2px;
+}
+.ra-duo-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.ra-duo-mid {
+  min-height: 92px;
+  align-self: stretch;
+}
+.ra-sidechip {
+  font-family: var(--font-jb), monospace;
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 9px;
+  border: 1px dashed var(--border-strong);
+  color: var(--text-2);
+  background: var(--panel);
+  max-width: 190px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.ra-sidechip.lit {
+  border-style: solid;
+  border-color: var(--acc-border);
+  color: var(--acc-ink);
+  background: var(--acc-soft);
+}
+.ra-sidechip.ok {
+  border-style: solid;
+  border-color: color-mix(in oklab, var(--ok) 45%, transparent);
+  color: var(--ok);
+  background: var(--ok-bg);
+}
+.ra-sidechip.bad {
+  border-style: solid;
+  border-color: color-mix(in oklab, var(--risk) 45%, transparent);
+  color: var(--risk);
+  background: var(--risk-bg);
+}
+
+/* — §05 幂等键舞台:场景条 + 账本 — */
+.ra-idem {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 620px;
+  padding: 2px;
+}
+.ra-idem .ra-duo {
+  min-width: 0;
+}
+.ra-idem-top {
+  display: flex;
+}
+.ra-ledger {
+  font-family: var(--font-jb), monospace;
+  font-size: 11.5px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px dashed var(--border-strong);
+  color: var(--text-2);
+  background: var(--panel);
+  transition: all 0.3s;
+}
+.ra-ledger.lit {
+  border-style: solid;
+  border-color: var(--acc-border);
+  color: var(--acc-ink);
+  background: var(--acc-soft);
+}
+.flow-packet.ra-lost {
+  border-color: color-mix(in oklab, var(--risk) 55%, transparent);
+  color: var(--risk);
+  background: var(--risk-bg);
+  text-decoration: line-through;
+}
+
+/* — 窄屏 — */
+@media (max-width: 720px) {
+  .ra-util {
+    padding: 7px 11px;
+    font-size: 12px;
+  }
+}

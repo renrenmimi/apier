@@ -1,0 +1,377 @@
+/* 第 10 章 · GraphQL 后台与性能 专属样式(前缀 bs-)。
+   通用样式一律来自 globals.css,这里只放本章特有的。 */
+
+/* — hero:台前 / 后厨 — */
+.bs-hero {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 26px 0 10px;
+}
+.bs-hero-front,
+.bs-hero-back {
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  background: var(--panel-2);
+  padding: 12px 16px;
+  min-width: 200px;
+}
+.bs-hero-label {
+  font-family: var(--font-jb), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 8px;
+}
+.bs-hero-q {
+  margin: 0;
+  font-family: var(--font-jb), monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text-2);
+  white-space: pre;
+}
+.bs-hero-curtain {
+  align-self: center;
+  font-size: 26px;
+}
+.bs-hero-back {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bs-hero-fn {
+  font-family: var(--font-jb), monospace;
+  font-size: 12px;
+  color: var(--acc-ink);
+  background: var(--acc-soft);
+  border: 1px solid var(--acc-border);
+  border-radius: 8px;
+  padding: 5px 10px;
+  animation: bs-fn-run 3.3s ease-in-out infinite;
+}
+@keyframes bs-fn-run {
+  0%, 33%, 100% { box-shadow: none; opacity: 0.7; }
+  12% {
+    box-shadow: 0 0 0 1px var(--acc-border), 0 0 16px var(--acc-glow);
+    opacity: 1;
+  }
+}
+
+/* — resolver 执行树 — */
+.bs-tree {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 26px;
+  width: 100%;
+  min-width: 540px;
+  padding: 8px 4px;
+}
+.bs-tree-node {
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  background: var(--panel-2);
+  padding: 9px 12px;
+  transition: border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
+  opacity: 0.6;
+}
+.bs-tree-node.run {
+  opacity: 1;
+  border-color: var(--acc-border);
+  box-shadow: 0 0 0 1px var(--acc-border), 0 0 18px var(--acc-glow);
+}
+.bs-tree-node.done {
+  opacity: 1;
+  border-color: color-mix(in oklab, var(--ok) 45%, transparent);
+}
+.bs-tree-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.bs-tree-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-3);
+  flex: none;
+  transition: background 0.3s;
+}
+.bs-tree-node.run > .bs-tree-head .bs-tree-dot {
+  background: var(--acc);
+  box-shadow: 0 0 8px var(--acc-glow);
+}
+.bs-tree-node.done > .bs-tree-head .bs-tree-dot {
+  background: var(--ok);
+}
+.bs-tree-label {
+  font-family: var(--font-jb), monospace;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+.bs-tree-def {
+  font-family: var(--font-jb), monospace;
+  font-size: 9.5px;
+  color: var(--text-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+.bs-tree-kids {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0 2px 14px;
+  padding-left: 12px;
+  border-left: 2px dashed var(--border-strong);
+}
+.bs-tree-side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 320px;
+  min-width: 220px;
+}
+.bs-tree-sig {
+  font-size: 11.5px;
+  color: var(--acc-ink);
+  background: var(--acc-soft);
+  border: 1px solid var(--acc-border);
+  border-radius: 10px;
+  padding: 8px 12px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.bs-tree-parent {
+  font-size: 11.5px;
+  color: var(--text-2);
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  border-radius: 10px;
+  padding: 8px 12px;
+  white-space: pre-wrap;
+}
+
+/* — SQL 计数器(N+1 / DataLoader)— */
+.bs-n1 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 22px;
+  width: 100%;
+  min-width: 540px;
+  padding: 8px 4px;
+}
+.bs-n1-q {
+  margin: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  background: var(--code-bg);
+  padding: 12px 0;
+  font-family: var(--font-jb), monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--code-text);
+  flex: none;
+}
+.bs-n1-ql {
+  padding: 0 16px;
+  border-left: 3px solid transparent;
+  white-space: pre;
+  transition: background 0.2s, border-color 0.2s;
+}
+.bs-n1-ql.on {
+  background: var(--code-hl);
+  border-left-color: var(--acc);
+}
+.bs-n1-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 280px;
+  max-width: 380px;
+}
+.bs-n1-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  border-radius: 12px;
+  padding: 8px 16px;
+  align-self: flex-start;
+  transition: border-color 0.3s, background 0.3s;
+}
+.bs-n1-counter.boom {
+  border-color: var(--risk);
+  background: var(--risk-bg);
+  box-shadow: 0 0 18px color-mix(in oklab, var(--risk) 30%, transparent);
+}
+.bs-n1-counter.good {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+}
+.bs-n1-count {
+  font-family: var(--font-jb), monospace;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--acc-ink);
+}
+.bs-n1-counter.boom .bs-n1-count { color: var(--risk); }
+.bs-n1-counter.good .bs-n1-count { color: var(--ok); }
+.bs-n1-unit {
+  font-size: 12px;
+  color: var(--text-3);
+}
+.bs-n1-pad {
+  font-size: 11.5px;
+  color: var(--warn);
+  background: var(--warn-bg);
+  border: 1px solid color-mix(in oklab, var(--warn) 30%, transparent);
+  border-radius: 10px;
+  padding: 7px 11px;
+}
+.bs-n1-log {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bs-n1-sql {
+  font-size: 11.5px;
+  color: var(--code-text);
+  background: var(--code-bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 6px 10px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  animation: bs-sql-in 0.3s ease;
+}
+@keyframes bs-sql-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+.bs-n1-empty {
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+/* — 规范化缓存示意 — */
+.bs-norm {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  margin: 14px 0;
+  flex-wrap: wrap;
+}
+.bs-norm-panel {
+  flex: 1;
+  min-width: 260px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  padding: 14px 16px;
+}
+.bs-norm-title {
+  font-family: var(--font-jb), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 10px;
+}
+.bs-norm-json {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.75;
+  color: var(--code-text);
+  background: var(--code-bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 10px 12px;
+  white-space: pre;
+  overflow-x: auto;
+}
+.bs-norm-arrow {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 22px;
+  color: var(--acc-ink);
+}
+.bs-norm-arrow span {
+  font-size: 10.5px;
+  color: var(--text-3);
+  writing-mode: horizontal-tb;
+  white-space: nowrap;
+}
+.bs-norm-row {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 7px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--panel-2);
+  margin-bottom: 8px;
+}
+.bs-norm-key {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--acc-ink);
+  flex: none;
+}
+.bs-norm-val {
+  font-size: 11.5px;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+.bs-norm-val b { color: var(--acc-ink); }
+.bs-norm-note {
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--text-2);
+}
+.bs-norm-note b { color: var(--text); }
+@media (max-width: 880px) {
+  .bs-norm { flex-direction: column; }
+  .bs-norm-arrow { transform: rotate(90deg); }
+}
+
+/* — 缓存三条出路小节 — */
+.bs-way {
+  margin: 22px 0;
+}
+.bs-way-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.bs-way-num {
+  font-family: var(--font-jb), monospace;
+  font-size: 11px;
+  color: var(--acc-ink);
+  letter-spacing: 0.1em;
+}
+.bs-way-title {
+  font-size: 16.5px;
+  font-weight: 750;
+  margin: 0;
+}
+.bs-way > p {
+  margin: 6px 0 12px;
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--text-2);
+}
+.bs-way > p b {
+  color: var(--text);
+}

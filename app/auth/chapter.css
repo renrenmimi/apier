@@ -1,0 +1,348 @@
+/* 06 · 认证与安全 专属样式(前缀 au-)。通用样式一律来自 globals.css。 */
+
+/* — hero:信任的阶梯 — */
+.au-ladder {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 28px 0 8px;
+  max-width: 720px;
+}
+.au-rung {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 15px;
+  border-radius: 14px;
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  min-width: 150px;
+  flex: 1;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: au-rise 0.55s ease forwards;
+}
+.au-rung .ico {
+  font-size: 19px;
+  line-height: 1;
+}
+.au-rung b {
+  font-size: 13.5px;
+}
+.au-rung small {
+  font-size: 11px;
+  color: var(--text-3);
+  line-height: 1.55;
+}
+.au-rung:nth-child(2) {
+  margin-bottom: 14px;
+}
+.au-rung:nth-child(3) {
+  margin-bottom: 28px;
+}
+.au-rung:nth-child(4) {
+  margin-bottom: 42px;
+}
+@keyframes au-rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (max-width: 720px) {
+  .au-rung:nth-child(n) {
+    margin-bottom: 0;
+  }
+}
+
+/* — 节点小注(代理图 / OAuth / CORS 舞台共用)— */
+.au-node-sub {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-3);
+  font-family: var(--font-jb), monospace;
+}
+.au-consent {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  color: var(--ok);
+  background: var(--ok-bg);
+  border: 1px solid color-mix(in oklab, var(--ok) 35%, transparent);
+  white-space: nowrap;
+}
+
+/* — §02 后端代理静态图 — */
+.au-proxy {
+  min-width: 640px;
+  padding: 10px 4px;
+}
+.au-proxy-mid {
+  min-height: 72px;
+}
+
+/* — §03 Base64 加工台 — */
+.au-b64-label {
+  display: block;
+  font-size: 13px;
+  color: var(--text-2);
+  margin-bottom: 8px;
+}
+.au-input {
+  width: 100%;
+  max-width: 420px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  color: var(--text);
+  font-family: var(--font-jb), monospace;
+  font-size: 13.5px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.au-input:focus {
+  border-color: var(--acc-border);
+  box-shadow: 0 0 0 3px var(--acc-soft);
+}
+.au-b64-out {
+  margin-top: 12px;
+  padding: 12px 15px;
+  border-radius: 12px;
+  border: 1px solid var(--border-strong);
+  background: var(--code-bg);
+  color: var(--code-text);
+  font-family: var(--font-jb), monospace;
+  font-size: 12.5px;
+  line-height: 1.8;
+  word-break: break-all;
+}
+.au-b64-out b {
+  color: var(--acc-ink);
+}
+.au-b64-hdr {
+  color: var(--warn);
+}
+.au-b64-ctl {
+  margin-top: 12px;
+}
+.au-b64-reveal {
+  margin-top: 12px;
+  padding: 13px 16px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in oklab, var(--warn) 40%, transparent);
+  background: var(--warn-bg);
+  font-size: 13px;
+  color: var(--text-2);
+  word-break: break-all;
+}
+.au-b64-reveal b {
+  color: var(--text);
+}
+.au-b64-reveal p {
+  margin: 8px 0 0;
+  line-height: 1.75;
+}
+
+/* — §04 JWT 解剖台 — */
+.au-jwt-token {
+  font-family: var(--font-jb), monospace;
+  font-size: 12.5px;
+  line-height: 2;
+  word-break: break-all;
+  padding: 15px 17px;
+  border-radius: 14px;
+  border: 1px solid var(--border-strong);
+  background: var(--code-bg);
+}
+.au-jwt-dot {
+  color: var(--text-3);
+  font-weight: 700;
+  padding: 0 1px;
+}
+.au-jwt-seg {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  padding: 1px 3px;
+  border-radius: 6px;
+  cursor: pointer;
+  word-break: break-all;
+  transition: background 0.15s, outline-color 0.15s;
+}
+.au-jwt-seg[data-k="h"] {
+  color: #f26f7e;
+}
+.au-jwt-seg[data-k="p"] {
+  color: #b392f0;
+}
+.au-jwt-seg[data-k="s"] {
+  color: #6fc7f2;
+}
+[data-theme="light"] .au-jwt-seg[data-k="h"] {
+  color: #c22f44;
+}
+[data-theme="light"] .au-jwt-seg[data-k="p"] {
+  color: #6f42c1;
+}
+[data-theme="light"] .au-jwt-seg[data-k="s"] {
+  color: #0969ab;
+}
+.au-jwt-seg:hover {
+  background: var(--code-hl);
+}
+.au-jwt-seg.on {
+  background: var(--code-hl);
+  outline: 1px solid var(--acc-border);
+}
+.au-jwt-info {
+  margin-top: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  padding: 15px 18px;
+}
+.au-jwt-info p {
+  margin: 10px 0 0;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--text-2);
+}
+.au-jwt-info b {
+  color: var(--text);
+}
+.au-jwt-pre {
+  margin: 12px 0 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  background: var(--code-bg);
+  color: var(--code-text);
+  font-family: var(--font-jb), monospace;
+  font-size: 12px;
+  line-height: 1.75;
+  overflow: auto;
+  white-space: pre;
+}
+
+/* — §04 refresh 换发四步 — */
+.au-refresh {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+}
+.au-rstep {
+  position: relative;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  padding: 15px 16px;
+}
+.au-rstep b {
+  display: block;
+  font-size: 14px;
+  margin: 6px 0 5px;
+}
+.au-rstep p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--text-2);
+}
+.au-rstep-n {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-family: var(--font-jb), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--acc-ink);
+  background: var(--acc-soft);
+  border: 1px solid var(--acc-border);
+}
+.au-rstep:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: -13px;
+  top: 16px;
+  color: var(--text-3);
+  font-weight: 700;
+  z-index: 1;
+}
+@media (max-width: 880px) {
+  .au-refresh {
+    grid-template-columns: 1fr 1fr;
+  }
+  .au-rstep:nth-child(2)::after {
+    display: none;
+  }
+}
+@media (max-width: 560px) {
+  .au-refresh {
+    grid-template-columns: 1fr;
+  }
+  .au-rstep::after {
+    display: none;
+  }
+}
+
+/* — §05 OAuth / §06 CORS 舞台 — */
+.au-oauth {
+  min-width: 760px;
+  padding: 10px 4px;
+}
+.au-oauth-mid {
+  min-height: 76px;
+}
+.au-oauth .flow-node,
+.au-cors .flow-node {
+  gap: 4px;
+}
+.au-cors {
+  min-width: 620px;
+  padding: 10px 4px;
+}
+.au-cors-mid {
+  min-height: 76px;
+}
+
+/* — §07 安全清单 — */
+.au-checks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+.au-check {
+  display: flex;
+  gap: 13px;
+  padding: 15px 17px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+}
+.au-check .ico {
+  font-size: 18px;
+  line-height: 1.5;
+}
+.au-check b {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.au-check p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-2);
+}
+@media (max-width: 720px) {
+  .au-checks {
+    grid-template-columns: 1fr;
+  }
+}
