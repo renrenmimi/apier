@@ -49,6 +49,10 @@
   flex-wrap: wrap;
   padding: 3px 0;
 }
+/* 首行右侧给「邮戳」让位,注释文字不与它重叠 */
+.ht-letter-stamp + .ht-letter-row {
+  padding-right: 88px;
+}
 .ht-letter-row.blank {
   border-bottom: 1px dashed var(--border-strong);
   margin-bottom: 4px;

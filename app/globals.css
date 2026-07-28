@@ -171,6 +171,7 @@
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
@@ -720,6 +721,7 @@ html[data-sidebar="collapsed"] .sidebar {
   font-family: var(--font-display);
   font-size: clamp(40px, 6.2vw, 64px);
   font-weight: 900;
+  text-wrap: balance;
   letter-spacing: 0.005em;
   line-height: 1.08;
   margin: 0 0 6px;
@@ -844,6 +846,7 @@ html[data-sidebar="collapsed"] .sidebar {
 .sec-title {
   font-size: clamp(22px, 3vw, 28px);
   font-weight: 700;
+  text-wrap: balance;
   letter-spacing: 0.01em;
 }
 
@@ -1745,6 +1748,7 @@ li code {
   overflow-y: hidden;
   padding-bottom: 2px;
   scrollbar-width: thin;
+  overscroll-behavior-x: contain; /* 横滑到底也别触发浏览器后退手势 */
 }
 .viz-scroll > * {
   width: max-content;

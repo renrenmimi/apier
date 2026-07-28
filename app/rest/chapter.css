@@ -199,7 +199,8 @@
   align-items: center;
   gap: 12px;
   min-width: 560px;
-  padding: 8px 4px;
+  /* 右侧多留一点:气泡徽章(top:-13/right:-12)会探出节点,别撑出横向滚动条 */
+  padding: 14px 16px 8px 4px;
 }
 .rs-sf-mid {
   flex: 1;
