@@ -5,7 +5,7 @@
 ## 这是什么
 
 **APIer(把 API 讲透)**:面向零基础学习者的交互式 API 课程网站,
-**DataData / AlgoAlgo(../Downloads/Vide/DataData、../Downloads/Vide/AooRithm)的姊妹篇**,
+**DataData / AlgoAlgo(../DataData、../AooRithm)的姊妹篇**,
 同一套外壳与设计语言。承诺:**学完这一套课,RESTful API 和 GraphQL 就真的会了 ——
 不是「听说过」,是能上手调、能自己设计、能替团队做选型。**
 
