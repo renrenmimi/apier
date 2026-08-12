@@ -5,28 +5,27 @@
 // 帧数据由各章自己写。自由形态的动画请在章节内自建组件,
 // 复用 useStepper + <StepControls /> 和 .viz/.viz-stage/.viz-msg/.viz-ctl 样式。
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 export function useStepper(total: number, intervalMs = 1400) {
   const [step, setStep] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const timer = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // 自动播放:每帧重新起一个 timeout,而不是一个长跑的 interval。
+  // 好处 ①  setStep 的更新函数保持纯粹(不在里面调 setPlaying —— 那在
+  // StrictMode 下会被双调用);② 播到最后一帧时由这个 effect 自己收尾停播。
   useEffect(() => {
     if (!playing) return;
-    timer.current = setInterval(() => {
-      setStep((s) => {
-        if (s >= total - 1) {
-          setPlaying(false);
-          return s;
-        }
-        return s + 1;
-      });
-    }, intervalMs);
-    return () => {
-      if (timer.current) clearInterval(timer.current);
-    };
-  }, [playing, total, intervalMs]);
+    if (step >= total - 1) {
+      setPlaying(false);
+      return;
+    }
+    const id = setTimeout(
+      () => setStep((s) => Math.min(s + 1, total - 1)),
+      intervalMs,
+    );
+    return () => clearTimeout(id);
+  }, [playing, step, total, intervalMs]);
 
   return {
     step,
@@ -114,7 +113,9 @@ export function FlowStepper({
   frames: FlowFrame[];
 }) {
   const stepper = useStepper(frames.length);
-  const f = frames[stepper.step];
+  // frames 变短(或为空)时 step 可能越界 —— 兜底,别让整页白屏。
+  const f = frames[Math.min(stepper.step, frames.length - 1)];
+  if (!f) return null;
 
   return (
     <div className="viz">

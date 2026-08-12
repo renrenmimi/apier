@@ -342,13 +342,21 @@ export function LiveFetch() {
     const t0 = performance.now();
     try {
       const res = await fetch(preset.url);
-      const data = await res.json();
+      // 服务器回了话就算「通」—— 哪怕是 4xx/5xx。正文按 JSON 解析,
+      // 解析不了就原样显示文本,别把「服务器报错」误报成「网络不通」。
+      const raw = await res.text();
+      let body = raw;
+      try {
+        body = JSON.stringify(JSON.parse(raw), null, 2);
+      } catch {
+        /* 不是 JSON(常见于错误页),原样贴出来 */
+      }
       setSt({
         phase: "done",
         preset,
         status: res.status,
         ms: Math.round(performance.now() - t0),
-        body: JSON.stringify(data, null, 2),
+        body,
         offline: false,
       });
     } catch {

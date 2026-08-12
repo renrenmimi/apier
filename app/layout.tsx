@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     template: "%s · APIer",
   },
   description:
-    "从「什么是 API」到 RESTful 与 GraphQL 全套:HTTP 地基、fetch 实战、REST 六大约束与设计模式、GraphQL 类型系统与性能,交互可视化 + 中英双语。",
+    "从「什么是 API」到 RESTful 与 GraphQL 全套:HTTP 地基、fetch 实战、REST 六大约束与设计模式、GraphQL 类型系统与性能,配交互式可视化演示。",
 };
 
 export const viewport: Viewport = {

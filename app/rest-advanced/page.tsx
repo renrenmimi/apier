@@ -407,25 +407,27 @@ x-ratelimit-reset: 1794816042
         <CodeBlock
           lang="js"
           title="带退避的 fetch 封装"
-          hl={[8, 10]}
+          hl={[11, 12]}
           code={`async function fetchWithRetry(url, tries = 5) {
   for (let i = 0; i < tries; i++) {
     const res = await fetch(url);
     // 429 / 5xx 才值得重试;404 这种重试一万次也是 404
     if (res.status !== 429 && res.status < 500) return res;
+    // 最后一次还是失败:把响应交给调用方,别再白等一轮
+    if (i === tries - 1) return res;
 
-    // 服务器直接说了等多久,就听它的;没说就指数退避
-    const ra = res.headers.get("Retry-After");
-    const base = ra ? Number(ra) * 1000 : 500 * 2 ** i;
+    // 服务器说了等多久就听它的。但 Retry-After 也可能写成 HTTP 日期,
+    // 取不到秒数就退回指数退避 —— 否则 setTimeout(NaN) 会立刻空转重试
+    const secs = Number(res.headers.get("Retry-After"));
+    const base = secs > 0 ? secs * 1000 : 500 * 2 ** i;
     const wait = base + Math.random() * 300; // 抖动
     await new Promise((ok) => setTimeout(ok, wait));
   }
-  throw new Error("重试次数用尽,仍被限流");
 }`}
           note={
             <>
-              等待序列大约是 0.5s → 1s → 2s → 4s → 8s(各加随机零头)。
-              注意第 5 行:<b>该重试的才重试</b> ——
+              等待序列大约是 0.5s → 1s → 2s → 4s(共 5 次请求、4 次等待,
+              各加随机零头)。注意第 5 行:<b>该重试的才重试</b> ——
               对 4xx 里除 429 外的错误退避,纯属浪费大家时间。
             </>
           }
