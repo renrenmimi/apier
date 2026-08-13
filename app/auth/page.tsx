@@ -369,7 +369,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
               <b>一律 HTTPS</b>
               <p>
                 明文 HTTP 下,Header 里的 token、key
-                全在裸奔。现代 API 只该有 https:// 一种形态。
+                全是明文传输。现代 API 只该有 https:// 一种形态。
               </p>
             </div>
           </div>
