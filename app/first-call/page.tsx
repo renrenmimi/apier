@@ -200,7 +200,7 @@ export default function FirstCallPage() {
           <p>
             所以必须自己检查 <code>res.ok</code>(状态码 200–299 时为
             true),不查,404 的响应体就会被你当正常数据往下传,
-            最后在离案发现场很远的地方炸出一串 undefined。
+            最后在离出错点很远的地方冒出一串 undefined。
           </p>
         </Callout>
 
@@ -254,7 +254,7 @@ export default function FirstCallPage() {
             <>
               高亮的就是「改 DOM」的那几行:请求前先写一句「查询中…」
               给用户交代;数据到手,把 JSON 里的字段拼成 HTML 塞进{" "}
-              <code>innerHTML</code>;失败了也要说人话。
+              <code>innerHTML</code>;失败了也要给出可读的提示。
               <b>fetch → res.json() → 改 DOM</b>,前端的日常三步,就这么多。
             </>
           }

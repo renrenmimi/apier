@@ -369,7 +369,7 @@ query {
             <p>
               二手资料会骗人,规范不会:OpenAPI 3.2 在{" "}
               <code>spec.openapis.org</code>;GraphQL 官方教程在{" "}
-              <code>graphql.org/learn</code>;Apollo 全家桶文档在{" "}
+              <code>graphql.org/learn</code>;Apollo 整套工具链的文档在{" "}
               <code>apollographql.com/docs</code>;HTTP 语义的老家是 RFC
               9110,<code>rfc-editor.org/rfc/rfc9110</code>。
             </p>
@@ -381,7 +381,7 @@ query {
             <p>
               挑一个公开 API:Open-Meteo 做天气面板,PokeAPI 做宝可梦图鉴,
               Rick and Morty(REST 和 GraphQL 双供)最妙 ——
-              同一个作品,两种风格各写一遍,写完你对这章的对决表会有全新的体感。
+              同一个作品,两种风格各写一遍,写完你对这章的对比表会有全新的认识。
             </p>
             <p>作品比证书有说服力。</p>
           </div>

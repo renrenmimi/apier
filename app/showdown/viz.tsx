@@ -94,7 +94,7 @@ const VS_ROWS: VsRow[] = [
         REST 也能靠组合端点(比如 <code>?embed=author,comments</code>
         )减少往返,可每加一种组合就多养一个端点。GraphQL
         一次取整棵树是真省往返 —— 但别忘了第 10 章:省下的往返变成了服务端
-        resolver 的活,写不好就是 N+1。羊毛出在羊身上,只是换了只羊。
+        resolver 的活,写不好就是 N+1。成本没有消失,只是从客户端转移到了服务端。
       </>
     ),
   },
@@ -114,7 +114,7 @@ const VS_ROWS: VsRow[] = [
   },
   {
     dim: "类型契约",
-    rest: "契约靠自觉:OpenAPI 可以写,也可以……算了,明天再写",
+    rest: "契约靠自觉:OpenAPI 写不写、写完是否跟着代码更新,全看团队纪律",
     gql: "schema 是运行时的一部分,不写契约,服务器根本起不来",
     lean: "gql",
     detail: (
@@ -128,7 +128,7 @@ const VS_ROWS: VsRow[] = [
   },
   {
     dim: "文件上传",
-    rest: "multipart/form-data 一把梭,浏览器原生支持,几十年的老手艺",
+    rest: "multipart/form-data 一种方案通用,浏览器原生支持,几十年的老手艺",
     gql: "规范里压根没这回事:要么装 multipart 扩展,要么隔壁开个 REST 端点",
     lean: "rest",
     detail: (
@@ -136,13 +136,13 @@ const VS_ROWS: VsRow[] = [
         GraphQL 的请求体是 JSON,往里塞二进制天生别扭。社区有
         graphql-multipart-request-spec 这类扩展,但主流建议反而是:
         上传这种事,老老实实开个 REST 端点或用预签名 URL。
-        混合着用不丢人 —— §04 会正式给这种做法发户口。
+        混合使用是正当做法 —— §04 会专门讲这种架构。
       </>
     ),
   },
   {
     dim: "错误模型",
-    rest: "状态码当场宣判:404 没这人、401 先登录、500 我的锅,监控一眼就懂",
+    rest: "状态码当场宣判:404 没这人、401 先登录、500 服务端故障,监控一眼就懂",
     gql: "传统上恒 200,错误装进 errors 数组;还有「部分成功」这个新物种",
     lean: "tie",
     detail: (
@@ -161,7 +161,7 @@ const VS_ROWS: VsRow[] = [
     lean: "rest",
     detail: (
       <>
-        你自己刚走完这条路,应该有体感:REST 那四章基本是在「把 HTTP 用对」,
+        你自己刚走完这条路,应该有直接感受:REST 那四章基本是在「把 HTTP 用对」,
         GraphQL 四章却是学一门新语言外加一套新后端。团队每来一个新人,
         这笔学费就要重付一次 —— 人的成本,常常比机器的成本更该进决策表。
       </>
@@ -170,7 +170,7 @@ const VS_ROWS: VsRow[] = [
   {
     dim: "服务端成本",
     rest: "路由 + 处理函数,一个端点一段逻辑,想写复杂都难",
-    gql: "resolver 树、N+1、DataLoader、深度限制、复杂度预算……装备栏必须点满",
+    gql: "resolver 树、N+1、DataLoader、深度限制、复杂度预算……这些配套一样都不能少",
     lean: "rest",
     detail: (
       <>
@@ -189,7 +189,7 @@ const VS_ROWS: VsRow[] = [
     detail: (
       <>
         论「走到哪都有人接得住」,REST 赢:它不需要生态,它就是生态。
-        论单点工具的爽感,GraphQL 的 GraphiQL + codegen 是 REST
+        论单项工具的使用体验,GraphQL 的 GraphiQL + codegen 是 REST
         世界羡慕的存在 —— OpenAPI 生态(Swagger UI 等)在追,
         但「工具从契约里自动长出来」这件事,粉方是原生的。
       </>
@@ -197,7 +197,7 @@ const VS_ROWS: VsRow[] = [
   },
   {
     dim: "团队规模",
-    rest: "一个人到一个组都好使,起步零仪式感",
+    rest: "一个人到一个组都好使,起步几乎没有额外成本",
     gql: "一张 schema 多团队共建,规模越大越划算 —— 小团队反而背不动",
     lean: "tie",
     detail: (
@@ -381,7 +381,7 @@ const D_QUESTIONS: DQuestion[] = [
           "聚合是常态:GraphQL 天生适合当聚合层(Netflix 用它联邦了 70+ 个服务);服务之间的内线可以配 gRPC。",
       },
       {
-        label: "就一个后端,一把梭",
+        label: "就一个后端,直接调用",
         scores: { rest: 1 },
         reason: "单体后端:没有聚合需求,别为不存在的问题引入复杂度。",
       },
@@ -701,7 +701,7 @@ const REVIEW: Record<ChapterId, { soul: string; keys: string[] }> = {
     keys: ["三种操作", "变量", "fragment"],
   },
   backstage: {
-    soul: "每个字段背后一个 resolver;N+1 是 GraphQL 的原罪,DataLoader 是装机必备的解药。",
+    soul: "每个字段背后一个 resolver;N+1 是 GraphQL 的原罪,DataLoader 是标准解法。",
     keys: ["resolver", "N+1", "DataLoader"],
   },
   showdown: {

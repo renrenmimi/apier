@@ -290,7 +290,7 @@ export default function HttpPage() {
           </p>
         </Callout>
 
-        <Callout tone="warn" title="PUT 和 PATCH:最容易翻车的一对">
+        <Callout tone="warn" title="PUT 和 PATCH:最容易混淆的一对">
           <p>
             <b>PUT = 整体替换。</b>你只传半个对象,漏掉的字段按语义会被清空 ——
             资料表里 email、bio 一夜蒸发,就是这么来的。
@@ -339,7 +339,7 @@ export default function HttpPage() {
         </div>
 
         <p className="sec-desc">
-          下面是 API 日常最高频的十六位。<b>点一格,看它的人话解释和典型场景</b>{" "}
+          下面是 API 日常最高频的十六位。<b>点一格,看它的通俗解释和典型场景</b>{" "}
           —— 不用背,混个脸熟,真撞见时回来查就行。
         </p>
         <StatusExplorer />
@@ -353,7 +353,7 @@ export default function HttpPage() {
             叫 Unauthorized(未授权),干的却是「未认证」的活,历史遗留,认了吧。
           </p>
           <p>
-            再加一个彩蛋:有些 API 会故意用 <b>404 掩盖 403</b> ——
+            再补充一点:有些 API 会故意用 <b>404 掩盖 403</b> ——
             不让你探知「这个资源存在,只是你没权限」。GitHub API 就这么干:
             访问别人的私有仓库,回你一个 404,装作查无此仓。
           </p>

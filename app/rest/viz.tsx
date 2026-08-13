@@ -104,7 +104,7 @@ Content-Type: application/xml
 </user>`,
     msg: (
       <>
-        还是它,这回穿上了老派西装 —— 不少银行、政务系统的老接口至今说
+        还是它,这回换成了 XML 格式 —— 不少银行、政务系统的老接口至今说
         XML。<b>三副面孔,一个资源</b>:这就是「REST ≠ JSON」的现场证据。
       </>
     ),
@@ -337,7 +337,7 @@ const STATEFUL_FRAMES: SFFrame[] = [
     deadA: true,
     showB: true,
     litB: true,
-    bubbleB: "你谁啊?",
+    bubbleB: "你是谁?",
     msg: (
       <>
         B 翻遍全身也不知道你是谁、看到哪页 —— 会话丢失,你被迫重新登录。
@@ -547,7 +547,7 @@ Content-Type: application/json
         />
         <p className="rs-detail-note">
           进步:世界被拆成了一个个资源,66 号订单有了自己的门牌号。
-          但动作还是塞在 body 的 action 字段里,方法依旧 POST 一把梭 ——
+          但动作还是塞在 body 的 action 字段里,方法依旧一律用 POST ——
           门牌有了,规矩还没立。
         </p>
       </>
@@ -555,7 +555,7 @@ Content-Type: application/json
   },
   {
     lv: "L0",
-    name: "POST 一把梭",
+    name: "单端点 POST",
     tag: "the swamp of POX",
     emoji: "🐊",
     detail: (

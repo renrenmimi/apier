@@ -32,7 +32,7 @@ export const LABS: Lab[] = [
         <code>content-type: application/json; charset=utf-8</code>
         (响应正文是什么格式)、<code>cache-control</code>(这份响应能不能缓存)、
         <code>accept</code>(客户端想要什么格式)。注意 DevTools 里 header
-        名全显示成小写 —— 没毛病,header 名本来就不区分大小写。要是你还抄到了{" "}
+        名全显示成小写 —— 这是正常的,header 名本来就不区分大小写。要是你还抄到了{" "}
         <code>etag</code> 或 <code>authorization</code>,恭喜,§05
         的五位常客你已经野外目击了两位。
       </p>
@@ -194,7 +194,7 @@ export const QUIZ: QuizItem[] = [
         401 问的是「你是谁?凭证缺失或无效」。这里凭证是好的,
         服务器清清楚楚知道你是谁 —— 它只是不许你干这事。
       </>,
-      <>服务器没出任何错,它是清醒且坚定地拒绝了你 —— 这不是 5xx 的事故。</>,
+      <>服务器没出任何错,它是明确地拒绝了这次操作 —— 这不是 5xx 的事故。</>,
     ],
     why: (
       <>
@@ -224,7 +224,7 @@ export const QUIZ: QuizItem[] = [
     ],
     why: (
       <>
-        状态码首位就是「甩锅方向」:4xx 你的问题,5xx 服务器的问题。503 =
+        状态码首位就指明了责任方:4xx 你的问题,5xx 服务器的问题。503 =
         过载或维护中的临时歇业,常配 Retry-After 头告诉你几秒后再来。
       </>
     ),
@@ -254,7 +254,7 @@ export const QUIZ: QuizItem[] = [
         「都能接受」的表达是 <code>Accept: */*</code> ——
         还是 Accept 家的事,和 Content-Type 无关。
       </>,
-      <>压缩协商用的是 Accept-Encoding(如 gzip)—— 另一位专员负责。</>,
+      <>压缩协商用的是 Accept-Encoding(如 gzip),和 Content-Type 是两回事。</>,
     ],
     why: (
       <>
@@ -326,7 +326,7 @@ export const QUIZ: QuizItem[] = [
     why: (
       <>
         PUT = 整体替换且幂等;PATCH = 部分修改、不承诺幂等。
-        用 PUT 传半个对象,是新手弄丢字段的头号案发现场 ——
+        用 PUT 传半个对象,是新手弄丢字段的最常见的原因 ——
         在 JSONPlaceholder 上可以安全地亲手复现一次。
       </>
     ),

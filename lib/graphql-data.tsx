@@ -24,7 +24,7 @@ export const LABS: Lab[] = [
     hint: (
       <>
         在花括号里按 Ctrl+Space(Mac 是 ⌥Space 或 Ctrl+Space),
-        自动补全会把能点的字段全列出来 —— 这是 GraphiQL 最爽的功能,别用手背字段名。
+        自动补全会把能点的字段全列出来 —— 这是 GraphiQL 最实用的功能,不必去背字段名。
       </>
     ),
     solution: (
@@ -309,7 +309,7 @@ export const QUIZ: QuizItem[] = [
     wrong: [
       <>
         GraphiQL 免费开源,官方出品。GraphQL 世界确实有商业产品(Apollo
-        全家桶等),但 GraphiQL 不是。
+        的整套工具链等),但 GraphiQL 不是。
       </>,
       undefined,
       <>

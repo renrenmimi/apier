@@ -79,7 +79,7 @@ type Loan {
       <p>
         打开 <code>https://rickandmortyapi.com/graphql</code>,运行内省查询{" "}
         <code>{"{ __schema { types { name } } }"}</code>。
-        数一数一共回来多少个类型,并注意两类「不请自来」的家伙:
+        数一数一共回来多少个类型,并注意两类你没有定义、却出现在名单里的类型:
         名字以 <code>__</code> 开头的,和 String、Int 这些眼熟的。
       </p>
     ),
@@ -154,7 +154,7 @@ type Loan {
         />
         <p>
           全对的话,你已经比不少写了一年 GraphQL 的人都稳了 ——
-          第 4、5 案是真实项目里最常见的两个翻车点。
+          第 4、5 案是真实项目里最常见的两个出错点。
         </p>
       </>
     ),
@@ -180,7 +180,7 @@ export const QUIZ: QuizItem[] = [
     ),
     extraHint: (
       <>
-        混进了编外人员:Date 很常见但那是<b>自定义标量</b>,不是内置的;
+        选中了不属于内置标量的项:Date 很常见但那是<b>自定义标量</b>,不是内置的;
         Number 是 JavaScript 的说法,GraphQL 里分成 Int 和 Float。
       </>
     ),
@@ -221,14 +221,14 @@ export const QUIZ: QuizItem[] = [
         想要「纯字符串」,得写 <code>String!</code>。
       </>,
       <>
-        schema 是独立的契约,不看数据库脸色。数据库允许 NULL 但 schema 写了{" "}
+        schema 是独立的契约,与数据库的约束无关。数据库允许 NULL 但 schema 写了{" "}
         <code>!</code>?那返回 null 时就是服务器违约,直接报错。
       </>,
     ],
     why: (
       <>
         默认可空是 GraphQL 最著名的反直觉设定:好处是某个字段挂了可以只让它为
-        null,不必整个响应陪葬;代价是前端要多判空。
+        null,不影响整个响应;代价是前端要多判空。
       </>
     ),
   },

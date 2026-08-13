@@ -46,7 +46,7 @@ export const LABS: Lab[] = [
         敲进去(建议手敲,别复制),回车,看看打印出什么。
       </p>
     ),
-    hint: <>如果打印出来的是 Promise,别慌 —— 数据在后面的 .then 里才到货。</>,
+    hint: <>如果打印出来的是 Promise,这是正常的 —— 数据要到后面的 .then 里才拿得到。</>,
     solution: (
       <>
         <CodeBlock
@@ -180,7 +180,7 @@ export const QUIZ: QuizItem[] = [
     correct: 2,
     wrong: [
       <>
-        名字里带 JavaScript 只是出身,不是户口。Python 有 json 模块,Java 有
+        名字里带 JavaScript 只说明它的来源,不代表只有 JavaScript 能用。Python 有 json 模块,Java 有
         Jackson —— 谁都能读写。
       </>,
       <>

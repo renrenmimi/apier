@@ -248,7 +248,7 @@ export default function RestAdvancedPage() {
             <div className="card-kicker" style={{ color: "var(--risk)" }}>
               破坏性 · 必须升版本
             </div>
-            <div className="card-title">💥 老客户端会坏</div>
+            <div className="card-title">老客户端会坏</div>
             <p>
               删字段(取值变 undefined)、改字段类型(解析崩)、
               改字段语义(数据悄悄错,最阴险)、改 URL 或状态码含义。
@@ -258,7 +258,7 @@ export default function RestAdvancedPage() {
             <div className="card-kicker" style={{ color: "var(--ok)" }}>
               非破坏性 · 随便上
             </div>
-            <div className="card-title">🌱 老客户端无感</div>
+            <div className="card-title">老客户端无感</div>
             <p>
               加可选的响应字段、加新端点、加可选的 query 参数。
               JSON 里多出来的键,老代码看都不看 —— 所以「只加不改不删」
@@ -476,21 +476,21 @@ paths:
 
         <div className="grid-3">
           <div className="card">
-            <div className="card-title">📖 生成文档</div>
+            <div className="card-title">生成文档</div>
             <p>
               Swagger UI 读这份 YAML,渲染出可以在线点「Try it out」
               的交互文档 —— 你在大厂开发者官网见过的那种。
             </p>
           </div>
           <div className="card">
-            <div className="card-title">🧩 生成代码</div>
+            <div className="card-title">生成代码</div>
             <p>
               客户端 SDK、服务端骨架、TypeScript 类型,都能从定义直接生成 ——
               手写 fetch 拼字段的时代就此谢幕。
             </p>
           </div>
           <div className="card">
-            <div className="card-title">🎭 生成 Mock</div>
+            <div className="card-title">生成 Mock</div>
             <p>
               后端还没写完?按定义起一个假服务器,前端先开工。
               前后端并行,靠的就是这纸契约。

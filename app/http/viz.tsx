@@ -4,7 +4,7 @@
 //  - HeroLetter:hero 里那封「写给服务器的信」(纯装饰)。
 //  - UrlAnatomy:URL 解剖台 —— 逐段点击,右侧讲解(承自序章 JsonAnatomy 的交互)。
 //  - MethodPicker:「场景选方法」小练习,点选即判,答错给针对性解释。
-//  - StatusExplorer:状态码格子墙,点一个看「人话解释 + 典型场景」。
+//  - StatusExplorer:状态码格子墙,点一个看「通俗解释 + 典型场景」。
 
 import { useState, type ReactNode } from "react";
 import { Method, Status, type HttpMethod } from "@/lib/kit";
@@ -197,7 +197,7 @@ const MP_SCENARIOS: MpScenario[] = [
       ),
       PUT: <>PUT 会拿你的请求体去整体替换资源 —— 你压根没打算改它。</>,
       PATCH: <>PATCH 是改几个字段用的 —— 这里一个字段都不想动,纯看。</>,
-      DELETE: <>点进详情页商品就没了?用户怕是要报警。</>,
+      DELETE: <>DELETE 会真的删掉这件商品 —— 打开详情页只是查看,不该产生删除动作。</>,
     },
   },
   {
@@ -268,7 +268,7 @@ const MP_SCENARIOS: MpScenario[] = [
       PUT: (
         <>
           用 PUT 只传昵称,按语义<b>其他字段会被清掉</b> ——
-          这是新手弄丢数据的头号姿势,§03 的警告牌就是为它立的。
+          这是新手弄丢数据最常见的原因,§03 的警告牌就是为它立的。
         </>
       ),
       POST: <>不是要造新用户,是修一下旧的 —— 创建的事才找 POST。</>,

@@ -480,7 +480,7 @@ export const QUIZ: QuizItem[] = [
       <>
         schema 里 Post.author 指向 User,User.posts 又指回 Post ——
         循环引用是正常设计,但也给了攻击者素材:百来字节的嵌套查询就可能
-        让服务器烧掉几十秒 CPU。深度限制一刀切住「套娃」的层数,
+        让服务器烧掉几十秒 CPU。深度限制直接限制嵌套的层数,
         配合复杂度打分和超时,才算把门守住。
       </>
     ),

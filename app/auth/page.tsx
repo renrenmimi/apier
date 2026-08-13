@@ -262,22 +262,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
         <div className="grid-4">
           <div className="card">
             <div className="card-kicker">RESOURCE OWNER</div>
-            <div className="card-title">🧑 资源所有者</div>
+            <div className="card-title">资源所有者</div>
             <p>你。头像是你的,给不给别人看,你说了算。</p>
           </div>
           <div className="card">
             <div className="card-kicker">CLIENT</div>
-            <div className="card-title">🖨️ 客户端</div>
+            <div className="card-title">客户端</div>
             <p>想借数据的第三方应用。它是「客」,不是主人。</p>
           </div>
           <div className="card">
             <div className="card-kicker">AUTHORIZATION SERVER</div>
-            <div className="card-title">🛂 授权服务器</div>
+            <div className="card-title">授权服务器</div>
             <p>发钥匙的:验你的密码、征你的同意、签发 token。</p>
           </div>
           <div className="card">
             <div className="card-kicker">RESOURCE SERVER</div>
-            <div className="card-title">🗄️ 资源服务器</div>
+            <div className="card-title">资源服务器</div>
             <p>守数据的:见 token 放行,只开 token 允许的门。</p>
           </div>
         </div>
@@ -319,7 +319,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
 
         <div className="grid-3">
           <div className="card">
-            <div className="card-title">🧯 报错 ≠ API 挂了</div>
+            <div className="card-title">报错 ≠ API 挂了</div>
             <p>
               CORS 报错时,请求往往已经到了服务器、甚至被处理了 ——
               只是响应被浏览器扣下不给 JS。该修的是服务器的响应头,
@@ -327,14 +327,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
             </p>
           </div>
           <div className="card">
-            <div className="card-title">🔧 curl / Postman 不受管</div>
+            <div className="card-title">curl / Postman 不受管</div>
             <p>
               保安只住在浏览器里。命令行和调试工具直连畅通 ——
               所以「Postman 能通、网页不行」恰恰是 CORS 的铁证。
             </p>
           </div>
           <div className="card">
-            <div className="card-title">🚧 它不是安全防线</div>
+            <div className="card-title">它不是安全防线</div>
             <p>
               CORS 保护的是用户,防的是别的网站冒用浏览器身份。
               挡爬虫、挡攻击者?人家根本不用浏览器。

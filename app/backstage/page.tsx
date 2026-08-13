@@ -192,7 +192,7 @@ const resolvers = {
       >
         <p className="sec-desc">
           回看 §01 的 resolver:<code>Post.author</code> 每次执行都单独查一次库。
-          单看没毛病 —— 但 query 是 <code>posts {"{ author }"}</code>{" "}
+          单看没有问题 —— 但 query 是 <code>posts {"{ author }"}</code>{" "}
           的时候呢?列表有 N 篇文章,author 的 resolver 就跑 N 次,
           <b>1 次查列表 + N 次查作者</b>。每个 resolver
           都只看得见自己手里的那个 parent,谁也不知道别人在干同样的事。
@@ -232,7 +232,7 @@ const resolvers = {
 
         <CodeBlock
           lang="js"
-          title="loaders.js · 改动小得离谱"
+          title="loaders.js · 改动极小"
           hl={[5, 15]}
           code={`import DataLoader from "dataloader";
 

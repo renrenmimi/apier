@@ -9,13 +9,13 @@ import { CodeBlock } from "@/lib/code";
 export const LABS: Lab[] = [
   {
     id: "url-makeover",
-    title: "整容五个烂 URL",
+    title: "修正五个有问题的 URL",
     d: "easy",
     tags: ["URL 设计"],
     task: (
       <>
         <p>
-          纸笔或心算都行 —— 给下面五个 URL 写出问题诊断和整容后的样子
+          纸笔或心算都行 —— 给下面五个 URL 写出问题诊断和修改后的写法
           (方法 + 路径):
         </p>
         <p>
@@ -32,9 +32,9 @@ export const LABS: Lab[] = [
     ),
     solution: (
       <p>
-        ① <code>GET /users</code>(get 是复读,All 是废话)。
+        ① <code>GET /users</code>(get 与方法重复,All 是多余的)。
         <br />② <code>POST /users</code>(POST 本身就是 create;user 要复数)。
-        <br />③ <code>GET /posts/7</code>(fetch、ById 全是复读;id 进路径)。
+        <br />③ <code>GET /posts/7</code>(fetch、ById 都与方法重复;id 应放进路径)。
         <br />④ <code>DELETE /posts/7</code> ——
         这个最危险:用 GET 做删除,浏览器预加载、爬虫扫一遍,数据就没了。
         <br />⑤ <code>POST /users/7/comments</code>;不过评论一般从属于文章,
@@ -123,7 +123,7 @@ console.log(patch); // { userId: 1, id: 1, title: "hi", body: "quia et..." }`}
           <code>DELETE /ratings/1001</code> → 204;再删一次 404
         </p>
         <p>
-          三条底线必须成立:动词在方法里、名词在路径里、状态码说人话。
+          三条底线必须成立:动词在方法里、名词在路径里、状态码准确表达结果。
           做到这三条,细节怎么定都算合格设计。
         </p>
       </>
@@ -153,7 +153,7 @@ export const QUIZ: QuizItem[] = [
     wrong: [
       <>
         动词混进了 URL —— 动作已经由 GET 表达了,路径里再写 get
-        是复读机行为。
+        属于重复表达。
       </>,
       undefined,
       <>
@@ -243,7 +243,7 @@ export const QUIZ: QuizItem[] = [
       </>,
       <>
         301 是「资源永久搬家」的导航语义,用在这儿等于对刚出生的资源说
-        「你搬走了」—— 驴唇不对马嘴。
+        「你搬走了」—— 语义完全对不上。
       </>,
     ],
     why: (
@@ -276,15 +276,15 @@ export const QUIZ: QuizItem[] = [
     wrong: [
       <>
         PUT 是整体替换 —— 只发 title,等于宣布「这篇文章从此只有标题」,
-        body、createdAt 全会被清掉。新手丢数据的头号案发现场。
+        body、createdAt 全会被清掉。新手丢数据的最常见的原因。
       </>,
       undefined,
       <>
         对已存在的单个资源做 POST,没有约定俗成的语义 ——
-        同事看到这行代码只会一脸问号。
+        读代码的人无法判断它到底要做什么。
       </>,
       <>
-        目的能达到,代价离谱:id 变了、createdAt 变了,
+        目的能达到,但代价过大:id 变了、createdAt 变了,
         所有引用这篇文章的链接全断 —— 用大炮打蚊子,还打塌了房。
       </>,
     ],
@@ -308,7 +308,7 @@ export const QUIZ: QuizItem[] = [
     wrong: [
       <>
         400 说的是「话都没说利索」—— 比如 JSON 解析失败。这份 JSON
-        语法没毛病,错在内容语义,那是 422 的领域。
+        语法正确,问题出在内容语义,那是 422 的领域。
       </>,
       <>
         409 是「和服务器现有状态冲突」,比如用户名被占。
@@ -316,8 +316,8 @@ export const QUIZ: QuizItem[] = [
       </>,
       undefined,
       <>
-        500 是服务器自己出错时的忏悔。这明明是客户端发来的数据不合格,
-        别替它背锅。
+        500 表示服务器自身出错。这明明是客户端发来的数据不合格,
+        责任不在服务器,不该用 5xx。
       </>,
     ],
     why: (
@@ -421,7 +421,7 @@ export const QUIZ: QuizItem[] = [
         一点没解决。
       </>,
       <>
-        这是直接退化回成熟度 L0 的「POST 一把梭」——
+        这是直接退化回成熟度 L0 的「所有请求都打同一个 POST 端点」——
         第 03 章的梯子白爬了。
       </>,
     ],

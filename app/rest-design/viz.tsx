@@ -2,7 +2,7 @@
 
 // 第 04 章 · RESTful 设计实战 —— 本章专属可视化:
 //  - HeroBlueprint:hero 里的「图纸」动画,端点行轮流点亮(纯 CSS 驱动)。
-//  - UrlClinic:URL 整容室 —— 六个烂 URL,点开看诊断和整容后的样子。
+//  - UrlClinic:URL 诊断台 —— 六个有问题的 URL,点开看诊断和修改后的写法。
 //  - StatusDealer:状态码决策室 —— 八个场景发牌,选码即判,即时讲解。
 
 import { useState, type ReactNode } from "react";
@@ -127,7 +127,7 @@ const URL_CASES: UrlCase[] = [
     why: (
       <>
         创建 = 对集合 POST,POST 本身就是「新建」,URL 里再写 create
-        是复读。评论从属于文章,一层嵌套刚好把这层关系说清。
+        属于重复表达。评论从属于文章,一层嵌套刚好把这层关系说清。
       </>
     ),
   },
@@ -139,7 +139,7 @@ export function UrlClinic() {
 
   return (
     <div className="viz">
-      <div className="viz-title">URL 整容室 —— 点左边的「病号」,看诊断书</div>
+      <div className="viz-title">URL 诊断台 —— 点左边的问题 URL,看诊断结果</div>
       <div className="rd-clinic">
         <div className="rd-url-list" role="group">
           {URL_CASES.map((u, i) => (
@@ -164,7 +164,7 @@ export function UrlClinic() {
               <li key={p}>{p}</li>
             ))}
           </ul>
-          <div className="rd-report-h">整容后</div>
+          <div className="rd-report-h">修改后</div>
           <div className="rd-fixed">
             <Method m={c.fixedMethod} />
             {c.fixedPath}
@@ -312,7 +312,7 @@ const SCENES: Scene[] = [
       </>
     ),
     traps: {
-      422: "这份数据本身没毛病(昨天发就成功了),错在和服务器现有数据撞车 —— Conflict,409。",
+      422: "这份数据本身没有语法问题(昨天发就成功了),错在和服务器现有数据撞车 —— Conflict,409。",
       400: "语法、语义都挑不出错,坏在「撞车」—— 那是 409 的地盘。",
     },
   },

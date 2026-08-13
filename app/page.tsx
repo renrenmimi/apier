@@ -144,21 +144,21 @@ export default function HomePage() {
             </p>
           </div>
           <div className="card hoverable">
-            <div className="card-title">💳 扫码付一杯咖啡</div>
+            <div className="card-title">扫码付一杯咖啡</div>
             <p>
               收银机调支付平台的 API:「向这位顾客收 28 元」。你听到的那声
               「叮」,是一次 API 调用成功返回的声音。
             </p>
           </div>
           <div className="card hoverable">
-            <div className="card-title">🔑 「用微信登录」</div>
+            <div className="card-title">「用微信登录」</div>
             <p>
               陌生网站不知道你是谁,它调微信的 API 替你验明正身 ——
               你的密码从头到尾没离开过微信。这套机制叫 OAuth,第 06 章见。
             </p>
           </div>
           <div className="card hoverable">
-            <div className="card-title">🤖 问 AI 一个问题</div>
+            <div className="card-title">问 AI 一个问题</div>
             <p>
               你敲下的问题被打包成请求,发给模型服务商的 API;答案就是响应体。
               所谓「接入 AI」,本质就是「调它的 API」。

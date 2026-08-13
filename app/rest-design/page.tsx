@@ -1,7 +1,7 @@
 "use client";
 
 // 第 04 章 · RESTful 设计实战:
-// 建筑师开工 → 贯穿案例「博客 API」→ URL 命名规矩(整容室)→
+// 建筑师开工 → 贯穿案例「博客 API」→ URL 命名规矩(诊断台)→
 // CRUD 映射总表 → 三场完整对话(创建/更新/删除)→ 状态码决策室 →
 // RFC 9457 错误格式 → 端点竣工图 → 动手任务 → 测验 → 要点。
 
@@ -93,7 +93,7 @@ export default function RestDesignPage() {
             <span className="no">规矩 3</span>
             <span>
               <b>动词不进 URL。</b>URL 回答「哪儿」,方法回答「干嘛」——
-              GET 就是取,POST 就是建,写在路径里是复读。
+              GET 就是取,POST 就是建,写在路径里属于重复。
             </span>
           </li>
           <li>
@@ -138,7 +138,7 @@ export default function RestDesignPage() {
             <thead>
               <tr>
                 <th>请求</th>
-                <th>人话</th>
+                <th>通俗说法</th>
                 <th>成功回</th>
                 <th>幂等?</th>
               </tr>
@@ -235,7 +235,7 @@ export default function RestDesignPage() {
             <Method m="POST" /> <code>/posts/42</code>
             (对单个资源 POST)没有约定俗成的含义,能不用就不用;
             <Method m="GET" /> 永远不该改数据 —— 它是「安全」方法,
-            浏览器预加载和爬虫会随意触发它,§01 整容室里那起
+            浏览器预加载和爬虫会随意触发它,§01 诊断台里那起
             「爬虫删库」就是这么来的。
           </p>
         </Callout>
@@ -358,7 +358,7 @@ Content-Type: application/json
             />
           }
         />
-        <Callout tone="warn" title="新手丢数据的头号案发现场">
+        <Callout tone="warn" title="新手丢数据的最常见的原因">
           <p>
             用 PUT 传半个对象。记住 PUT 的合同是<b>整体替换</b>:你没提的
             字段,不是「不改」,是「没有」。只想改一处,用
@@ -454,7 +454,7 @@ Content-Type: application/problem+json
             <div className="card-title">
               <Status code={404} text="Not Found" />
             </div>
-            <p>查无此物 —— 请求没毛病,东西不存在。</p>
+            <p>查无此物 —— 请求本身没有问题,资源不存在。</p>
           </div>
           <div className="card">
             <div className="card-title">

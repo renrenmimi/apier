@@ -17,7 +17,7 @@ export const LABS: Lab[] = [
         把 §03 那份宝可梦查询器代码抄进一个 html 文件(或直接在 Console 里做),
         改成查 <code>ditto</code>,并在身高体重之外<b>多显示一个字段</b> ——
         推荐 <code>types</code>(属性)或 <code>base_experience</code>。
-        提示:先把整个响应对象 console.log 出来,看看还有什么宝贝。
+        提示:先把整个响应对象 console.log 出来,看看还有哪些字段。
       </p>
     ),
     hint: (
@@ -66,7 +66,7 @@ console.log(p.types.map((t) => t.type.name).join(", ")); // normal`}
     hint: (
       <>
         三件套:method、headers 里的 Content-Type、JSON.stringify 过的
-        body —— 少一个都会出怪事。
+        body —— 少一件都会出错。
       </>
     ),
     solution: (
@@ -154,13 +154,13 @@ export const QUIZ: QuizItem[] = [
     correct: 1,
     wrong: [
       <>
-        网络一来一回要几十上百毫秒,JS 不会原地罚站等它 ——
+        网络一来一回要几十上百毫秒,JS 不会停在原地等它 ——
         立刻拿到的只能是「凭证」,不是货。
       </>,
       undefined,
       <>
         JSON 要等响应到货、再经 res.json() 解析才有 ——
-        这一瞬间八字还没一撇。
+        这一瞬间响应还没回来。
       </>,
       <>
         fetch 不返回布尔值;成败要等 Promise 兑现那一刻才见分晓。
@@ -190,7 +190,7 @@ export const QUIZ: QuizItem[] = [
     wrong: [
       <>
         回个 404 也算「回复了」,但 ok 是 false —— ok
-        看的是状态码的段位,不是有没有回信。
+        看的是状态码落在哪个区间,不是有没有回信。
       </>,
       undefined,
       <>
@@ -261,7 +261,7 @@ export const QUIZ: QuizItem[] = [
       undefined,
       <>
         不是悄悄塞给你个 null,是明确抛错(TypeError: body stream
-        already read)—— 这点还算厚道。
+        already read),便于定位问题。
       </>,
       <>
         res 只是那一次响应的封装,再怎么折腾它,也不会触发新的网络请求。
@@ -299,7 +299,7 @@ export const QUIZ: QuizItem[] = [
     extraHint: (
       <>
         有一项纯属多余 —— fetch 返回的 Promise 自己会等响应,
-        轮不到你掐秒表。
+        不需要你手动计时。
       </>
     ),
     why: (
@@ -354,7 +354,7 @@ export const QUIZ: QuizItem[] = [
       <>运营商不管这事 —— curl 都通了,说明链路根本没问题。</>,
       <>
         换 XMLHttpRequest、换 axios 一样报错 ——
-        规矩是浏览器定的,不是哪个函数的锅。
+        这条规则由浏览器执行,与用哪个函数无关。
       </>,
     ],
     why: (
