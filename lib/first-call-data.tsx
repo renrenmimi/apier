@@ -304,8 +304,8 @@ export const QUIZ: QuizItem[] = [
     ),
     why: (
       <>
-        三件套各管一段:method 换动词(默认 GET,而 GET 不带
-        body);Content-Type 告诉服务器按 JSON 解析;JSON.stringify
+        三件套各管一段:method 换动词(默认 GET,而 GET 带 body 会被
+        fetch 直接拒收);Content-Type 告诉服务器按 JSON 解析;JSON.stringify
         把对象拍扁成能上网线的文本。缺谁,谁的岗位就出事。
       </>
     ),

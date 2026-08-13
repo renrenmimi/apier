@@ -294,8 +294,10 @@ export default function FirstCallPage() {
             一个字段都解析不出来。
             <b>忘了 Content-Type?</b>服务器可能按纯文本或表单去解析你的
             JSON,轻则字段全空,重则直接 400。
-            <b>忘了 method?</b>默认是 GET,而 GET 根本不带请求体 ——
-            你的数据压根没上车。
+            <b>忘了 method?</b>默认就是 GET —— 而 GET 不允许带请求体,
+            fetch 会当场抛 <code>TypeError: Request with GET/HEAD method cannot have body</code>,
+            请求<b>一个字节都发不出去</b>。好消息是这个错很响,直接掉进 catch,
+            不像前两样那么阴。
           </p>
           <p>
             以后遇到「明明传了数据服务器说没收到」,先按这个顺序查一遍,
