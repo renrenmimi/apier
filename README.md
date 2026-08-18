@@ -9,6 +9,14 @@ them, and argue for one over the other.
 Sister sites: [DataData](https://data-data.vercel.app) (data structures) and
 [AlgoAlgo](https://algo-algo.vercel.app) (algorithms) — same design language.
 
+![The course home — 12 chapters across REST and GraphQL](docs/home.jpg)
+
+*The course home — 12 chapters across REST and GraphQL*
+
+![HTTP: status codes, methods and headers, explored interactively](docs/http.jpg)
+
+*HTTP: status codes, methods and headers, explored interactively*
+
 ## The 12 chapters
 
 | # | Chapter | What it covers |
