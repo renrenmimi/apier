@@ -3,8 +3,7 @@
 **▶ [Open the course](https://apier-eta.vercel.app)** — runs in your browser, nothing to install.
 
 An interactive API course for people starting from zero. It begins at "what is an API" and
-goes far enough into both **REST** and **GraphQL** that you can build with them, design
-them, and argue for one over the other.
+goes far enough into both **REST** and **GraphQL** that you can design an API in either and choose between them.
 
 Sister sites: [DataData](https://data-data.vercel.app) (data structures) and
 [AlgoAlgo](https://algo-algo.vercel.app) (algorithms) — same design language.
