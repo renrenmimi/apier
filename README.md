@@ -34,7 +34,7 @@ Sister sites: [DataData](https://data-data.vercel.app) (data structures) and
 | ✦ | Finale — the comparison | Side by side on every axis · a decision tree · GitHub and Shopify case studies · final quiz |
 
 Each chapter follows the same rhythm: an intuition first, then an interactive
-visualization, then code you can actually run, then the common mistakes, then a hands-on
+visualization, then runnable code, then the common mistakes, then a hands-on
 task against a real public API, then a quiz. Progress is stored locally in the browser.
 
 ## Running locally
@@ -51,7 +51,7 @@ Build with type checking: `npm run build`.
 
 ## Structure
 
-Next.js 15 (App Router) + TypeScript + React 19, plain CSS, no Tailwind. No API routes, so the whole site prerenders to static pages.
+Next.js 15 (App Router) + TypeScript + React 19, plain CSS. No API routes, so the whole site prerenders to static pages.
 
 Each chapter is one folder under `app/` holding its page, its visualizations (`viz.tsx`) and
 its own stylesheet, paired with a data file under `lib/` for quizzes and exercises.
