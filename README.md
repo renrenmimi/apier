@@ -35,7 +35,7 @@ Sister sites: [DataData](https://data-data.vercel.app) (data structures) and
 
 Each chapter follows the same rhythm: an intuition first, then an interactive
 visualization, then runnable code, then the common mistakes, then a hands-on
-task against a real public API, then a quiz. Progress is stored locally in the browser.
+task against a live public API, then a quiz. Progress is stored locally in the browser.
 
 ## Running locally
 
