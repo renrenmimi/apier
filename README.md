@@ -17,7 +17,7 @@ Sister sites: [DataData](https://data-data.vercel.app) (data structures) and
 
 *HTTP: status codes, methods and headers, explored interactively*
 
-## The 12 chapters
+## Chapters
 
 | # | Chapter | What it covers |
 |---|---|---|
