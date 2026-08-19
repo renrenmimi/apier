@@ -99,7 +99,8 @@
 }
 .rs-flip {
   perspective: 1100px;
-  height: 208px;
+  /* 英文文案比中文长,卡面高度按英文最长的一张留足,避免 overflow:hidden 截断 */
+  height: 246px;
   border: 0;
   background: transparent;
   padding: 0;
