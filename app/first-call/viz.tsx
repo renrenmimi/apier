@@ -1,14 +1,16 @@
 "use client";
 
-// 第 02 章专属可视化:
-//  - HeroDrive:hero 里的「上路」循环动画(你的 JS ↔ 真实世界的 API)。
-//  - FetchLab:三种结局亲手踩 —— 正常 / 404 / 断网,真 fetch + 代码分支高亮,失败自动降级。
+// 第 02 章专属可视化(双语,英文默认):
+//  - HeroDrive:hero 里的循环动画(你的 JavaScript ↔ 真实世界的 API)。
+//  - FetchLab:三种结局亲手踩 —— 正常 / 404 / 域名不存在,真 fetch + 代码分支高亮,失败自动降级。
 //  - PokedexWidget:真的能玩的宝可梦查询器(真 fetch PokeAPI,断网降级内置数据)。
 //  - NetworkTour:DevTools Network 面板导览(可点的标签页)。
+// 文案一律走 <T en zh /> 或 Loc<…>,不要在这里写 lang === "en" ? … : …。
 
 import { useState, type ReactNode } from "react";
 import { CodeBlock } from "@/lib/code";
 import { Status } from "@/lib/kit";
+import { T, useL, type Loc } from "@/lib/i18n";
 
 /* ================= HeroDrive ================= */
 
@@ -17,7 +19,7 @@ export function HeroDrive() {
     <div className="fc-loop" aria-hidden>
       <div className="flow-node lit">
         <span className="ico">🧑‍💻</span>
-        你的 JS
+        <T en="Your JavaScript" zh="你的 JS" />
       </div>
       <div className="flow-mid fc-loop-mid">
         <div className="flow-line" />
@@ -26,7 +28,7 @@ export function HeroDrive() {
       </div>
       <div className="flow-node">
         <span className="ico">🌍</span>
-        真实世界的 API
+        <T en="A real API" zh="真实世界的 API" />
       </div>
     </div>
   );
@@ -41,15 +43,15 @@ const FETCH_CODE = `async function load(url) {
       throw new Error("HTTP " + res.status);
     }
     const data = await res.json();
-    console.log("成功:", data);
+    console.log("ok:", data);
   } catch (err) {
-    console.error("失败:", err.message);
+    console.error("failed:", err.message);
   }
 }`;
 
 interface FcScenario {
   id: "ok" | "notfound" | "offline";
-  label: string;
+  label: Loc<string>;
   url: string;
   hl: number[];
   path: ReactNode;
@@ -58,43 +60,87 @@ interface FcScenario {
 const SCENARIOS: FcScenario[] = [
   {
     id: "ok",
-    label: "① 正常 URL",
+    label: { en: "① A working URL", zh: "① 正常 URL" },
     url: "https://jsonplaceholder.typicode.com/posts/1",
     hl: [3, 7, 8],
     path: (
-      <>
-        第 3 行:fetch 顺利兑现,res.status = 200,res.ok = true ——
-        跳过 if,第 7 行解析 JSON,第 8 行打印数据。
-        全程没碰 catch,一路绿灯。
-      </>
+      <T
+        en={
+          <>
+            Line 3: the fetch Promise resolves, <code>res.status</code> is 200
+            and <code>res.ok</code> is true, so the <code>if</code> is skipped.
+            Line 7 parses the body, line 8 prints it. The{" "}
+            <code>catch</code> block is never reached.
+          </>
+        }
+        zh={
+          <>
+            第 3 行:fetch 的 Promise 兑现,<code>res.status</code> 是 200,
+            <code>res.ok</code> 是 true,跳过 <code>if</code>。
+            第 7 行解析正文,第 8 行打印。全程没进 <code>catch</code>。
+          </>
+        }
+      />
     ),
   },
   {
     id: "notfound",
-    label: "② 404 URL",
+    label: { en: "② A URL that returns 404", zh: "② 404 的 URL" },
     url: "https://jsonplaceholder.typicode.com/nothing-here",
-    hl: [3, 4, 5, 10],
+    hl: [3, 4, 5, 9, 10],
     path: (
-      <>
-        第 3 行:注意!fetch <b>还是成功兑现了</b> —— 服务器回了话,
-        只是回的是 404。res.ok = false,第 4、5 行手动把它升级成错误,
-        第 10 行接住。要是没写这个 if,代码会带着一具「404
-        的响应体」继续往下跑,最后在离出错点很远的地方炸出一串 undefined。
-      </>
+      <T
+        en={
+          <>
+            Line 3: notice that the fetch Promise <b>still resolved</b>. The
+            server answered; the answer happens to be 404. So{" "}
+            <code>res.ok</code> is false, lines 4 and 5 raise that status into an
+            error, and the <code>catch</code> on lines 9 and 10 receives it.
+            Without that <code>if</code>, the
+            program would carry on with the body of a 404 response and fail much
+            later, far from the real cause.
+          </>
+        }
+        zh={
+          <>
+            第 3 行:注意,fetch 的 Promise <b>照样兑现了</b> ——
+            服务器回了话,只是回的是 404。所以 <code>res.ok</code> 是 false,
+            第 4、5 行把这个状态升级成错误,第 9、10 行的 <code>catch</code>{" "}
+            接住。要是不写这个 <code>if</code>,程序会带着 404 的响应正文继续往下跑,
+            在离出错点很远的地方才失败。
+          </>
+        }
+      />
     ),
   },
   {
     id: "offline",
-    label: "③ 断网(域名不存在)",
+    label: {
+      en: "③ A hostname that does not exist",
+      zh: "③ 域名不存在",
+    },
     url: "https://api.no-such-host-anywhere.example/data",
     hl: [3, 9, 10],
     path: (
-      <>
-        第 3 行:域名都解析不了,信根本寄不出去 —— 这才是 fetch
-        亲自 reject 的情形,直接跳进第 9、10 行的 catch,err 是{" "}
-        <code>TypeError: Failed to fetch</code>。
-        网络层失败才走这条路,404/500 不走。
-      </>
+      <T
+        en={
+          <>
+            Line 3: the hostname does not resolve, so the request never leaves
+            the machine. This is the case where fetch rejects on its own.
+            Execution jumps to the <code>catch</code> on lines 9 and 10, and{" "}
+            <code>err</code> is <code>TypeError: Failed to fetch</code>. Only
+            network-level failures take this path. 404 and 500 do not.
+          </>
+        }
+        zh={
+          <>
+            第 3 行:域名解析不了,请求根本发不出去。这才是 fetch 自己
+            reject 的情形,直接跳到第 9、10 行的 <code>catch</code>,
+            <code>err</code> 是 <code>TypeError: Failed to fetch</code>。
+            只有网络层失败会走这条路,404、500 不会。
+          </>
+        }
+      />
     ),
   },
 ];
@@ -119,6 +165,7 @@ type FcState =
     };
 
 export function FetchLab() {
+  const L = useL();
   const [st, setSt] = useState<FcState>({ phase: "idle" });
 
   const run = async (sc: FcScenario) => {
@@ -183,7 +230,12 @@ export function FetchLab() {
 
   return (
     <div className="viz fc-lab">
-      <div className="viz-title">三种结局,亲手各踩一遍</div>
+      <div className="viz-title">
+        <T
+          en="Three outcomes, run each one yourself"
+          zh="三种结局,亲手各跑一遍"
+        />
+      </div>
       <div className="fc-lab-btns">
         {SCENARIOS.map((sc) => (
           <button
@@ -193,15 +245,28 @@ export function FetchLab() {
             disabled={st.phase === "loading"}
             onClick={() => run(sc)}
           >
-            {sc.label}
+            {L(sc.label)}
           </button>
         ))}
       </div>
 
       {st.phase === "idle" && (
         <div className="viz-msg">
-          点一个按钮,你的浏览器会<b>真的</b>发出这个请求,
-          下面的代码会高亮出它这次走过的分支。三个都点一遍,坑就认全了。
+          <T
+            en={
+              <>
+                Press a button. Your browser <b>really</b> sends that request,
+                and the code below highlights the lines this run went through.
+                Try all three.
+              </>
+            }
+            zh={
+              <>
+                点一个按钮,你的浏览器会<b>真的</b>发出这个请求,
+                下面的代码会高亮出这次走过的行。三个都点一遍。
+              </>
+            }
+          />
         </div>
       )}
 
@@ -209,7 +274,7 @@ export function FetchLab() {
         <div className="viz-msg">
           <span className="fc-lab-url">GET {st.sc.url}</span>
           <br />
-          请求在路上……
+          <T en="Request in flight…" zh="请求在路上……" />
         </div>
       )}
 
@@ -229,13 +294,19 @@ export function FetchLab() {
             )}
             {st.simulated && (
               <span className="fc-lab-sim">
-                当前连不上外网,以下是内置的同款结果
+                <T
+                  en="No internet connection right now, so this is a built-in copy of the same result."
+                  zh="当前连不上外网,以下是内置的同款结果"
+                />
               </span>
             )}
           </div>
           <CodeBlock
             lang="js"
-            title="load.js · 高亮 = 这次走过的行"
+            title={{
+              en: "load.js · highlighted = the lines this run used",
+              zh: "load.js · 高亮 = 这次走过的行",
+            }}
             code={FETCH_CODE}
             hl={st.sc.hl}
             note={st.sc.path}
@@ -291,6 +362,7 @@ type PokeState =
   | { phase: "error" };
 
 export function PokedexWidget() {
+  const L = useL();
   const [input, setInput] = useState("pikachu");
   const [st, setSt] = useState<PokeState>({ phase: "idle" });
   const [imgBroken, setImgBroken] = useState(false);
@@ -334,12 +406,20 @@ export function PokedexWidget() {
 
   return (
     <div className="viz fc-poke">
-      <div className="viz-title">试玩版 · 真的在调 PokeAPI</div>
+      <div className="viz-title">
+        <T
+          en="Live demo · this really calls PokeAPI"
+          zh="试玩版 · 真的在调 PokeAPI"
+        />
+      </div>
       <div className="fc-poke-form">
         <input
           className="fc-input"
           value={input}
-          placeholder="输入宝可梦英文名,如 pikachu"
+          placeholder={L({
+            en: "Pokemon name, for example pikachu",
+            zh: "输入宝可梦英文名,如 pikachu",
+          })}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") go();
@@ -352,7 +432,9 @@ export function PokedexWidget() {
           onClick={() => go()}
           disabled={st.phase === "loading" || !input.trim()}
         >
-          {st.phase === "loading" ? "查询中…" : "查询"}
+          {st.phase === "loading"
+            ? L({ en: "Searching…", zh: "查询中…" })
+            : L({ en: "Search", zh: "查询" })}
         </button>
       </div>
       <div className="fc-poke-chips">
@@ -371,8 +453,21 @@ export function PokedexWidget() {
 
       {st.phase === "idle" && (
         <div className="viz-msg">
-          输入名字点「查询」,或直接点上面的候选 ——
-          浏览器会真的向 <code>pokeapi.co</code> 发一个 GET 请求。
+          <T
+            en={
+              <>
+                Type a name and press Search, or use one of the buttons above.
+                The browser really sends a GET request to{" "}
+                <code>pokeapi.co</code>.
+              </>
+            }
+            zh={
+              <>
+                输入名字点「查询」,或者直接点上面的候选 ——
+                浏览器会真的向 <code>pokeapi.co</code> 发一个 GET 请求。
+              </>
+            }
+          />
         </div>
       )}
 
@@ -382,22 +477,38 @@ export function PokedexWidget() {
             GET https://pokeapi.co/api/v2/pokemon/{st.name}
           </span>
           <br />
-          请求在路上……
+          <T en="Request in flight…" zh="请求在路上……" />
         </div>
       )}
 
       {st.phase === "notfound" && (
         <div className="viz-msg">
-          <Status code={404} text="Not Found" /> —— 没有叫「{st.name}
-          」的宝可梦。注意:服务器认真地回了话,这就是状态码的价值。
-          试试 pikachu、ditto、eevee 或 snorlax(注意用英文名)。
+          <Status code={404} text="Not Found" />{" "}
+          <T
+            en={
+              <>
+                — there is no Pokemon called &quot;{st.name}&quot;. The server
+                answered clearly, which is exactly what a status code is for. Try
+                pikachu, ditto, eevee, or snorlax. Names have to be in English.
+              </>
+            }
+            zh={
+              <>
+                —— 没有叫「{st.name}」的宝可梦。服务器认真地回答了,
+                这正是状态码的用处。试试 pikachu、ditto、eevee 或
+                snorlax,名字要用英文。
+              </>
+            }
+          />
         </div>
       )}
 
       {st.phase === "error" && (
         <div className="viz-msg">
-          网络好像不通 —— 试试内置缓存了数据的 pikachu 或
-          ditto,断网也能看到效果。
+          <T
+            en="The network does not seem to be reachable. Try pikachu or ditto: their data is built into this page, so the demo still works offline."
+            zh="网络好像不通。试试 pikachu 或 ditto —— 它们的数据内置在本页,断网也能看到效果。"
+          />
         </div>
       )}
 
@@ -405,8 +516,10 @@ export function PokedexWidget() {
         <>
           {st.offline && (
             <div className="viz-msg">
-              现在连不上外网,展示的是内置的本地数据 ——
-              字段和真实响应完全一致。
+              <T
+                en="No internet connection right now, so this is built-in local data. The fields are the same as in the real response."
+                zh="当前连不上外网,这里显示的是内置的本地数据 —— 字段和真实响应完全一致。"
+              />
             </div>
           )}
           <div className="fc-poke-card">
@@ -430,21 +543,39 @@ export function PokedexWidget() {
               </div>
               <div className="fc-poke-stats">
                 <span className="fc-poke-stat">
-                  <b>{st.data.height / 10} m</b>身高
+                  <b>{st.data.height / 10} m</b>
+                  <T en="Height" zh="身高" />
                 </span>
                 <span className="fc-poke-stat">
-                  <b>{st.data.weight / 10} kg</b>体重
+                  <b>{st.data.weight / 10} kg</b>
+                  <T en="Weight" zh="体重" />
                 </span>
                 <span className="fc-poke-stat">
-                  <b>{st.data.types.join(" / ") || "?"}</b>属性
+                  <b>{st.data.types.join(" / ") || "?"}</b>
+                  <T en="Type" zh="属性" />
                 </span>
               </div>
             </div>
           </div>
           <div className="viz-msg">
-            数据链路:<code>fetch → res.json() → 改 DOM</code>。
-            身高体重的单位是分米和百克 —— 光看数字猜不出来,
-            这种事永远以<b>文档</b>为准。
+            <T
+              en={
+                <>
+                  The path was <code>fetch → res.json() → update the DOM</code>.
+                  The units in the response are decimeters and hectograms, which
+                  is why both numbers are divided by 10. You cannot guess that
+                  from the numbers alone. For this kind of detail the{" "}
+                  <b>documentation</b> is the only reliable source.
+                </>
+              }
+              zh={
+                <>
+                  这条链路是 <code>fetch → res.json() → 改 DOM</code>。
+                  响应里的单位是分米和百克,所以两个数字都除以了 10。
+                  光看数字猜不出来,这种事只能以<b>文档</b>为准。
+                </>
+              }
+            />
           </div>
         </>
       )}
@@ -456,8 +587,9 @@ export function PokedexWidget() {
 
 interface DtTab {
   id: string;
+  /** DevTools 里的标签名,不翻译 */
   label: string;
-  title: string;
+  title: ReactNode;
   body: ReactNode;
 }
 
@@ -465,17 +597,47 @@ const DT_TABS: DtTab[] = [
   {
     id: "headers",
     label: "Headers",
-    title: "这次对话的信封与抬头",
+    title: (
+      <T en="The metadata of this exchange" zh="这次交互的元数据" />
+    ),
     body: (
       <>
         <p>
-          分三段:<b>General</b>(完整 URL、请求方法、状态码 ——
-          第 01 章的主角们都在这)、<b>Response Headers</b>(服务器回信的抬头)、
-          <b>Request Headers</b>(你寄出去的抬头)。
+          <T
+            en={
+              <>
+                Three groups: <b>General</b> (the full URL, the request method,
+                and the status code), <b>Response Headers</b> (what the server
+                sent back), and <b>Request Headers</b> (what your browser sent).
+                Chapter 01 explains what these headers mean.
+              </>
+            }
+            zh={
+              <>
+                分三组:<b>General</b>(完整 URL、请求方法、状态码)、
+                <b>Response Headers</b>(服务器回的头)、
+                <b>Request Headers</b>(浏览器发出的头)。
+                这些头分别是什么意思,第 01 章讲过。
+              </>
+            }
+          />
         </p>
         <p>
-          查 Content-Type 对不对、缓存头给了没、带没带
-          Authorization —— 第一站永远是这里。
+          <T
+            en={
+              <>
+                Checking whether Content-Type is right, whether a caching header
+                was sent, or whether Authorization was included: this tab is
+                always the first place to look.
+              </>
+            }
+            zh={
+              <>
+                查 Content-Type 对不对、缓存头有没有给、有没有带上 Authorization
+                —— 第一站永远是这里。
+              </>
+            }
+          />
         </p>
       </>
     ),
@@ -483,17 +645,44 @@ const DT_TABS: DtTab[] = [
   {
     id: "payload",
     label: "Payload",
-    title: "你随请求寄出去的东西",
+    title: <T en="What you sent with the request" zh="你随请求寄出去的东西" />,
     body: (
       <>
         <p>
-          两样:URL 里的<b>查询参数</b>(Query String Parameters,
-          已经帮你拆成一行一个),和 POST/PUT 的<b>请求体</b>(Request
-          Payload)。
+          <T
+            en={
+              <>
+                Two things: the <b>query string parameters</b> from the URL,
+                already split into one line each, and the <b>request body</b> of
+                a POST or a PUT.
+              </>
+            }
+            zh={
+              <>
+                两样:URL 里的<b>查询参数</b>(已经按一行一个拆好),
+                以及 POST 或 PUT 的<b>请求正文</b>。
+              </>
+            }
+          />
         </p>
         <p>
-          「明明传了参数怎么没生效?」—— 来这一看,大概率是名字拼错了、
-          或者 JSON.stringify 忘了。排查参数问题的第一站。
+          <T
+            en={
+              <>
+                &quot;I sent the parameter but nothing changed&quot; usually ends
+                here. Most of the time the name is misspelled, or
+                JSON.stringify was left out. Start here for any parameter
+                problem.
+              </>
+            }
+            zh={
+              <>
+                「参数明明传了却没生效」的问题一般在这里收场:
+                多半是名字拼错了,或者忘了 JSON.stringify。
+                查参数问题就从这里开始。
+              </>
+            }
+          />
         </p>
       </>
     ),
@@ -501,16 +690,46 @@ const DT_TABS: DtTab[] = [
   {
     id: "response",
     label: "Response",
-    title: "服务器回的正文原文",
+    title: (
+      <T
+        en="The body the server sent, exactly as it arrived"
+        zh="服务器回的正文原文"
+      />
+    ),
     body: (
       <>
         <p>
-          一字不差的响应体。旁边的 <b>Preview</b>{" "}
-          标签是同一份东西的折叠树视图,大 JSON 用它看更舒服。
+          <T
+            en={
+              <>
+                The response body, character for character. The <b>Preview</b>{" "}
+                tab beside it shows the same content as a collapsible tree, which
+                is easier to read for a large JSON document.
+              </>
+            }
+            zh={
+              <>
+                一字不差的响应正文。旁边的 <b>Preview</b>{" "}
+                标签是同一份内容的折叠树视图,大段 JSON 用它看更省力。
+              </>
+            }
+          />
         </p>
         <p>
-          前端说「接口没返回这个字段」,后端说「明明有」——
-          打开这里看响应原文,几秒就能确认。
+          <T
+            en={
+              <>
+                When the front end says a field is missing and the back end says
+                it is there, this tab settles it in seconds.
+              </>
+            }
+            zh={
+              <>
+                前端说「接口没返回这个字段」,后端说「明明有」——
+                打开这里看原文,几秒就能定论。
+              </>
+            }
+          />
         </p>
       </>
     ),
@@ -518,16 +737,45 @@ const DT_TABS: DtTab[] = [
   {
     id: "timing",
     label: "Timing",
-    title: "这一趟时间都花在哪了",
+    title: <T en="Where the time went" zh="时间都花在哪了" />,
     body: (
       <>
         <p>
-          排队、DNS 解析、建立连接、<b>等待服务器首字节(TTFB)</b>、
-          下载内容 —— 每一段各花了几毫秒,瀑布图一目了然。
+          <T
+            en={
+              <>
+                Queueing, DNS lookup, connection setup,{" "}
+                <b>waiting for the first byte from the server (TTFB)</b>, and
+                downloading the content, each with its own duration in
+                milliseconds.
+              </>
+            }
+            zh={
+              <>
+                排队、DNS 解析、建立连接、
+                <b>等待服务器的第一个字节(TTFB)</b>、下载内容 ——
+                每一段各花了几毫秒,一目了然。
+              </>
+            }
+          />
         </p>
         <p>
-          接口慢,先看是「等」慢(服务器处理久,TTFB 长)还是「传」慢
-          (响应太大,下载久)—— 药方完全不同。
+          <T
+            en={
+              <>
+                When a request is slow, this tells you whether the server took a
+                long time to answer (a large TTFB) or the response was large and
+                took a long time to download. The two problems have different
+                fixes.
+              </>
+            }
+            zh={
+              <>
+                接口慢的时候,这里能告诉你是服务器答得慢(TTFB 长),
+                还是响应太大、下载得慢。两种问题的解法完全不同。
+              </>
+            }
+          />
         </p>
       </>
     ),
@@ -535,12 +783,20 @@ const DT_TABS: DtTab[] = [
 ];
 
 export function NetworkTour() {
+  const L = useL();
   const [sel, setSel] = useState(0);
   const tab = DT_TABS[sel];
 
   return (
     <div className="fc-dt">
-      <div className="fc-dt-bar" role="tablist" aria-label="Network 面板标签页">
+      <div
+        className="fc-dt-bar"
+        role="tablist"
+        aria-label={L({
+          en: "Network panel tabs",
+          zh: "Network 面板标签页",
+        })}
+      >
         {DT_TABS.map((t, i) => (
           <button
             key={t.id}
