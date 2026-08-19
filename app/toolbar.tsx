@@ -1,14 +1,17 @@
 "use client";
 
-// 顶部工具条:侧栏开关 + 面包屑 + ⌘K + 主题切换。
+// 顶部工具条:侧栏开关 + 面包屑 + ⌘K + 语言切换 + 主题切换。
 
 import { usePathname } from "next/navigation";
 import { chapterByPath } from "@/lib/curriculum";
+import { useL, useLang, T } from "@/lib/i18n";
 import { useShell, useTheme } from "./theme-provider";
 
 export default function Toolbar() {
   const path = usePathname();
   const ch = chapterByPath(path);
+  const L = useL();
+  const { lang, setLang } = useLang();
   const { theme, toggleTheme } = useTheme();
   const { setSidebarOpen, toggleSidebarCollapsed, setCmdkOpen } = useShell();
 
@@ -17,7 +20,7 @@ export default function Toolbar() {
       <button
         type="button"
         className="tb-btn"
-        aria-label="切换侧栏"
+        aria-label={L({ en: "Toggle sidebar", zh: "切换侧栏" })}
         onClick={() => {
           if (window.innerWidth <= 960) setSidebarOpen((v) => !v);
           else toggleSidebarCollapsed();
@@ -38,7 +41,7 @@ export default function Toolbar() {
         <span className="sep">/</span>
         <b>
           {ch.num !== "✦" ? `${ch.num} · ` : ""}
-          {ch.title}
+          {L(ch.title)}
         </b>
       </div>
 
@@ -46,16 +49,39 @@ export default function Toolbar() {
         type="button"
         className="tb-btn"
         onClick={() => setCmdkOpen(true)}
-        aria-label="打开命令面板"
+        aria-label={L({ en: "Open the command palette", zh: "打开命令面板" })}
       >
-        跳转 <span className="tb-kbd">⌘K</span>
+        <T en="Jump to" zh="跳转" /> <span className="tb-kbd">⌘K</span>
       </button>
+
+      <div
+        className="seg"
+        role="group"
+        aria-label={L({ en: "Language", zh: "语言" })}
+      >
+        <button
+          type="button"
+          className={`seg-btn${lang === "en" ? " on" : ""}`}
+          aria-pressed={lang === "en"}
+          onClick={() => setLang("en")}
+        >
+          EN
+        </button>
+        <button
+          type="button"
+          className={`seg-btn${lang === "zh" ? " on" : ""}`}
+          aria-pressed={lang === "zh"}
+          onClick={() => setLang("zh")}
+        >
+          中文
+        </button>
+      </div>
 
       <button
         type="button"
         className="tb-btn"
         onClick={toggleTheme}
-        aria-label="切换主题"
+        aria-label={L({ en: "Toggle theme", zh: "切换主题" })}
       >
         {theme === "dark" ? "☾" : "☀"}
       </button>

@@ -5,10 +5,12 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CHAPTERS } from "@/lib/curriculum";
+import { CHAPTERS, searchText } from "@/lib/curriculum";
+import { useL, T } from "@/lib/i18n";
 import { useShell } from "./theme-provider";
 
 export default function CommandPalette() {
+  const L = useL();
   const { cmdkOpen, setCmdkOpen } = useShell();
   const [query, setQuery] = useState("");
   const [sel, setSel] = useState(0);
@@ -37,14 +39,11 @@ export default function CommandPalette() {
     }
   }, [cmdkOpen]);
 
+  // 两种语言的标题/副标/标签一起进搜索池 —— 英文界面下输中文也能命中。
   const hits = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return CHAPTERS;
-    return CHAPTERS.filter((c) =>
-      [c.title, c.en, c.num, ...c.tags].some((s) =>
-        s.toLowerCase().includes(q),
-      ),
-    );
+    return CHAPTERS.filter((c) => searchText(c).includes(q));
   }, [query]);
 
   if (!cmdkOpen) return null;
@@ -61,11 +60,18 @@ export default function CommandPalette() {
         if (e.target === e.currentTarget) setCmdkOpen(false);
       }}
     >
-      <div className="cmdk" role="dialog" aria-label="快速跳转">
+      <div
+        className="cmdk"
+        role="dialog"
+        aria-label={L({ en: "Jump to a chapter", zh: "快速跳转" })}
+      >
         <input
           ref={inputRef}
           className="cmdk-input"
-          placeholder="搜索章节、概念、标签…"
+          placeholder={L({
+            en: "Search chapters, concepts, tags…",
+            zh: "搜索章节、概念、标签…",
+          })}
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
@@ -85,7 +91,12 @@ export default function CommandPalette() {
         />
         <div className="cmdk-list">
           {hits.length === 0 && (
-            <div className="cmdk-empty">没有匹配的章节 —— 换个关键词?</div>
+            <div className="cmdk-empty">
+              <T
+                en="No chapter matches that. Try another keyword."
+                zh="没有匹配的章节 —— 换个关键词?"
+              />
+            </div>
           )}
           {hits.map((c, i) => (
             <button
@@ -98,11 +109,11 @@ export default function CommandPalette() {
             >
               <span className="side-num">{c.num}</span>
               <span style={{ flex: 1 }}>
-                {c.title}
-                <span className="side-en">{c.en}</span>
+                {L(c.title)}
+                <span className="side-en">{L(c.en)}</span>
               </span>
               <span className="dim" style={{ fontSize: 11 }}>
-                {c.tags.slice(0, 2).join(" · ")}
+                {L(c.tags).slice(0, 2).join(" · ")}
               </span>
             </button>
           ))}

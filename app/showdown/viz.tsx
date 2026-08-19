@@ -11,6 +11,7 @@
 import { useState, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
 import { CHAPTERS, type ChapterId } from "@/lib/curriculum";
+import { useL } from "@/lib/i18n";
 
 /* ================= HeroArena ================= */
 
@@ -711,6 +712,7 @@ const REVIEW: Record<ChapterId, { soul: string; keys: string[] }> = {
 };
 
 export function ReviewWall() {
+  const L = useL();
   return (
     <div className="sd-wall">
       {CHAPTERS.map((c) => {
@@ -723,9 +725,9 @@ export function ReviewWall() {
             style={{ "--hue": c.hue, "--ch-hue": c.hue } as CSSProperties}
           >
             <span className="sd-wall-num">
-              {c.num} · {c.en}
+              {c.num} · {L(c.en)}
             </span>
-            <span className="sd-wall-title">{c.title}</span>
+            <span className="sd-wall-title">{L(c.title)}</span>
             <span className="sd-wall-soul">{r.soul}</span>
             <span className="sd-wall-keys">
               {r.keys.map((k) => (

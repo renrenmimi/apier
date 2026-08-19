@@ -6,6 +6,7 @@
 // 复用 useStepper + <StepControls /> 和 .viz/.viz-stage/.viz-msg/.viz-ctl 样式。
 
 import { useEffect, useState, type ReactNode } from "react";
+import { useL, type Loc } from "@/lib/i18n";
 
 export function useStepper(total: number, intervalMs = 1400) {
   const [step, setStep] = useState(0);
@@ -58,6 +59,7 @@ export function StepControls({
   step: number;
   total: number;
 }) {
+  const L = useL();
   return (
     <div className="viz-ctl">
       <button
@@ -66,14 +68,18 @@ export function StepControls({
         onClick={stepper.prev}
         disabled={step === 0}
       >
-        ← 上一步
+        {L({ en: "← Back", zh: "← 上一步" })}
       </button>
       <button
         type="button"
         className="btn btn-sm btn-primary"
         onClick={stepper.toggle}
       >
-        {stepper.playing ? "⏸ 暂停" : step >= total - 1 ? "↻ 重播" : "▶ 自动播放"}
+        {stepper.playing
+          ? L({ en: "⏸ Pause", zh: "⏸ 暂停" })
+          : step >= total - 1
+            ? L({ en: "↻ Replay", zh: "↻ 重播" })
+            : L({ en: "▶ Play", zh: "▶ 自动播放" })}
       </button>
       <button
         type="button"
@@ -81,7 +87,7 @@ export function StepControls({
         onClick={stepper.next}
         disabled={step >= total - 1}
       >
-        下一步 →
+        {L({ en: "Next →", zh: "下一步 →" })}
       </button>
       <span
         className="mono dim"
@@ -100,18 +106,19 @@ export function StepControls({
 
 export interface FlowFrame {
   /** 舞台内容 —— 每帧一张完整快照(通常是几个 .flow-node + 一个在途 .flow-packet) */
-  stage: ReactNode;
+  stage: Loc<ReactNode>;
   /** 本帧旁白 */
-  msg: ReactNode;
+  msg: Loc<ReactNode>;
 }
 
 export function FlowStepper({
   title,
   frames,
 }: {
-  title: ReactNode;
+  title: Loc<ReactNode>;
   frames: FlowFrame[];
 }) {
+  const L = useL();
   const stepper = useStepper(frames.length);
   // frames 变短(或为空)时 step 可能越界 —— 兜底,别让整页白屏。
   const f = frames[Math.min(stepper.step, frames.length - 1)];
@@ -119,12 +126,12 @@ export function FlowStepper({
 
   return (
     <div className="viz">
-      <div className="viz-title">{title}</div>
+      <div className="viz-title">{L(title)}</div>
       <div className="viz-stage">
-        <div className="viz-scroll">{f.stage}</div>
+        <div className="viz-scroll">{L(f.stage)}</div>
       </div>
       <div className="viz-msg" aria-live="polite">
-        {f.msg}
+        {L(f.msg)}
       </div>
       <StepControls stepper={stepper} step={stepper.step} total={frames.length} />
     </div>
