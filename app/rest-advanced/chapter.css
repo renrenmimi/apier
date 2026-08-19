@@ -6,7 +6,8 @@
   gap: 10px;
   flex-wrap: wrap;
   margin: 26px 0 10px;
-  max-width: 640px;
+  /* 英文小字比中文长,给多一点横向空间,避免 hero 里堆成四五行 */
+  max-width: 760px;
 }
 .ra-util {
   display: flex;
