@@ -12,6 +12,7 @@ import {
   themeScript,
 } from "@/app/theme-provider";
 import { ProgressProvider } from "@/lib/progress";
+import { LangProvider, langScript } from "@/lib/i18n";
 import Sidebar from "@/app/sidebar";
 import Toolbar from "@/app/toolbar";
 import CommandPalette from "@/app/command-palette";
@@ -47,11 +48,11 @@ const notoSC = Noto_Sans_SC({
 
 export const metadata: Metadata = {
   title: {
-    default: "APIer · 把 API 讲透",
+    default: "APIer — HTTP, REST and GraphQL explained",
     template: "%s · APIer",
   },
   description:
-    "从「什么是 API」到 RESTful 与 GraphQL 全套:HTTP 地基、fetch 实战、REST 六大约束与设计模式、GraphQL 类型系统与性能,配交互式可视化演示。",
+    "An interactive course that starts at \"what is an API\" and covers HTTP, fetch, the six REST constraints, RESTful design, authentication, and the GraphQL type system and performance. Available in English and Chinese.",
 };
 
 export const viewport: Viewport = {
@@ -67,33 +68,36 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="zh-CN"
+      lang="en"
       suppressHydrationWarning
       className={`${syne.variable} ${grotesk.variable} ${jetbrains.variable} ${notoSC.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: langScript }} />
       </head>
       <body>
-        <ThemeProvider>
-          <ShellProvider>
-            <ProgressProvider>
-              <div className="aurora" aria-hidden>
-                <div className="aurora-a" />
-                <div className="aurora-b" />
-                <div className="aurora-grid" />
-              </div>
-              <div className="shell">
-                <Sidebar />
-                <div className="shell-main">
-                  <Toolbar />
-                  <div className="shell-content">{children}</div>
+        <LangProvider>
+          <ThemeProvider>
+            <ShellProvider>
+              <ProgressProvider>
+                <div className="aurora" aria-hidden>
+                  <div className="aurora-a" />
+                  <div className="aurora-b" />
+                  <div className="aurora-grid" />
                 </div>
-              </div>
-              <CommandPalette />
-            </ProgressProvider>
-          </ShellProvider>
-        </ThemeProvider>
+                <div className="shell">
+                  <Sidebar />
+                  <div className="shell-main">
+                    <Toolbar />
+                    <div className="shell-content">{children}</div>
+                  </div>
+                </div>
+                <CommandPalette />
+              </ProgressProvider>
+            </ShellProvider>
+          </ThemeProvider>
+        </LangProvider>
       </body>
     </html>
   );
