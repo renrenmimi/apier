@@ -88,7 +88,8 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  min-width: 104px;
+  /* 英文「Your call / TRADE-OFF」比中文宽,留够位置别换行 */
+  min-width: 118px;
   padding: 12px 14px;
   border-radius: 16px;
   border: 1px dashed var(--acc-border);
@@ -126,7 +127,8 @@
 
 .sd-vs-head {
   display: grid;
-  grid-template-columns: 118px 1fr 1fr;
+  /* 维度列:英文词组(Server-side work / Choosing fields)比中文宽 */
+  grid-template-columns: 138px 1fr 1fr;
   gap: 12px;
   padding: 12px 18px;
   background: var(--panel-2);
@@ -146,7 +148,7 @@
 
 .sd-vs-line {
   display: grid;
-  grid-template-columns: 118px 1fr 1fr;
+  grid-template-columns: 138px 1fr 1fr;
   gap: 12px;
   width: 100%;
   padding: 13px 18px;
@@ -424,6 +426,17 @@
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 14px;
+}
+
+/* 窄屏:英文选项比中文长,胶囊按钮会折成两三行 —— 改成整行卡片,收小圆角 */
+@media (max-width: 620px) {
+  .sd-dr-opts {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .sd-dr-opt {
+    border-radius: 14px;
+  }
 }
 
 /* ================= §03 采用率横条 ================= */
