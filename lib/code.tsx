@@ -7,6 +7,7 @@
 
 import { useMemo, type ReactNode } from "react";
 import { highlight, type CodeLangId } from "@/lib/highlight";
+import { useL, type Loc } from "@/lib/i18n";
 
 const LANG_LABEL: Record<CodeLangId, string> = {
   js: "JavaScript",
@@ -21,11 +22,14 @@ export function CodeLines({
   lang,
   hl,
 }: {
-  code: string;
+  /** 代码本身两种语言一致;只有注释可能需要双语,所以接受 Loc<string>。 */
+  code: Loc<string>;
   lang: CodeLangId;
   hl?: number[];
 }) {
-  const lines = useMemo(() => highlight(code.trimEnd(), lang), [code, lang]);
+  const L = useL();
+  const src = L(code);
+  const lines = useMemo(() => highlight(src.trimEnd(), lang), [src, lang]);
   const hlSet = useMemo(() => new Set(hl ?? []), [hl]);
   return (
     <div className="codewin-body">
@@ -57,12 +61,13 @@ export function CodeBlock({
   hl,
   note,
 }: {
-  code: string;
+  code: Loc<string>;
   lang: CodeLangId;
-  title?: string;
+  title?: Loc<string>;
   hl?: number[];
-  note?: ReactNode;
+  note?: Loc<ReactNode>;
 }) {
+  const L = useL();
   return (
     <div className="codewin">
       <div className="codewin-bar">
@@ -71,11 +76,13 @@ export function CodeBlock({
           <i />
           <i />
         </span>
-        <span className="codewin-name">{title ?? LANG_LABEL[lang]}</span>
+        <span className="codewin-name">
+          {title === undefined ? LANG_LABEL[lang] : L(title)}
+        </span>
         <span style={{ width: 47 }} aria-hidden />
       </div>
       <CodeLines code={code} lang={lang} hl={hl} />
-      {note && <div className="codewin-note">{note}</div>}
+      {note && <div className="codewin-note">{L(note)}</div>}
     </div>
   );
 }

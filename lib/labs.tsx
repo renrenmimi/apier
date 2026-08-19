@@ -7,25 +7,27 @@
 
 import { useState, type ReactNode } from "react";
 import { useProgress } from "@/lib/progress";
+import { useL, type Loc } from "@/lib/i18n";
 import type { ChapterId } from "@/lib/curriculum";
 
 export interface Lab {
   /** 稳定 id,进度键的一部分,别改名 */
   id: string;
-  title: ReactNode;
+  title: Loc<ReactNode>;
   d: "easy" | "medium" | "hard";
-  tags: string[];
+  tags: Loc<string[]>;
   /** 任务说明 —— 要做什么、去哪做(浏览器 Console / 在线工具) */
-  task: ReactNode;
+  task: Loc<ReactNode>;
   /** 一句话提示 —— 不剧透完整做法 */
-  hint: ReactNode;
+  hint: Loc<ReactNode>;
   /** 参考做法 —— 可以是文字 + <CodeBlock /> */
-  solution: ReactNode;
+  solution: Loc<ReactNode>;
 }
 
 const D_LABEL = { easy: "EASY", medium: "MEDIUM", hard: "HARD" } as const;
 
 export function LabSet({ ch, items }: { ch: ChapterId; items: Lab[] }) {
+  const L = useL();
   const { isDone, toggleLab, ready } = useProgress();
   const [open, setOpen] = useState<string | null>(null);
 
@@ -57,7 +59,11 @@ export function LabSet({ ch, items }: { ch: ChapterId; items: Lab[] }) {
               <button
                 type="button"
                 className="prob-check"
-                aria-label={done ? "标记为未完成" : "做完了,勾掉它"}
+                aria-label={L(
+                  done
+                    ? { en: "Mark as not done", zh: "标记为未完成" }
+                    : { en: "Mark as done", zh: "做完了,勾掉它" },
+                )}
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleLab(pid);
@@ -66,9 +72,9 @@ export function LabSet({ ch, items }: { ch: ChapterId; items: Lab[] }) {
                 ✓
               </button>
               <span className="prob-id">LAB {String(i + 1).padStart(2, "0")}</span>
-              <span className="prob-title">{p.title}</span>
+              <span className="prob-title">{L(p.title)}</span>
               <span className="prob-tags">
-                {p.tags.map((tag) => (
+                {L(p.tags).map((tag) => (
                   <span key={tag} className="prob-tag">
                     {tag}
                   </span>
@@ -83,11 +89,18 @@ export function LabSet({ ch, items }: { ch: ChapterId; items: Lab[] }) {
             </div>
             {expanded && (
               <div className="prob-body">
-                <div>{p.task}</div>
-                <div className="prob-hint-label">提示 · 先自己想一分钟</div>
-                <p>{p.hint}</p>
-                <div className="prob-hint-label">参考做法</div>
-                <div>{p.solution}</div>
+                <div>{L(p.task)}</div>
+                <div className="prob-hint-label">
+                  {L({
+                    en: "Hint · try it yourself first",
+                    zh: "提示 · 先自己想一分钟",
+                  })}
+                </div>
+                <p>{L(p.hint)}</p>
+                <div className="prob-hint-label">
+                  {L({ en: "One way to do it", zh: "参考做法" })}
+                </div>
+                <div>{L(p.solution)}</div>
               </div>
             )}
           </div>

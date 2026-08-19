@@ -17,6 +17,7 @@ import {
 } from "react";
 import Link from "next/link";
 import { CHAPTERS, prevNext, type ChapterId } from "@/lib/curriculum";
+import { useL, type Loc } from "@/lib/i18n";
 
 /* ---------- Reveal ---------- */
 
@@ -63,7 +64,7 @@ export function Reveal({
 
 export interface HeroChip {
   id: string;
-  label: ReactNode;
+  label: Loc<ReactNode>;
   n: string;
 }
 
@@ -76,12 +77,13 @@ export function Hero({
 }: {
   ch: ChapterId;
   /** 渐变标题,例如 <>REST 的思想 <span className="grad">REST</span></> */
-  title: ReactNode;
-  essence: ReactNode;
+  title: Loc<ReactNode>;
+  essence: Loc<ReactNode>;
   chips?: HeroChip[];
   /** hero 右侧/下方的自定义视觉(每章专属动画) */
   children?: ReactNode;
 }) {
+  const L = useL();
   const meta = CHAPTERS.find((c) => c.id === ch)!;
   return (
     <header className="hero">
@@ -89,17 +91,17 @@ export function Hero({
         {meta.num}
       </div>
       <div className="hero-eyebrow">
-        CHAPTER {meta.num} · {meta.en}
+        CHAPTER {meta.num} · {L(meta.en)}
       </div>
-      <h1 className="hero-title">{title}</h1>
-      <p className="hero-essence">{essence}</p>
+      <h1 className="hero-title">{L(title)}</h1>
+      <p className="hero-essence">{L(essence)}</p>
       {children}
       {chips && chips.length > 0 && (
         <nav className="hero-nav">
           {chips.map((c) => (
             <a key={c.id} href={`#${c.id}`} className="hero-chip">
               <span className="n">§{c.n}</span>
-              {c.label}
+              {L(c.label)}
             </a>
           ))}
         </nav>
@@ -120,20 +122,21 @@ export function Section({
 }: {
   id?: string;
   index: string;
-  title: ReactNode;
-  desc?: ReactNode;
-  badge?: ReactNode;
+  title: Loc<ReactNode>;
+  desc?: Loc<ReactNode>;
+  badge?: Loc<ReactNode>;
   children: ReactNode;
 }) {
+  const L = useL();
   return (
     <Reveal>
       <section className="sec" id={id}>
         <div className="sec-head">
           <span className="sec-index">§{index}</span>
-          <h2 className="sec-title">{title}</h2>
-          {badge && <span className="sec-badge">{badge}</span>}
+          <h2 className="sec-title">{L(title)}</h2>
+          {badge && <span className="sec-badge">{L(badge)}</span>}
         </div>
-        {desc && <p className="sec-desc">{desc}</p>}
+        {desc && <p className="sec-desc">{L(desc)}</p>}
         {children}
       </section>
     </Reveal>
@@ -158,9 +161,10 @@ export function Callout({
 }: {
   tone?: "idea" | "warn" | "deep" | "story" | "win";
   ico?: string;
-  title?: ReactNode;
+  title?: Loc<ReactNode>;
   children: ReactNode;
 }) {
+  const L = useL();
   return (
     <div className="callout" data-tone={tone}>
       <span className="ico" aria-hidden>
@@ -169,7 +173,7 @@ export function Callout({
       <div>
         {title && (
           <p>
-            <b>{title}</b>
+            <b>{L(title)}</b>
           </p>
         )}
         {typeof children === "string" ? <p>{children}</p> : children}
@@ -211,23 +215,27 @@ export function Status({ code, text }: { code: number; text?: string }) {
 /* ---------- KeyPoints ---------- */
 
 export function KeyPoints({
-  title = "这一章,真正要带走的",
+  title = {
+    en: "What to take away from this chapter",
+    zh: "这一章,真正要带走的",
+  },
   points,
 }: {
-  title?: ReactNode;
-  points: ReactNode[];
+  title?: Loc<ReactNode>;
+  points: Loc<ReactNode>[];
 }) {
+  const L = useL();
   return (
     <Reveal>
       <div className="kp">
         <div className="kp-title">
           <span aria-hidden>✦</span>
-          {title}
+          {L(title)}
         </div>
         <ul>
           {points.map((p, i) => (
             <li key={i}>
-              <span>{p}</span>
+              <span>{L(p)}</span>
             </li>
           ))}
         </ul>
@@ -239,19 +247,25 @@ export function KeyPoints({
 /* ---------- ChapterFooter ---------- */
 
 export function ChapterFooter({ ch }: { ch: ChapterId }) {
+  const L = useL();
   const { prev, next } = prevNext(ch);
   return (
-    <nav className="ch-footer" aria-label="章节导航">
+    <nav
+      className="ch-footer"
+      aria-label={L({ en: "Chapter navigation", zh: "章节导航" })}
+    >
       {prev ? (
         <Link
           href={prev.href}
           className="ch-footer-link"
           style={{ "--ch-hue": prev.hue } as CSSProperties}
         >
-          <span className="lab">← 上一章</span>
+          <span className="lab">
+            {L({ en: "← Previous chapter", zh: "← 上一章" })}
+          </span>
           <span className="name">
             <span className="n">{prev.num}</span>
-            {prev.title}
+            {L(prev.title)}
           </span>
         </Link>
       ) : (
@@ -263,10 +277,12 @@ export function ChapterFooter({ ch }: { ch: ChapterId }) {
           className="ch-footer-link next"
           style={{ "--ch-hue": next.hue } as CSSProperties}
         >
-          <span className="lab">下一章 →</span>
+          <span className="lab">
+            {L({ en: "Next chapter →", zh: "下一章 →" })}
+          </span>
           <span className="name">
             <span className="n">{next.num}</span>
-            {next.title}
+            {L(next.title)}
           </span>
         </Link>
       ) : (
