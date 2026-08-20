@@ -2338,7 +2338,7 @@ li code {
 }
 .codepair .codewin { margin: 0; }
 @media (max-width: 880px) {
-  .codepair { grid-template-columns: 1fr; }
+  .codepair { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* — 流程舞台节点(FlowStepper / 各章自由动画共用)— */
