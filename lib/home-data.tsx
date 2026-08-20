@@ -321,7 +321,7 @@ export const QUIZ: QuizItem[] = [
         en: (
           <>
             The app is the client, and the program in the weather company&apos;s
-            data centre is the server
+            data center is the server
           </>
         ),
         zh: <>App 是客户端,天气公司机房里的那台程序是服务器</>,
@@ -347,7 +347,7 @@ export const QUIZ: QuizItem[] = [
           <>
             That is the wrong way round. The side that displays the data is the
             one placing the order. The side that provides the data is the
-            kitchen. The phone asks, the data centre answers.
+            kitchen. The phone asks, the data center answers.
           </>
         ),
         zh: (

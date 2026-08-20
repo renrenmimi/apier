@@ -661,7 +661,7 @@ export const QUIZ: QuizItem[] = [
       {
         en: (
           <>
-            There is no such directive. The default behaviour is built in and
+            There is no such directive. The default behavior is built in and
             needs no configuration.
           </>
         ),
@@ -955,7 +955,7 @@ export const QUIZ: QuizItem[] = [
           <>
             Size is not the issue; a CDN stores much larger files every day. The
             issue is that POST with a changing body gives the cache no way to
-            recognise the same request.
+            recognize the same request.
           </>
         ),
         zh: (
