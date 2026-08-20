@@ -1,4 +1,5 @@
-/* 第 04 章 · RESTful 设计实战 专属样式(前缀 rd-)。通用样式一律来自 globals.css。 */
+/* 第 04 章 · RESTful 设计实战 专属样式(前缀 rd-)。通用样式一律来自 globals.css。
+   双语页面:英文字符串普遍比中文长,下面几处为英文预留了换行空间。 */
 
 /* — hero:端点图纸 — */
 .rd-bp {
@@ -49,6 +50,7 @@
 .rd-sub {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
   margin: 30px 0 6px;
   font-weight: 700;
@@ -98,7 +100,7 @@
   flex: 0 0 auto;
 }
 
-/* — URL 整容室 — */
+/* — URL 诊断台 — */
 .rd-clinic {
   display: grid;
   grid-template-columns: 300px 1fr;
@@ -209,6 +211,13 @@
 /* — 状态码速记卡 — */
 .rd-code-legend .card p {
   font-size: 12.5px;
+}
+/* 英文状态码名(如 429 Too Many Requests)比中文长,允许徽章换行,不缩字号。 */
+.rd-code-legend .card-title {
+  flex-wrap: wrap;
+}
+.rd-code-legend .card-title .status {
+  max-width: 100%;
 }
 
 /* — 状态码决策室 — */

@@ -1,7 +1,7 @@
 /* 第 07 章 · GraphQL 初见 专属样式(前缀 gq-)。
    通用样式一律来自 globals.css,这里只放本章特有的。 */
 
-/* — hero 里的点菜循环 — */
+/* — hero 里的「查询 → 服务器」循环 — */
 .gq-loop {
   display: flex;
   align-items: center;
@@ -250,7 +250,7 @@
   .gq-wf-badge { display: none; }
 }
 
-/* — QueryBuilder 点菜台 — */
+/* — QueryBuilder 选字段面板 — */
 .gq-qb {
   display: grid;
   grid-template-columns: 186px 1fr 1fr;
@@ -319,12 +319,13 @@
 }
 .gq-qb-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
   margin-top: 8px;
   padding-top: 10px;
   border-top: 1px dashed var(--border);
 }
-.gq-qb-actions .btn { flex: 1; justify-content: center; }
+.gq-qb-actions .btn { flex: 1 1 68px; justify-content: center; }
 @media (max-width: 1080px) {
   .gq-qb { grid-template-columns: 170px 1fr; }
   .gq-qb-menu { grid-row: span 2; }
@@ -365,6 +366,20 @@
   color: var(--acc-ink);
   background: transparent;
   border: none;
+}
+
+/* — 三笔代价卡片(globals 的 .grid-3 不会在窄屏塌成一列,这里自带断点)— */
+.gq-cost {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 14px 0;
+}
+@media (max-width: 1080px) {
+  .gq-cost { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+  .gq-cost { grid-template-columns: 1fr; }
 }
 
 /* — GraphiQL 界面地图 — */

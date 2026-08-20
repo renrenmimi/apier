@@ -75,6 +75,13 @@
   color: var(--text-3);
   white-space: nowrap;
 }
+/* 窄屏 + 较长的英文标签:允许换行,别把信纸撑破 */
+@media (max-width: 560px) {
+  .ht-letter-tag {
+    margin-left: 0;
+    white-space: normal;
+  }
+}
 
 /* — §01 URL 解剖台 — */
 .ht-url {
@@ -161,6 +168,22 @@
   .ht-url {
     grid-template-columns: 1fr;
   }
+}
+
+/* — §03 方法表:方法名与勾叉列保持紧凑,把宽度留给语义/备注两列 — */
+.ht-mtable td:first-child,
+.ht-mtable th:nth-child(3),
+.ht-mtable th:nth-child(4),
+.ht-mtable td:nth-child(3),
+.ht-mtable td:nth-child(4) {
+  white-space: nowrap;
+}
+.ht-mtable th:nth-child(3),
+.ht-mtable th:nth-child(4),
+.ht-mtable td:nth-child(3),
+.ht-mtable td:nth-child(4) {
+  width: 1%;
+  text-align: center;
 }
 
 /* — §03 方法表:安全/幂等勾叉 — */
@@ -264,7 +287,8 @@
 /* — §04 状态码五大家族 — */
 .ht-fam-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* minmax(0,…):英文族名比中文长,别让某一列被内容撑爆 */
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 12px;
   margin: 14px 0;
 }
@@ -295,10 +319,16 @@
   font-size: 12px;
   line-height: 1.65;
   color: var(--text-2);
+  overflow-wrap: break-word;
+}
+@media (max-width: 1100px) {
+  .ht-fam-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 @media (max-width: 880px) {
   .ht-fam-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

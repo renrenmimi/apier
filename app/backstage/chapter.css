@@ -128,12 +128,13 @@
   padding-left: 12px;
   border-left: 2px dashed var(--border-strong);
 }
+/* 侧栏放 resolver 签名与 parent 说明,英文更长 —— 给宽一点,允许换行。 */
 .bs-tree-side {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-width: 320px;
-  min-width: 220px;
+  max-width: 340px;
+  min-width: 240px;
 }
 .bs-tree-sig {
   font-size: 11.5px;
@@ -305,11 +306,15 @@
   font-size: 22px;
   color: var(--acc-ink);
 }
+/* 英文比中文长:让这行说明换行,而不是把箭头那一列撑宽。 */
 .bs-norm-arrow span {
   font-size: 10.5px;
   color: var(--text-3);
   writing-mode: horizontal-tb;
-  white-space: nowrap;
+  white-space: normal;
+  max-width: 130px;
+  text-align: center;
+  line-height: 1.5;
 }
 .bs-norm-row {
   display: flex;
