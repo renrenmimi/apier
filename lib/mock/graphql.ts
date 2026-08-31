@@ -1,22 +1,26 @@
-// 极简 GraphQL 执行器 —— 零依赖,只覆盖本课程教到的语法子集。
-// 支持:query/mutation、变量、别名、嵌套选择集、参数、具名/内联片段、
-//       @include/@skip 指令、__typename、精简版 __schema 内省。
-// 不支持(课程也没教):subscription 实时通道、自定义标量、联邦。
+// Minimal GraphQL executor: zero dependencies, covering only the syntax the
+// course teaches -- query/mutation, variables, aliases, nested selection sets,
+// arguments, named and inline fragments, @include/@skip, __typename and a
+// trimmed __schema introspection. Subscriptions, custom scalars and federation
+// are out of scope because the course does not teach them.
 //
-// 教学彩蛋:执行时会统计「数据库读取次数」,放进 extensions.dbCalls 和响应头。
-// 同一个 query 加上 ?dataloader=1 就会走批量加载 —— 计数器当场从 1+N 掉到 2,
-// 第 10 章的 N+1 与 DataLoader 因此可以亲手做实验,而不是只看动画。
+// Every execution counts "database reads" into extensions.dbCalls. Adding
+// ?dataloader=1 batches the loads, so the counter drops from 1+N to 2 and the
+// N+1 lesson in chapter 10 becomes an experiment rather than an animation.
+//
+// The executor is pure with respect to its store: it reads and writes only the
+// MockStore handed to it, which is what keeps one visitor isolated from another.
 
 import {
-  db,
   findPost,
   findUser,
   commentsOfPost,
   postsOfUser,
   type Comment,
+  type MockStore,
   type Post,
   type User,
-} from "./db";
+} from "./seed";
 
 /* ================= 词法 ================= */
 
@@ -228,7 +232,7 @@ function parse(src: string) {
         }
         continue;
       }
-      let alias = name();
+      const alias = name();
       let fname = alias;
       if (at(":")) {
         eat(":");
@@ -299,6 +303,8 @@ function parse(src: string) {
 /* ================= 执行 ================= */
 
 interface Ctx {
+  /** The caller's store. Nothing in this module reads ambient state. */
+  store: MockStore;
   vars: Record<string, unknown>;
   frags: Record<string, { on: string; sel: Selection[] }>;
   errors: { message: string; path: (string | number)[] }[];
@@ -356,7 +362,7 @@ function loadUsers(ids: number[], ctx: Ctx): void {
   if (!missing.length) return;
   ctx.dbCalls++; // 一次批量查询
   for (const id of missing) {
-    const u = findUser(id);
+    const u = findUser(ctx.store, id);
     if (u) ctx.userCache.set(id, u);
   }
 }
@@ -368,7 +374,7 @@ function getUser(id: number, ctx: Ctx): User | null {
     return ctx.userCache.get(id) ?? null;
   }
   ctx.dbCalls++; // 每篇文章单独查一次 → 这就是 N+1
-  return findUser(id) ?? null;
+  return findUser(ctx.store, id) ?? null;
 }
 
 // 真正的 DataLoader 靠事件循环的同一个 tick 合并 load() 调用;这个执行器是同步的,
@@ -416,7 +422,7 @@ function execPost(post: Post, sel: Selection[], ctx: Ctx, path: (string | number
       }
       case "comments": {
         ctx.dbCalls++;
-        const rows = commentsOfPost(post.id);
+        const rows = commentsOfPost(ctx.store, post.id);
         const limit = Number(argMap(f, ctx).first ?? rows.length);
         const shown = rows.slice(0, limit);
         primeCommentAuthors(shown, f.sel, ctx);
@@ -442,7 +448,7 @@ function execUser(user: User, sel: Selection[], ctx: Ctx, path: (string | number
     if (f.name === "__typename") out[f.alias] = "User";
     else if (f.name === "posts") {
       ctx.dbCalls++;
-      const mine = postsOfUser(user.id);
+      const mine = postsOfUser(ctx.store, user.id);
       primePostAuthors(mine, f.sel, ctx);
       out[f.alias] = mine.map((p, i) => execPost(p, f.sel, ctx, [...fp, i]));
     } else out[f.alias] = (user as unknown as Record<string, unknown>)[f.name];
@@ -495,14 +501,14 @@ function execRoot(op: Operation, ctx: Ctx) {
         switch (f.name) {
           case "post": {
             ctx.dbCalls++;
-            const p = findPost(Number(a.id));
+            const p = findPost(ctx.store, Number(a.id));
             // Query.post 返回可空的 Post —— 找不到就是 null,不是错误
             data[f.alias] = p ? execPost(p, f.sel, ctx, path) : null;
             break;
           }
           case "posts": {
             ctx.dbCalls++;
-            let rows = [...db.posts];
+            let rows = [...ctx.store.posts];
             if (a.status) rows = rows.filter((p) => p.status === a.status);
             const limit = Number(a.limit ?? 10);
             const shown = rows.slice(0, limit);
@@ -512,13 +518,13 @@ function execRoot(op: Operation, ctx: Ctx) {
           }
           case "user": {
             ctx.dbCalls++;
-            const u = findUser(Number(a.id));
+            const u = findUser(ctx.store, Number(a.id));
             data[f.alias] = u ? execUser(u, f.sel, ctx, path) : null;
             break;
           }
           case "users": {
             ctx.dbCalls++;
-            data[f.alias] = db.users.map((u, i) => execUser(u, f.sel, ctx, [...path, i]));
+            data[f.alias] = ctx.store.users.map((u, i) => execUser(u, f.sel, ctx, [...path, i]));
             break;
           }
           default:
@@ -532,22 +538,22 @@ function execRoot(op: Operation, ctx: Ctx) {
             const title = String(input.title ?? "").trim();
             if (!title) throw new GqlError("createPost 需要非空的 title", path);
             const post: Post = {
-              id: db.nextPostId++,
+              id: ctx.store.nextPostId++,
               title,
               body: String(input.body ?? ""),
               authorId: Number(input.authorId ?? 1),
               status: (input.status as Post["status"]) ?? "DRAFT",
               createdAt: new Date().toISOString(),
             };
-            db.posts.push(post);
+            ctx.store.posts.push(post);
             ctx.dbCalls++;
             data[f.alias] = execPost(post, f.sel, ctx, path);
             break;
           }
           case "deletePost": {
-            const idx = db.posts.findIndex((p) => p.id === Number(a.id));
+            const idx = ctx.store.posts.findIndex((p) => p.id === Number(a.id));
             ctx.dbCalls++;
-            if (idx !== -1) db.posts.splice(idx, 1);
+            if (idx !== -1) ctx.store.posts.splice(idx, 1);
             data[f.alias] = idx !== -1;
             break;
           }
@@ -574,6 +580,7 @@ export interface GqlResult {
 }
 
 export function executeGraphQL(
+  store: MockStore,
   query: string,
   variables: Record<string, unknown> = {},
   operationName?: string,
@@ -608,6 +615,7 @@ export function executeGraphQL(
   }
 
   const ctx: Ctx = {
+    store,
     vars,
     frags: parsed.frags,
     errors: [],

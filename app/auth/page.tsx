@@ -233,13 +233,13 @@ export default function AuthPage() {
             zh: "401 与 403,只差一个按钮",
           }}
           defaultMethod="POST"
-          defaultPath="/api/posts"
+          defaultPath="/mock-api/posts"
           presets={[
             {
               id: "anon",
               label: { en: "No credentials", zh: "不带凭证" },
               method: "POST",
-              path: "/api/posts",
+              path: "/mock-api/posts",
               body: '{"title":"试试看","body":"正文"}',
               note: {
                 en: (
@@ -262,7 +262,7 @@ export default function AuthPage() {
               id: "readonly",
               label: { en: "A read-only token", zh: "带一枚只读凭证" },
               method: "POST",
-              path: "/api/posts",
+              path: "/mock-api/posts",
               headers: { Authorization: "Bearer apier-readonly-token" },
               body: '{"title":"试试看","body":"正文"}',
               note: {
@@ -285,7 +285,7 @@ export default function AuthPage() {
               id: "write",
               label: { en: "A token that may write", zh: "带一枚可写凭证" },
               method: "POST",
-              path: "/api/posts",
+              path: "/mock-api/posts",
               headers: { Authorization: "Bearer apier-demo-token" },
               body: '{"title":"试试看","body":"正文"}',
               note: {

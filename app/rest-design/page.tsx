@@ -920,13 +920,13 @@ Content-Type: application/problem+json
             en: "Lose a field with your own hands",
             zh: "亲手把一个字段弄丢",
           }}
-          defaultPath="/api/posts/7"
+          defaultPath="/mock-api/posts/7"
           presets={[
             {
               id: "before",
               label: { en: "1 · Look at post 7", zh: "1 · 先看看 7 号文章" },
               method: "GET",
-              path: "/api/posts/7",
+              path: "/mock-api/posts/7",
               note: {
                 en: (
                   <>
@@ -948,7 +948,7 @@ Content-Type: application/problem+json
               id: "put",
               label: { en: "2 · PUT only the title", zh: "2 · PUT 只发标题" },
               method: "PUT",
-              path: "/api/posts/7",
+              path: "/mock-api/posts/7",
               headers: { Authorization: "Bearer apier-demo-token" },
               body: '{"title":"只改一下标题"}',
               note: {
@@ -974,7 +974,7 @@ Content-Type: application/problem+json
               id: "reset",
               label: { en: "3 · Undo it", zh: "3 · 还原" },
               method: "POST",
-              path: "/api/reset",
+              path: "/mock-api/reset",
               note: {
                 en: <>Back to the original data. Now try the same edit with PATCH.</>,
                 zh: <>数据回到初始状态。现在换 PATCH 做同一件事。</>,
@@ -984,7 +984,7 @@ Content-Type: application/problem+json
               id: "patch",
               label: { en: "4 · PATCH only the title", zh: "4 · PATCH 只发标题" },
               method: "PATCH",
-              path: "/api/posts/7",
+              path: "/mock-api/posts/7",
               headers: { Authorization: "Bearer apier-demo-token" },
               body: '{"title":"只改一下标题"}',
               note: {

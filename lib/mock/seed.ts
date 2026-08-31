@@ -1,8 +1,12 @@
-// 本地 Mock 数据库 —— 全书贯穿案例「博客」的唯一数据源。
-//  - 字段口径与第 04 章端点总表、第 08 章 SDL 完全一致(User/Post/Comment)。
-//  - 进程内存储:改动(POST/PUT/PATCH/DELETE)会真的生效,让学习者看到副作用;
-//    /api/reset 可一键恢复,dev 热更新也会自然重置。
-//  - 种子数据由固定 PRNG 生成 —— 每次启动内容一致,教学截图/答案不会漂移。
+// Deterministic seed data for the mock API.
+//
+// This module is intentionally pure and environment-agnostic: it never touches
+// globalThis, the filesystem, or any runtime API. The same seed therefore
+// produces byte-identical data in a Service Worker, in Node, and in tests,
+// which is what makes "reset" a genuinely deterministic operation.
+//
+// The store must stay structured-cloneable so it can be persisted to IndexedDB
+// as a single record (hence plain objects rather than Map/Set).
 
 export interface User {
   id: number;
@@ -29,25 +33,31 @@ export interface Comment {
   createdAt: string;
 }
 
-interface Store {
+/** A replayed response, kept so a repeated Idempotency-Key returns the first result. */
+export interface IdempotentRecord {
+  status: number;
+  body: unknown;
+}
+
+export interface MockStore {
   users: User[];
   posts: Post[];
   comments: Comment[];
-  /** 自增计数器,保证新建资源的 id 不撞车 */
   nextPostId: number;
   nextCommentId: number;
-  /** Idempotency-Key → 首次响应快照(第 05 章幂等键教学用) */
-  idempotency: Map<string, { status: number; body: unknown }>;
-  /** 限流计数:窗口起点 + 已用次数(第 05 章限流教学用) */
+  /** Idempotency-Key -> first response (chapter 05). */
+  idempotency: Record<string, IdempotentRecord>;
+  /** Fixed-window rate limiter state (chapter 05). */
   rate: { windowStart: number; used: number };
 }
 
-/** 确定性 PRNG(mulberry32)—— 固定种子,内容每次一样 */
-function rng(seed: number) {
+/** Deterministic PRNG (mulberry32) so the dataset never drifts between runs. */
+function rng(seedValue: number) {
+  let state = seedValue;
   return () => {
-    seed |= 0;
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    state |= 0;
+    state = (state + 0x6d2b79f5) | 0;
+    let t = Math.imul(state ^ (state >>> 15), 1 | state);
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
@@ -66,6 +76,8 @@ const NAMES: [string, string][] = [
   ["Katherine Johnson", "katherine"],
 ];
 
+// Post titles double as course cross-references, so they stay bilingual-neutral
+// (they are data, not UI copy, and are identical in both languages).
 const TOPICS = [
   "为什么 REST 不是协议",
   "第一次调用 API 踩的三个坑",
@@ -97,8 +109,17 @@ const BODY_SEEDS = [
   "先看现象,再看原理,最后给一段能直接跑的代码。",
 ];
 
-function seed(): Store {
+const COMMENT_SEEDS = ["同意。", "这段讲得好,收藏了。", "请教一下,这个在生产上怎么落地?", "补充一个反例。"];
+
+/**
+ * Build a fresh store from the fixed seed.
+ *
+ * `rate.windowStart` is the only value that depends on the clock; it is passed
+ * in so tests can pin it and so a reset starts the visitor's rate window now.
+ */
+export function createSeedStore(now: number = Date.now()): MockStore {
   const rand = rng(42);
+
   const users: User[] = NAMES.map(([name, handle], i) => ({
     id: i + 1,
     name,
@@ -107,7 +128,7 @@ function seed(): Store {
 
   const statuses: PostStatus[] = ["PUBLISHED", "PUBLISHED", "PUBLISHED", "DRAFT", "ARCHIVED"];
   const posts: Post[] = [];
-  // 50 篇 —— 覆盖课程里出现过的 /posts/42 等具体编号,例子可直接照抄跑通
+  // 50 posts so ids referenced by the course (for example /posts/42) exist.
   for (let i = 1; i <= 50; i++) {
     const topic = TOPICS[Math.floor(rand() * TOPICS.length)];
     posts.push({
@@ -116,24 +137,22 @@ function seed(): Store {
       body: BODY_SEEDS[Math.floor(rand() * BODY_SEEDS.length)],
       authorId: 1 + Math.floor(rand() * users.length),
       status: statuses[Math.floor(rand() * statuses.length)],
-      // 从 2026-01-01 起每篇隔约一天,时间戳稳定可预期
+      // Fixed epoch so timestamps never drift between runs.
       createdAt: new Date(Date.UTC(2026, 0, 1) + i * 86400000).toISOString(),
     });
   }
 
   const comments: Comment[] = [];
-  let cid = 1;
-  for (const p of posts) {
-    const n = Math.floor(rand() * 4); // 0–3 条
-    for (let k = 0; k < n; k++) {
+  let commentId = 1;
+  for (const post of posts) {
+    const count = Math.floor(rand() * 4); // 0-3 comments
+    for (let k = 0; k < count; k++) {
       comments.push({
-        id: cid++,
-        postId: p.id,
+        id: commentId++,
+        postId: post.id,
         authorId: 1 + Math.floor(rand() * users.length),
-        body: ["同意。", "这段讲得好,收藏了。", "请教一下,这个在生产上怎么落地?", "补充一个反例。"][
-          Math.floor(rand() * 4)
-        ],
-        createdAt: new Date(Date.parse(p.createdAt) + 3600000 * (k + 1)).toISOString(),
+        body: COMMENT_SEEDS[Math.floor(rand() * COMMENT_SEEDS.length)],
+        createdAt: new Date(Date.parse(post.createdAt) + 3600000 * (k + 1)).toISOString(),
       });
     }
   }
@@ -143,33 +162,17 @@ function seed(): Store {
     posts,
     comments,
     nextPostId: 51,
-    nextCommentId: cid,
-    idempotency: new Map(),
-    rate: { windowStart: Date.now(), used: 0 },
+    nextCommentId: commentId,
+    idempotency: {},
+    rate: { windowStart: now, used: 0 },
   };
 }
 
-// dev 环境下 Next 会热重载模块,挂在 globalThis 上才不会每次改代码就丢状态
-const g = globalThis as { __apierStore?: Store };
-export const db: Store = (g.__apierStore ??= seed());
+/* ---------- store-scoped lookups ---------- */
 
-/** 恢复出厂设置 —— /api/reset 调用 */
-export function resetDb() {
-  const fresh = seed();
-  db.users = fresh.users;
-  db.posts = fresh.posts;
-  db.comments = fresh.comments;
-  db.nextPostId = fresh.nextPostId;
-  db.nextCommentId = fresh.nextCommentId;
-  db.idempotency.clear();
-  db.rate = fresh.rate;
-}
-
-/* ---------- 查询helpers ---------- */
-
-export const findUser = (id: number) => db.users.find((u) => u.id === id);
-export const findPost = (id: number) => db.posts.find((p) => p.id === id);
-export const commentsOfPost = (postId: number) =>
-  db.comments.filter((c) => c.postId === postId);
-export const postsOfUser = (authorId: number) =>
-  db.posts.filter((p) => p.authorId === authorId);
+export const findUser = (store: MockStore, id: number) => store.users.find((u) => u.id === id);
+export const findPost = (store: MockStore, id: number) => store.posts.find((p) => p.id === id);
+export const commentsOfPost = (store: MockStore, postId: number) =>
+  store.comments.filter((c) => c.postId === postId);
+export const postsOfUser = (store: MockStore, authorId: number) =>
+  store.posts.filter((p) => p.authorId === authorId);

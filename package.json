@@ -3,9 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3300",
     "build": "next build",
-    "start": "next start"
+    "start": "next start -p 3300",
+    "build:sw": "node scripts/build-sw.mjs",
+    "predev": "npm run build:sw",
+    "prebuild": "npm run build:sw",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test:unit": "playwright test --project=unit",
+    "test:e2e": "playwright test --project=e2e",
+    "test": "playwright test"
   },
   "dependencies": {
     "next": "^15.3.0",
@@ -13,9 +21,13 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "esbuild": "^0.28.2",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.4",
     "typescript": "^5.5.0"
   }
 }

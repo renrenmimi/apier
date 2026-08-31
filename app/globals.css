@@ -2662,3 +2662,56 @@ li code {
 @media (max-width: 620px) {
   .insp-hrow { grid-template-columns: 1fr; gap: 2px; }
 }
+
+/* Readiness banner + scope badge for the request inspector (lib/mock/client.tsx). */
+.insp-state {
+  margin: 0 0 12px;
+  padding: 9px 13px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  background: var(--panel-2);
+}
+.insp-state b { color: var(--text); }
+.insp-state code {
+  font-size: 11.5px;
+  background: var(--panel);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+.insp-state[data-tone="wait"] {
+  border-color: var(--acc-border);
+  background: var(--acc-soft);
+  color: var(--acc-ink);
+}
+.insp-state[data-tone="warn"] {
+  border-color: color-mix(in oklab, var(--warn) 40%, transparent);
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+.insp-state[data-tone="bad"] {
+  border-color: color-mix(in oklab, var(--risk) 40%, transparent);
+  background: var(--risk-bg);
+  color: var(--risk);
+}
+
+.insp-badge[data-phase="starting"] {
+  color: var(--text-3);
+  background: var(--panel-2);
+  border-color: var(--border);
+}
+.insp-badge[data-phase="unsupported"],
+.insp-badge[data-phase="failed"] {
+  color: var(--risk);
+  background: var(--risk-bg);
+  border-color: color-mix(in oklab, var(--risk) 40%, transparent);
+}
+
+/* Disabled controls must look disabled, not merely inert. */
+.insp-method:disabled,
+.insp-path:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

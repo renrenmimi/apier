@@ -12,6 +12,7 @@ import {
   themeScript,
 } from "@/app/theme-provider";
 import { ProgressProvider } from "@/lib/progress";
+import { MockApiProvider } from "@/lib/mock/client";
 import { LangProvider, langScript } from "@/lib/i18n";
 import Sidebar from "@/app/sidebar";
 import Toolbar from "@/app/toolbar";
@@ -80,6 +81,7 @@ export default function RootLayout({
         <LangProvider>
           <ThemeProvider>
             <ShellProvider>
+              <MockApiProvider>
               <ProgressProvider>
                 <div className="aurora" aria-hidden>
                   <div className="aurora-a" />
@@ -95,6 +97,7 @@ export default function RootLayout({
                 </div>
                 <CommandPalette />
               </ProgressProvider>
+            </MockApiProvider>
             </ShellProvider>
           </ThemeProvider>
         </LangProvider>

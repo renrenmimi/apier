@@ -1,15 +1,26 @@
 "use client";
 
-// 请求检查器 —— 全站共享的「看得见的 HTTP」。
-// 打的是同源的 /api/*(本地 Mock API),所以:不依赖第三方服务、不会被限流、
-// 不会撞 CORS、断网也能用。学习者点一下就能看到真实的状态码、响应头、
-// 计时分解和报文正文 —— DevTools Network 面板的教学版。
+// The request inspector: "HTTP you can see".
 //
-// 用法:<Inspector presets={[…]} />;预设由各章自己给,想演示什么就配什么。
+// Requests go to /mock-api/*, which this visitor's own Service Worker answers
+// from their own IndexedDB. That means no third-party dependency, no CORS, no
+// shared rate limit, and no way for one visitor to affect another.
+//
+// Send stays disabled until the worker has proven it is in control. Falling
+// back to the network would reach the real server and return a 404 HTML page,
+// which would quietly teach the learner the wrong thing.
+//
+// Usage: <Inspector presets={[...]} /> -- each chapter supplies the scenarios
+// it wants to demonstrate.
 
 import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
 import { useL, T, type Loc } from "@/lib/i18n";
 import { CodeLines } from "@/lib/code";
+import { MOCK_BASE } from "@/lib/mock/engine";
+import { useMockApi } from "@/lib/mock/client";
+
+/** Port that `npm run dev` binds, quoted by the curl tab. */
+const DEV_PORT = 3300;
 
 export type InspectorMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "HEAD" | "OPTIONS";
 
@@ -65,7 +76,7 @@ const TAKES_BODY = new Set(["POST", "PUT", "PATCH"]);
 
 export function Inspector({
   presets = [],
-  defaultPath = "/api/posts/42",
+  defaultPath = `${MOCK_BASE}/posts/42`,
   defaultMethod = "GET",
   title,
 }: {
@@ -75,6 +86,8 @@ export function Inspector({
   title?: Loc<ReactNode>;
 }) {
   const L = useL();
+  const mock = useMockApi();
+  const blocked = mock.phase !== "ready";
   const [method, setMethod] = useState<InspectorMethod>(defaultMethod);
   const [path, setPath] = useState(defaultPath);
   const [body, setBody] = useState("");
@@ -86,6 +99,10 @@ export function Inspector({
 
   const send = useCallback(
     async (over?: { method: InspectorMethod; path: string; body?: string; headers?: Record<string, string>; note?: ReactNode }) => {
+      // Never reach the network for a /mock-api path: if the worker is not in
+      // control the server would answer 404 and the lesson would be a lie.
+      if (mock.phase !== "ready") return;
+
       const m = over?.method ?? method;
       const p = over?.path ?? path;
       const b = over?.body ?? body;
@@ -146,10 +163,11 @@ export function Inspector({
         setState({ phase: "error", message: (e as Error).message });
       }
     },
-    [method, path, body, extraHeaders],
+    [method, path, body, extraHeaders, mock.phase],
   );
 
   const runPreset = (p: InspectorPreset) => {
+    if (blocked) return;
     setMethod(p.method);
     setPath(p.path);
     setBody(p.body ?? "");
@@ -164,8 +182,14 @@ export function Inspector({
     });
   };
 
+  // curl cannot reach a Service Worker, so this deliberately targets the
+  // server-side mock that a cloned repository runs at /api on the dev port.
+  // It is the same engine, but a separate store from the one above.
   const curl = useMemo(() => {
-    const parts = [`curl -i -X ${method} http://localhost:3300${path}`];
+    const localPath = path.startsWith(MOCK_BASE)
+      ? `/api${path.slice(MOCK_BASE.length)}`
+      : path;
+    const parts = [`curl -i -X ${method} http://localhost:${DEV_PORT}${localPath}`];
     for (const [k, v] of Object.entries(extraHeaders)) parts.push(`  -H '${k}: ${v}'`);
     if (TAKES_BODY.has(method) && body.trim()) {
       parts.push(`  -H 'Content-Type: application/json'`);
@@ -178,10 +202,18 @@ export function Inspector({
     <div className="insp">
       <div className="insp-title">
         {title ? L(title) : <T en="Request inspector" zh="请求检查器" />}
-        <span className="insp-badge">
-          <T en="local · same-origin" zh="本地 · 同源" />
+        <span className="insp-badge" data-phase={mock.phase}>
+          {mock.phase === "ready" ? (
+            <T en="runs in your browser" zh="跑在你的浏览器里" />
+          ) : mock.phase === "starting" ? (
+            <T en="starting…" zh="启动中…" />
+          ) : (
+            <T en="unavailable" zh="不可用" />
+          )}
         </span>
       </div>
+
+      <MockStatus />
 
       {presets.length > 0 && (
         <div className="insp-presets">
@@ -191,7 +223,7 @@ export function Inspector({
               type="button"
               className={`btn btn-sm${activePreset === p.id ? " btn-primary" : ""}`}
               onClick={() => runPreset(p)}
-              disabled={state.phase === "loading"}
+              disabled={blocked || state.phase === "loading"}
             >
               {L(p.label)}
             </button>
@@ -206,6 +238,7 @@ export function Inspector({
           data-m={method}
           value={method}
           onChange={(e) => setMethod(e.target.value as InspectorMethod)}
+          disabled={blocked}
           aria-label={L({ en: "HTTP method", zh: "HTTP 方法" })}
         >
           {METHODS.map((m) => (
@@ -222,13 +255,14 @@ export function Inspector({
           onKeyDown={(e) => {
             if (e.key === "Enter") send();
           }}
+          disabled={blocked}
           aria-label={L({ en: "Request path", zh: "请求路径" })}
         />
         <button
           type="button"
           className="btn btn-sm btn-primary"
           onClick={() => send()}
-          disabled={state.phase === "loading"}
+          disabled={blocked || state.phase === "loading"}
         >
           {state.phase === "loading" ? (
             <T en="Sending…" zh="发送中…" />
@@ -374,11 +408,32 @@ export function Inspector({
 
             {tab === "curl" && (
               <>
+                <div className="insp-sub">
+                  <T en="Run against a local clone" zh="在本地克隆上运行" />
+                </div>
                 <CodeLines code={curl} lang="bash" />
                 <div className="insp-foot">
                   <T
-                    en="Same request, from a terminal. Tools change; the message on the wire does not."
-                    zh="同一个请求,换到终端里发。工具千变,线上跑的报文不变。"
+                    en={
+                      <>
+                        Same HTTP message, sent from a terminal. It cannot reach
+                        the request above: that one is answered by a Service
+                        Worker inside your browser, and curl is a separate
+                        program with no access to it. This command targets{" "}
+                        <code>/api</code> on a cloned repository running{" "}
+                        <code>npm run dev</code> — the same engine, its own
+                        separate data.
+                      </>
+                    }
+                    zh={
+                      <>
+                        同一份 HTTP 报文,换到终端里发。它<b>到不了</b>上面那个请求
+                        —— 上面是你浏览器里的 Service Worker 答的,而 curl
+                        是另一个程序,碰不到它。这条命令打的是本地克隆跑起
+                        <code>npm run dev</code> 之后的 <code>/api</code>:
+                        同一套引擎,另一份独立数据。
+                      </>
+                    }
                   />
                 </div>
               </>
@@ -386,6 +441,95 @@ export function Inspector({
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+/**
+ * Explains the mock's state in plain language. It is deliberately visible in
+ * every phase except the healthy one, so a learner is never left guessing why
+ * Send is greyed out.
+ */
+function MockStatus() {
+  const mock = useMockApi();
+
+  if (mock.phase === "ready") {
+    if (mock.durable) return null;
+    return (
+      <div className="insp-state" data-tone="warn">
+        <T
+          en={
+            <>
+              Ready, but this browser is not allowing local storage, so your
+              changes will be lost when you refresh. Private windows often do
+              this.
+            </>
+          }
+          zh={
+            <>
+              可以用了,但这个浏览器不让写本地存储,所以刷新之后你的改动会丢失。
+              无痕窗口常常这样。
+            </>
+          }
+        />
+      </div>
+    );
+  }
+
+  if (mock.phase === "starting") {
+    return (
+      <div className="insp-state" data-tone="wait">
+        <T
+          en={<>Starting the mock API inside your browser…</>}
+          zh={<>正在你的浏览器里启动 Mock API…</>}
+        />
+      </div>
+    );
+  }
+
+  if (mock.phase === "unsupported") {
+    return (
+      <div className="insp-state" data-tone="bad">
+        <T
+          en={
+            <>
+              This browser cannot run the mock API, because it has no Service
+              Worker support in this context. Sending is disabled rather than
+              quietly falling back to a server, which would return something
+              different from what this chapter describes. The code samples
+              below are still accurate.
+            </>
+          }
+          zh={
+            <>
+              这个浏览器在当前环境下不支持 Service Worker,跑不了 Mock API。
+              发送按钮已禁用 —— 我们不会偷偷改打服务器,那样返回的东西和本章讲的
+              不是一回事。下面的代码示例依然准确。
+            </>
+          }
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="insp-state" data-tone="bad">
+      <T
+        en={
+          <>
+            The mock API did not start{mock.reason ? ` (${mock.reason})` : ""}.
+            Reload the page to try again. Sending stays disabled so you are
+            never shown a server response pretending to be your local one.
+          </>
+        }
+        zh={
+          <>
+            Mock API 没能启动{mock.reason ? `(${mock.reason})` : ""}。
+            刷新页面可以重试。发送保持禁用 ——
+            免得把服务器的响应冒充成你本地的那份给你看。
+          </>
+        }
+      />
     </div>
   );
 }
