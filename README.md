@@ -44,17 +44,42 @@ Requires Node 22:
 ```bash
 nvm use
 npm install
-npm run dev        # http://localhost:3000
+npm run dev        # http://localhost:3300
 ```
 
-Build with type checking: `npm run build`.
+Checks:
+
+```bash
+npm run typecheck
+npm run lint
+npm run test       # engine unit tests + Chromium end-to-end tests
+npm run build
+```
 
 ## Structure
 
-Next.js 15 (App Router) + TypeScript + React 19, plain CSS. No API routes, so the whole site prerenders to static pages.
+Next.js 15 (App Router) + TypeScript + React 19, plain CSS. Every chapter prerenders to a
+static page.
 
 Each chapter is one folder under `app/` holding its page, its visualizations (`viz.tsx`) and
 its own stylesheet, paired with a data file under `lib/` for quizzes and exercises.
+
+## The mock API
+
+Chapters 01, 04, 05, 06 and 10 embed a request inspector that sends real HTTP requests and
+shows the status, headers, timing breakdown, body size and payload.
+
+Those requests go to `/mock-api`, which is served by a **Service Worker inside your own
+browser**, backed by IndexedDB. Your data is yours: nobody else can see or change it, it
+survives a refresh, and `POST /mock-api/reset` restores the original dataset exactly. No
+third-party API, no shared server state, no CORS.
+
+A Service Worker cannot be reached by `curl`. To drive the same engine from a terminal,
+clone the repository and run `npm run dev`, which exposes the server-side equivalent at
+`http://localhost:3300/api`. That endpoint is disabled on shared hosting so visitors never
+share mutable state.
+
+See [docs/mock-api.md](docs/mock-api.md) for the full picture.
 
 ---
 

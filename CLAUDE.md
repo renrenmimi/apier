@@ -75,8 +75,11 @@ app/layout.tsx         外壳(sidebar/toolbar/cmdk/aurora)—— 禁止改
 lib/kit.tsx lib/code.tsx lib/quiz.tsx lib/labs.tsx lib/stepper.tsx
 lib/highlight.tsx lib/progress.tsx lib/curriculum.ts lib/i18n.tsx
 lib/inspector.tsx                                      共享库 —— 禁止改
-lib/mock/db.ts lib/mock/http.ts lib/mock/graphql.ts    本地 Mock API 内核
-app/api/**/route.ts                                    Mock API 路由
+lib/mock/seed.ts lib/mock/engine.ts lib/mock/http.ts
+lib/mock/graphql.ts lib/mock/idb.ts lib/mock/client.tsx  Mock API 内核 —— 禁止改
+sw/mock-sw.ts                                          Service Worker 源码
+scripts/build-sw.mjs                                   打包成 public/mock-sw.js
+app/api/[[...path]]/route.ts                           仅本地开发的服务端 Mock
 app/<ch>/page.tsx      章节主页面("use client",数据+组合)
 app/<ch>/viz.tsx       本章专属可视化组件
 app/<ch>/chapter.css   本章专属样式(page.tsx 里【必须】import "./chapter.css",
@@ -130,32 +133,51 @@ lib/<ch>-data.tsx      本章动手任务 LABS + 测验 QUIZ 数据
 - 全站进度 context:`toggleLab(pid)`、`reportQuiz(ch, right, total)`、
   `chapterState(ch)`。localStorage 键统一 `apier-*` 前缀。
 
-## 本地 Mock API 与请求检查器(课程的实验台)
+## Mock API and request inspector
 
-**目的:让每个 HTTP 概念都能亲手验证,不依赖第三方服务、永远不撞 CORS、断网可用。**
+Full architecture: `docs/mock-api.md`. The rules that matter when writing chapters:
 
-- 数据:全书贯穿的「博客」世界(User/Post/Comment),`lib/mock/db.ts` 固定种子生成,
-  50 篇文章 / 10 个用户,内存存储,写操作真的生效;`POST /api/reset` 一键还原。
-- `GET /api` 是自文档索引 —— 列出所有端点、认证方式和教学开关。
-- REST 端点兑现了课程教的全部语义:201+Location、204、PUT 整体替换(字段会真的消失)、
-  PATCH 合并、ETag/If-None-Match→304、Idempotency-Key 去重、429+Retry-After、
-  401(带 WWW-Authenticate)/403、RFC 9457 problem+json、Link 分页头。
-- `POST /api/graphql` 是零依赖手写执行器(`lib/mock/graphql.ts`),与 REST 共用同一份数据,
-  支持变量/别名/片段/@include/@skip/内省;`extensions.dbCalls` 会报出「数据库查询次数」,
-  加 `?dataloader=1` 当场从 11 掉到 2 —— 第 10 章的 N+1 因此可以做实验而不只是看动画。
-- 教学开关:`?delay=800` 放慢服务器耗时;token 见 `lib/mock/http.ts`
-  (`apier-demo-token` 可写、`apier-readonly-token` 只读→403)。
+- **The interactive mock runs in the visitor's browser**, not on the server. A Service
+  Worker (`sw/mock-sw.ts`) owns `/mock-api/**` and stores that visitor's data in
+  IndexedDB. State is per visitor, survives a refresh, and `POST /mock-api/reset`
+  restores the deterministic seed.
+- **Never point an inspector preset at `/api`.** That path is the server-side mock and
+  exists only on a local clone, for curl; it is disabled on shared hosting. Presets use
+  `/mock-api/...`.
+- `lib/mock/engine.ts` is pure: `handleMockRequest(store, request)`. Never reach for
+  ambient or module-level state -- that is precisely the bug this design removed.
+- Data is the course-wide blog world (User/Post/Comment), 10 users and 50 posts, so ids
+  the chapters quote (such as `/posts/42`) exist.
+- Implemented for real: 201+Location, 204, PUT replacement (fields genuinely disappear),
+  PATCH merge, ETag/If-None-Match -> 304, Idempotency-Key, 429+Retry-After,
+  401 (with WWW-Authenticate) / 403, RFC 9457 problem+json, Link pagination headers.
+- `POST /mock-api/graphql` shares the same store as REST. `extensions.dbCalls` exposes
+  the query count; `?dataloader=1` drops it from 11 to 2 for the chapter 10 N+1 lesson.
+- Knobs: `?delay=800` for visible timings; tokens `apier-demo-token` (write) and
+  `apier-readonly-token` (403 on write).
+- **Response header values must be ASCII.** `lib/mock/http.ts` normalises them at the
+  exit, but keep `X-Teaching-Note` in English anyway -- an em dash once caused a 500.
 
-### `<Inspector />`(lib/inspector.tsx)
-- `<Inspector presets={[…]} defaultPath defaultMethod title />`,打的是同源 `/api/*`。
-- 展示:状态码徽章、耗时分解(总计 / 服务器 / 网络)、响应体积、响应头、
-  你设置的请求头、等价 curl 命令 —— DevTools Network 面板的教学版。
-- `InspectorPreset = { id, label, method, path, body?, headers?, note? }`,
-  `note` 说明「这次要让学习者看到什么」,双语。
-- 已接入:01 §06(方法/状态码/头)、04 §03(PUT vs PATCH 字段蒸发)、
-  05 §04(ETag→304)、06 §01(401 vs 403)、10 §04(N+1 计数器)。
-- **响应头的值只能是 ASCII** —— `lib/mock/http.ts` 已在出口统一兜底,
-  但写 `X-Teaching-Note` 时仍建议只用英文(中文破折号曾导致 500)。
+### `<Inspector />` (lib/inspector.tsx)
+
+- `<Inspector presets={[...]} defaultPath defaultMethod title />`.
+- Shows the status badge, timing split (total / server / network), response size,
+  response headers, the request headers you set, and an equivalent curl command.
+- `InspectorPreset = { id, label, method, path, body?, headers?, note? }`; `note` says
+  what the learner should notice, and is bilingual like every other string.
+- **Send stays disabled until the worker proves it is in control.** Do not add a
+  fallback to the network: a server 404 rendered as a lesson would teach the wrong
+  thing. Failure and non-durable storage each have their own visible state.
+- The curl tab is labelled "Run against a local clone", targets
+  `http://localhost:3300/api/...`, and says outright that it cannot reach the
+  browser-local request above it. Keep it that way.
+- Wired into: 01 §06, 04 §03 (PUT vs PATCH), 05 §04 (ETag -> 304), 06 §01 (401 vs 403),
+  10 §04 (N+1 counter).
+
+### Checks
+
+`npm run typecheck` · `npm run lint` · `npm run test` (unit + Chromium e2e) ·
+`npm run build`. The worker is rebuilt automatically before dev and build.
 
 ## 章节页节奏(每章同一个骨架)
 
