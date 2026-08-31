@@ -15,7 +15,6 @@ import {
   createContext,
   useContext,
   useEffect,
-  useMemo,
   useState,
   type ReactNode,
 } from "react";
@@ -70,21 +69,22 @@ export function MockApiProvider({ children }: { children: ReactNode }) {
       if (!cancelled) setState({ phase: "failed", durable: true, reason });
     };
 
-    if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) {
-      setState({ phase: "unsupported", durable: true });
-      return;
-    }
-    // Service Workers only run in secure contexts; localhost counts as secure.
-    if (typeof window !== "undefined" && !window.isSecureContext) {
-      setState({
-        phase: "unsupported",
-        durable: true,
-        reason: "insecure context",
-      });
-      return;
-    }
-
     (async () => {
+      // Every state update happens after an await so the effect never triggers
+      // a cascading render, and so support checks share one code path.
+      await Promise.resolve();
+      if (cancelled) return;
+
+      if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) {
+        setState({ phase: "unsupported", durable: true });
+        return;
+      }
+      // Service Workers only run in secure contexts; localhost counts as secure.
+      if (typeof window !== "undefined" && !window.isSecureContext) {
+        setState({ phase: "unsupported", durable: true, reason: "insecure context" });
+        return;
+      }
+
       try {
         await navigator.serviceWorker.register("/mock-sw.js", { scope: "/" });
       } catch (err) {

@@ -232,7 +232,7 @@ function parse(src: string) {
         }
         continue;
       }
-      let alias = name();
+      const alias = name();
       let fname = alias;
       if (at(":")) {
         eat(":");
