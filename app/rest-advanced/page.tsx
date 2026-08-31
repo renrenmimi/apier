@@ -1040,13 +1040,13 @@ ETag: "abc"
             en: "Watch a 304 happen",
             zh: "亲眼看一次 304",
           }}
-          defaultPath="/api/posts/42"
+          defaultPath="/mock-api/posts/42"
           presets={[
             {
               id: "first",
               label: { en: "1 · First request", zh: "1 · 第一次请求" },
               method: "GET",
-              path: "/api/posts/42",
+              path: "/mock-api/posts/42",
               note: {
                 en: (
                   <>
@@ -1067,7 +1067,7 @@ ETag: "abc"
               id: "again",
               label: { en: "2 · Ask again, with the fingerprint", zh: "2 · 带着指纹再问一次" },
               method: "GET",
-              path: "/api/posts/42",
+              path: "/mock-api/posts/42",
               headers: { "If-None-Match": '"8ea1a986"' },
               note: {
                 en: (
@@ -1094,7 +1094,7 @@ ETag: "abc"
               id: "stale",
               label: { en: "3 · A stale fingerprint", zh: "3 · 用一个过期的指纹" },
               method: "GET",
-              path: "/api/posts/42",
+              path: "/mock-api/posts/42",
               headers: { "If-None-Match": '"deadbeef"' },
               note: {
                 en: (

@@ -3,9 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3300",
     "build": "next build",
-    "start": "next start"
+    "start": "next start -p 3300",
+    "build:sw": "node scripts/build-sw.mjs",
+    "predev": "npm run build:sw",
+    "prebuild": "npm run build:sw",
+    "typecheck": "tsc --noEmit",
+    "lint": "next lint"
   },
   "dependencies": {
     "next": "^15.3.0",
@@ -16,6 +21,7 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "esbuild": "^0.28.2",
     "typescript": "^5.5.0"
   }
 }

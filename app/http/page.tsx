@@ -1229,13 +1229,13 @@ export default function HttpPage() {
             en: "Now send one yourself",
             zh: "现在,你自己发一个",
           }}
-          defaultPath="/api/posts/42"
+          defaultPath="/mock-api/posts/42"
           presets={[
             {
               id: "ok",
               label: { en: "A normal GET", zh: "一次普通的 GET" },
               method: "GET",
-              path: "/api/posts/42",
+              path: "/mock-api/posts/42",
               note: {
                 en: (
                   <>
@@ -1258,7 +1258,7 @@ export default function HttpPage() {
               id: "missing",
               label: { en: "Ask for something gone", zh: "要一个不存在的" },
               method: "GET",
-              path: "/api/posts/9999",
+              path: "/mock-api/posts/9999",
               note: {
                 en: (
                   <>
@@ -1280,7 +1280,7 @@ export default function HttpPage() {
               id: "noauth",
               label: { en: "Write without a token", zh: "不带凭证去写" },
               method: "POST",
-              path: "/api/posts",
+              path: "/mock-api/posts",
               body: '{"title":"我的第一篇","body":"正文"}',
               note: {
                 en: (
@@ -1304,7 +1304,7 @@ export default function HttpPage() {
               id: "options",
               label: { en: "OPTIONS: what may I do?", zh: "OPTIONS:我能干什么?" },
               method: "OPTIONS",
-              path: "/api/posts",
+              path: "/mock-api/posts",
               note: {
                 en: (
                   <>
