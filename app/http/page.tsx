@@ -16,6 +16,7 @@ import {
 } from "@/lib/kit";
 import { CodeBlock, CodePair } from "@/lib/code";
 import { LabSet } from "@/lib/labs";
+import { Inspector } from "@/lib/inspector";
 import { Quiz } from "@/lib/quiz";
 import { LABS, QUIZ } from "@/lib/http-data";
 import { T } from "@/lib/i18n";
@@ -1216,11 +1217,112 @@ export default function HttpPage() {
               <>
                 <b>工具千变,报文不变。</b>浏览器、fetch、curl、Postman
                 生成的是同一份 HTTP 报文 —— 学会读报文,你就看懂了所有工具。
-                (api.shop.com 是本课程虚构的示例域名;下面的动手任务用的是真的公开
-                API。)
+                (api.shop.com 是本课程虚构的示例域名;下面的检查器打的是本站
+                自带的 Mock API,真实可跑。)
               </>
             ),
           }}
+        />
+
+        <Inspector
+          title={{
+            en: "Now send one yourself",
+            zh: "现在,你自己发一个",
+          }}
+          defaultPath="/api/posts/42"
+          presets={[
+            {
+              id: "ok",
+              label: { en: "A normal GET", zh: "一次普通的 GET" },
+              method: "GET",
+              path: "/api/posts/42",
+              note: {
+                en: (
+                  <>
+                    <b>200</b> and a body. Open the{" "}
+                    <b>Response headers</b> tab: <code>Content-Type</code> tells
+                    you it is JSON, <code>ETag</code> is the fingerprint we use
+                    in chapter 05.
+                  </>
+                ),
+                zh: (
+                  <>
+                    <b>200</b>,带回了正文。点开<b>响应头</b>那一栏:
+                    <code>Content-Type</code> 说明这是 JSON,
+                    <code>ETag</code> 是第 05 章要用的内容指纹。
+                  </>
+                ),
+              },
+            },
+            {
+              id: "missing",
+              label: { en: "Ask for something gone", zh: "要一个不存在的" },
+              method: "GET",
+              path: "/api/posts/9999",
+              note: {
+                en: (
+                  <>
+                    <b>404</b>. Note the body is not plain text but{" "}
+                    <code>application/problem+json</code> — a well-behaved error
+                    format we design properly in chapter 04.
+                  </>
+                ),
+                zh: (
+                  <>
+                    <b>404</b>。注意响应体不是干巴巴一句话,而是
+                    <code>application/problem+json</code> —— 会好好说话的错误格式,
+                    第 04 章专门设计它。
+                  </>
+                ),
+              },
+            },
+            {
+              id: "noauth",
+              label: { en: "Write without a token", zh: "不带凭证去写" },
+              method: "POST",
+              path: "/api/posts",
+              body: '{"title":"我的第一篇","body":"正文"}',
+              note: {
+                en: (
+                  <>
+                    <b>401</b>, plus a <code>WWW-Authenticate</code> response
+                    header — the spec requires it. 401 means &ldquo;who are
+                    you?&rdquo;, not &ldquo;you may not&rdquo;. Chapter 06 draws
+                    that line.
+                  </>
+                ),
+                zh: (
+                  <>
+                    <b>401</b>,而且带了 <code>WWW-Authenticate</code> 响应头 ——
+                    规范要求的。401 说的是「你是谁?」,不是「不许你」。
+                    这条界线第 06 章会划清楚。
+                  </>
+                ),
+              },
+            },
+            {
+              id: "options",
+              label: { en: "OPTIONS: what may I do?", zh: "OPTIONS:我能干什么?" },
+              method: "OPTIONS",
+              path: "/api/posts",
+              note: {
+                en: (
+                  <>
+                    <b>204</b>, no body — the answer lives entirely in the
+                    headers. <code>Access-Control-Allow-Methods</code> lists what
+                    this resource accepts. This is the preflight from chapter 06.
+                  </>
+                ),
+                zh: (
+                  <>
+                    <b>204</b>,没有正文 —— 答案全在响应头里。
+                    <code>Access-Control-Allow-Methods</code> 列出了这个资源
+                    接受哪些方法。这就是第 06 章要讲的预检请求。
+                  </>
+                ),
+              },
+            },
+          ]}
         />
       </Section>
 

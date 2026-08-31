@@ -2400,3 +2400,265 @@ li code {
   transition: transform 0.5s ease;
 }
 .flow-packet.back { border-style: dashed; }
+
+/* ============================================================
+   14. 请求检查器(lib/inspector.tsx)
+   ============================================================ */
+
+.insp {
+  border-radius: 18px;
+  border: 1px solid var(--border-strong);
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      oklch(var(--acc-l) var(--acc-c) var(--hue) / 0.06),
+      transparent 70%
+    ),
+    var(--panel);
+  backdrop-filter: blur(12px);
+  padding: 18px;
+  margin: 20px 0;
+}
+
+.insp-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 14px;
+}
+.insp-title::before {
+  content: "⇄";
+  color: var(--acc);
+  font-size: 13px;
+}
+.insp-badge {
+  font-family: var(--font-jb), monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--acc-ink);
+  background: var(--acc-soft);
+  border: 1px solid var(--acc-border);
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+
+.insp-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+/* — 请求行 — */
+.insp-line {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+.insp-method {
+  font-family: var(--font-jb), monospace;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 9px;
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  color: var(--text);
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+.insp-method[data-m="GET"]    { color: var(--info); }
+.insp-method[data-m="POST"]   { color: var(--ok); }
+.insp-method[data-m="PUT"]    { color: var(--warn); }
+.insp-method[data-m="PATCH"]  { color: #6fd6d0; }
+.insp-method[data-m="DELETE"] { color: var(--risk); }
+
+.insp-path {
+  flex: 1 1 240px;
+  min-width: 0;
+  font-family: var(--font-jb), monospace;
+  font-size: 12.5px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  color: var(--text);
+}
+.insp-path:focus-visible {
+  outline: none;
+  border-color: var(--acc-border);
+  box-shadow: 0 0 0 3px var(--acc-soft);
+}
+
+.insp-body-in {
+  width: 100%;
+  margin-top: 8px;
+  font-family: var(--font-jb), monospace;
+  font-size: 12.5px;
+  line-height: 1.7;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  background: var(--code-bg);
+  color: var(--code-text);
+  resize: vertical;
+}
+.insp-body-in:focus-visible {
+  outline: none;
+  border-color: var(--acc-border);
+}
+
+.insp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.insp-chip {
+  font-family: var(--font-jb), monospace;
+  font-size: 10.5px;
+  color: var(--text-3);
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 3px 8px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.insp-chip b { color: var(--text-2); font-weight: 600; }
+
+/* — 结果区 — */
+.insp-result { margin-top: 16px; }
+
+.insp-note {
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--text-2);
+  background: var(--acc-soft);
+  border: 1px solid var(--acc-border);
+  border-left: 3px solid var(--acc);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+}
+.insp-note b { color: var(--text); }
+
+.insp-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--border);
+}
+.insp-timing {
+  font-family: var(--font-jb), monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+.insp-dim {
+  font-family: var(--font-jb), monospace;
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.insp-tabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: 12px 0 10px;
+}
+.insp-tab {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 5px 11px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+.insp-tab:hover { color: var(--text-2); background: var(--panel-2); }
+.insp-tab.on {
+  color: var(--acc-ink);
+  background: var(--acc-soft);
+  border-color: var(--acc-border);
+}
+
+.insp-pane {
+  border-radius: 12px;
+  border: 1px solid var(--border-strong);
+  background: var(--code-bg);
+  overflow: hidden;
+  max-height: 420px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.insp-pane .codewin-body { padding: 10px 0; }
+
+.insp-headers { padding: 6px 0; }
+.insp-hrow {
+  display: grid;
+  grid-template-columns: minmax(120px, 34%) 1fr;
+  gap: 12px;
+  padding: 5px 14px;
+  font-family: var(--font-jb), monospace;
+  font-size: 11.5px;
+  line-height: 1.7;
+  border-left: 3px solid transparent;
+}
+.insp-hrow:hover { background: var(--code-hl); border-left-color: var(--acc); }
+.insp-hk { color: var(--tk-type); word-break: break-all; }
+.insp-hv { color: var(--code-text); word-break: break-all; }
+
+.insp-sub {
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding: 10px 14px 2px;
+}
+.insp-empty {
+  padding: 18px 14px;
+  font-size: 12.5px;
+  color: var(--text-3);
+  text-align: center;
+}
+.insp-empty b { color: var(--text-2); }
+.insp-foot {
+  padding: 10px 14px 12px;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--text-3);
+  border-top: 1px dashed var(--border);
+}
+.insp-foot code {
+  font-size: 11px;
+  background: var(--panel-2);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+
+.insp-err {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--risk);
+  background: var(--risk-bg);
+  border: 1px solid color-mix(in oklab, var(--risk) 40%, transparent);
+}
+
+@media (max-width: 620px) {
+  .insp-hrow { grid-template-columns: 1fr; gap: 2px; }
+}

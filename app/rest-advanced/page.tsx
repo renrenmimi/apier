@@ -19,6 +19,7 @@ import {
 } from "@/lib/kit";
 import { CodeBlock, CodePair } from "@/lib/code";
 import { LabSet } from "@/lib/labs";
+import { Inspector } from "@/lib/inspector";
 import { Quiz } from "@/lib/quiz";
 import { LABS, QUIZ } from "@/lib/rest-advanced-data";
 import { T } from "@/lib/i18n";
@@ -1033,6 +1034,87 @@ ETag: "abc"
             />
           </p>
         </Callout>
+
+        <Inspector
+          title={{
+            en: "Watch a 304 happen",
+            zh: "亲眼看一次 304",
+          }}
+          defaultPath="/api/posts/42"
+          presets={[
+            {
+              id: "first",
+              label: { en: "1 · First request", zh: "1 · 第一次请求" },
+              method: "GET",
+              path: "/api/posts/42",
+              note: {
+                en: (
+                  <>
+                    <b>200</b> with a full body. In the response headers, copy the
+                    value of <code>ETag</code> — that string is the
+                    server&rsquo;s fingerprint of this exact content.
+                  </>
+                ),
+                zh: (
+                  <>
+                    <b>200</b>,带回完整正文。在响应头里找到 <code>ETag</code>,
+                    记下它的值 —— 那串字符是服务器给这份内容按的指纹。
+                  </>
+                ),
+              },
+            },
+            {
+              id: "again",
+              label: { en: "2 · Ask again, with the fingerprint", zh: "2 · 带着指纹再问一次" },
+              method: "GET",
+              path: "/api/posts/42",
+              headers: { "If-None-Match": '"8ea1a986"' },
+              note: {
+                en: (
+                  <>
+                    <b>304 Not Modified</b>, and the body is empty — the server
+                    saved the entire payload and just said &ldquo;nothing
+                    changed&rdquo;. Compare the byte count with the first
+                    request. If you get 200 instead, the post really did change
+                    (someone PUT it) — which is exactly the job ETag is doing.
+                  </>
+                ),
+                zh: (
+                  <>
+                    <b>304 Not Modified</b>,响应体是空的 ——
+                    服务器把整个正文都省下来了,只回了一句「没变」。
+                    对比一下两次的字节数。如果你拿到的是 200,
+                    说明这篇文章真的被改过(比如刚才被 PUT 过)——
+                    那正是 ETag 在尽职。
+                  </>
+                ),
+              },
+            },
+            {
+              id: "stale",
+              label: { en: "3 · A stale fingerprint", zh: "3 · 用一个过期的指纹" },
+              method: "GET",
+              path: "/api/posts/42",
+              headers: { "If-None-Match": '"deadbeef"' },
+              note: {
+                en: (
+                  <>
+                    <b>200</b> again, with the whole body. The fingerprint did not
+                    match, so the server assumes your copy is stale and sends a
+                    fresh one. No fingerprint match, no savings.
+                  </>
+                ),
+                zh: (
+                  <>
+                    又是 <b>200</b>,正文完整送回。指纹对不上,
+                    服务器就认为你手里那份过期了,重新发一份完整的。
+                    指纹对不上,就省不下流量。
+                  </>
+                ),
+              },
+            },
+          ]}
+        />
       </Section>
 
       {/* ================= §05 幂等与重试 ================= */}

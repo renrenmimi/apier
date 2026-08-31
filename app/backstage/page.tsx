@@ -17,6 +17,7 @@ import {
 } from "@/lib/kit";
 import { CodeBlock } from "@/lib/code";
 import { LabSet } from "@/lib/labs";
+import { Inspector } from "@/lib/inspector";
 import { Quiz } from "@/lib/quiz";
 import { LABS, QUIZ } from "@/lib/backstage-data";
 import { T } from "@/lib/i18n";
@@ -541,6 +542,89 @@ const resolvers = {
         </p>
 
         <SqlCounter loader />
+
+        <Inspector
+          title={{
+            en: "Count the queries yourself",
+            zh: "自己数一遍查询次数",
+          }}
+          defaultMethod="POST"
+          defaultPath="/api/graphql"
+          presets={[
+            {
+              id: "n1",
+              label: { en: "10 posts + author (no loader)", zh: "10 篇文章带作者(没有 loader)" },
+              method: "POST",
+              path: "/api/graphql",
+              body: '{"query":"{ posts(limit: 10) { title author { name } } }"}',
+              note: {
+                en: (
+                  <>
+                    Scroll to <code>extensions.dbCalls</code> at the bottom of the
+                    response: <b>11</b>. One query for the list, then one more for
+                    every single post&rsquo;s author. That is 1 + N, live. The
+                    same number is in the <code>X-Resolver-Calls</code> response
+                    header.
+                  </>
+                ),
+                zh: (
+                  <>
+                    翻到响应最下面的 <code>extensions.dbCalls</code>:<b>11</b>。
+                    查列表 1 次,然后每篇文章的作者各查 1 次 ——
+                    这就是活的 1 + N。响应头 <code>X-Resolver-Calls</code>{" "}
+                    里是同一个数字。
+                  </>
+                ),
+              },
+            },
+            {
+              id: "loader",
+              label: { en: "Same query, loader on", zh: "同一个查询,开 loader" },
+              method: "POST",
+              path: "/api/graphql?dataloader=1",
+              body: '{"query":"{ posts(limit: 10) { title author { name } } }"}',
+              note: {
+                en: (
+                  <>
+                    <b>2.</b> Identical query, identical response data — the
+                    authors were collected and fetched in one batch instead of ten
+                    round trips. The client changed nothing; the server got
+                    smarter. That is what DataLoader buys you.
+                  </>
+                ),
+                zh: (
+                  <>
+                    <b>2。</b>查询一字没改,返回的数据也一模一样 ——
+                    区别是这次把作者攒成一批一次取回,而不是来回跑十趟。
+                    客户端什么都没变,是服务器变聪明了。DataLoader 买的就是这个。
+                  </>
+                ),
+              },
+            },
+            {
+              id: "deep",
+              label: { en: "Now add comments", zh: "再加上评论试试" },
+              method: "POST",
+              path: "/api/graphql",
+              body: '{"query":"{ posts(limit: 5) { title author { name } comments { body author { name } } } }"}',
+              note: {
+                en: (
+                  <>
+                    One more level of nesting, and the count climbs again. Nothing
+                    about the schema changed — a client just asked for more. This
+                    is why depth limits and cost analysis exist.
+                  </>
+                ),
+                zh: (
+                  <>
+                    只是多套了一层,次数又爬上去了。schema 一个字没改,
+                    只是客户端多要了点东西。这就是深度限制和复杂度打分存在的理由。
+                  </>
+                ),
+              },
+            },
+          ]}
+        />
       </Section>
 
       {/* ================= §05 缓存 ================= */}

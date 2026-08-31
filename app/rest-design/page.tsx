@@ -19,6 +19,7 @@ import {
 } from "@/lib/kit";
 import { CodeBlock, CodePair } from "@/lib/code";
 import { LabSet } from "@/lib/labs";
+import { Inspector } from "@/lib/inspector";
 import { Quiz } from "@/lib/quiz";
 import { LABS, QUIZ } from "@/lib/rest-design-data";
 import { T } from "@/lib/i18n";
@@ -913,6 +914,98 @@ Content-Type: application/problem+json
             />
           </p>
         </Callout>
+
+        <Inspector
+          title={{
+            en: "Lose a field with your own hands",
+            zh: "亲手把一个字段弄丢",
+          }}
+          defaultPath="/api/posts/7"
+          presets={[
+            {
+              id: "before",
+              label: { en: "1 · Look at post 7", zh: "1 · 先看看 7 号文章" },
+              method: "GET",
+              path: "/api/posts/7",
+              note: {
+                en: (
+                  <>
+                    Note every field it has right now: <code>title</code>,{" "}
+                    <code>body</code>, <code>authorId</code>, <code>status</code>.
+                    Remember <code>body</code> in particular.
+                  </>
+                ),
+                zh: (
+                  <>
+                    记住它现在有哪些字段:<code>title</code>、<code>body</code>、
+                    <code>authorId</code>、<code>status</code>。
+                    尤其记住 <code>body</code> 里那句话。
+                  </>
+                ),
+              },
+            },
+            {
+              id: "put",
+              label: { en: "2 · PUT only the title", zh: "2 · PUT 只发标题" },
+              method: "PUT",
+              path: "/api/posts/7",
+              headers: { Authorization: "Bearer apier-demo-token" },
+              body: '{"title":"只改一下标题"}',
+              note: {
+                en: (
+                  <>
+                    <b>The body is now an empty string and authorId is 0.</b> You
+                    did not delete them — PUT <i>replaces</i> the resource, and
+                    whatever you leave out of the request is simply not there
+                    afterwards. This is the most common way beginners lose data.
+                  </>
+                ),
+                zh: (
+                  <>
+                    <b>body 现在是空字符串,authorId 变成了 0。</b>
+                    你并没有删它们 —— PUT 是<i>整体替换</i>,
+                    请求体里没写的字段,替换完就真的不在了。
+                    新手丢数据,十有八九是这么丢的。
+                  </>
+                ),
+              },
+            },
+            {
+              id: "reset",
+              label: { en: "3 · Undo it", zh: "3 · 还原" },
+              method: "POST",
+              path: "/api/reset",
+              note: {
+                en: <>Back to the original data. Now try the same edit with PATCH.</>,
+                zh: <>数据回到初始状态。现在换 PATCH 做同一件事。</>,
+              },
+            },
+            {
+              id: "patch",
+              label: { en: "4 · PATCH only the title", zh: "4 · PATCH 只发标题" },
+              method: "PATCH",
+              path: "/api/posts/7",
+              headers: { Authorization: "Bearer apier-demo-token" },
+              body: '{"title":"只改一下标题"}',
+              note: {
+                en: (
+                  <>
+                    Same request body, completely different outcome:{" "}
+                    <b>the title changed and everything else survived</b>. PATCH
+                    merges what you sent; it never touches what you left out.
+                  </>
+                ),
+                zh: (
+                  <>
+                    请求体一模一样,结果完全不同:
+                    <b>标题改了,其余字段全都还在</b>。
+                    PATCH 只合并你发的那部分,没发的它不碰。
+                  </>
+                ),
+              },
+            },
+          ]}
+        />
       </Section>
 
       {/* ================= §04 状态码决策室 ================= */}

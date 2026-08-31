@@ -15,8 +15,10 @@
 - 假设读者不知道什么是「服务器」「请求」——序章从零讲起;
 - 代码示例一律 JavaScript(fetch / async-await),这是读者唯一会的语言。
 
-**语言:全站纯中文**(与 DataData/AlgoAlgo 对齐;曾计划双语,为省 token 已裁掉,
-勿再引入 i18n)。英文只出现在:章节注册表的 en 副标、hero 眉题、代码与术语。
+**语言:全站双语(英文默认 / 中文可切)**,底座在 `lib/i18n.tsx`:
+`Loc<T>` = `T | { en, zh }`,`useL()` 解析 props,`<T en zh />` 在 JSX 里内联切换。
+面向读者的文字一律成对写(含测验纠错、动画旁白、检查器预设说明)。
+代码注释与提交信息用中文;报文、SDL、命令等「线上跑的字节」两种语言完全一致。
 
 ## 文案风格(重要,全站贯穿)
 
@@ -71,7 +73,10 @@ GraphQL 章用同一套数据写 schema,终章用它做对比 —— 全书一�
 app/globals.css        全站设计系统(含 13 节 APIer 原语)—— 章节作者【禁止改】
 app/layout.tsx         外壳(sidebar/toolbar/cmdk/aurora)—— 禁止改
 lib/kit.tsx lib/code.tsx lib/quiz.tsx lib/labs.tsx lib/stepper.tsx
-lib/highlight.tsx lib/progress.tsx lib/curriculum.ts   共享库 —— 禁止改
+lib/highlight.tsx lib/progress.tsx lib/curriculum.ts lib/i18n.tsx
+lib/inspector.tsx                                      共享库 —— 禁止改
+lib/mock/db.ts lib/mock/http.ts lib/mock/graphql.ts    本地 Mock API 内核
+app/api/**/route.ts                                    Mock API 路由
 app/<ch>/page.tsx      章节主页面("use client",数据+组合)
 app/<ch>/viz.tsx       本章专属可视化组件
 app/<ch>/chapter.css   本章专属样式(page.tsx 里【必须】import "./chapter.css",
@@ -124,6 +129,33 @@ lib/<ch>-data.tsx      本章动手任务 LABS + 测验 QUIZ 数据
 ### lib/progress.tsx
 - 全站进度 context:`toggleLab(pid)`、`reportQuiz(ch, right, total)`、
   `chapterState(ch)`。localStorage 键统一 `apier-*` 前缀。
+
+## 本地 Mock API 与请求检查器(课程的实验台)
+
+**目的:让每个 HTTP 概念都能亲手验证,不依赖第三方服务、永远不撞 CORS、断网可用。**
+
+- 数据:全书贯穿的「博客」世界(User/Post/Comment),`lib/mock/db.ts` 固定种子生成,
+  50 篇文章 / 10 个用户,内存存储,写操作真的生效;`POST /api/reset` 一键还原。
+- `GET /api` 是自文档索引 —— 列出所有端点、认证方式和教学开关。
+- REST 端点兑现了课程教的全部语义:201+Location、204、PUT 整体替换(字段会真的消失)、
+  PATCH 合并、ETag/If-None-Match→304、Idempotency-Key 去重、429+Retry-After、
+  401(带 WWW-Authenticate)/403、RFC 9457 problem+json、Link 分页头。
+- `POST /api/graphql` 是零依赖手写执行器(`lib/mock/graphql.ts`),与 REST 共用同一份数据,
+  支持变量/别名/片段/@include/@skip/内省;`extensions.dbCalls` 会报出「数据库查询次数」,
+  加 `?dataloader=1` 当场从 11 掉到 2 —— 第 10 章的 N+1 因此可以做实验而不只是看动画。
+- 教学开关:`?delay=800` 放慢服务器耗时;token 见 `lib/mock/http.ts`
+  (`apier-demo-token` 可写、`apier-readonly-token` 只读→403)。
+
+### `<Inspector />`(lib/inspector.tsx)
+- `<Inspector presets={[…]} defaultPath defaultMethod title />`,打的是同源 `/api/*`。
+- 展示:状态码徽章、耗时分解(总计 / 服务器 / 网络)、响应体积、响应头、
+  你设置的请求头、等价 curl 命令 —— DevTools Network 面板的教学版。
+- `InspectorPreset = { id, label, method, path, body?, headers?, note? }`,
+  `note` 说明「这次要让学习者看到什么」,双语。
+- 已接入:01 §06(方法/状态码/头)、04 §03(PUT vs PATCH 字段蒸发)、
+  05 §04(ETag→304)、06 §01(401 vs 403)、10 §04(N+1 计数器)。
+- **响应头的值只能是 ASCII** —— `lib/mock/http.ts` 已在出口统一兜底,
+  但写 `X-Teaching-Note` 时仍建议只用英文(中文破折号曾导致 500)。
 
 ## 章节页节奏(每章同一个骨架)
 

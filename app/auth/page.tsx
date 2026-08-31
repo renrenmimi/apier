@@ -18,6 +18,7 @@ import {
 } from "@/lib/kit";
 import { CodeBlock } from "@/lib/code";
 import { LabSet } from "@/lib/labs";
+import { Inspector } from "@/lib/inspector";
 import { Quiz } from "@/lib/quiz";
 import { LABS, QUIZ } from "@/lib/auth-data";
 import { T } from "@/lib/i18n";
@@ -225,6 +226,86 @@ export default function AuthPage() {
             </p>
           </div>
         </div>
+
+        <Inspector
+          title={{
+            en: "401 and 403, one button apart",
+            zh: "401 与 403,只差一个按钮",
+          }}
+          defaultMethod="POST"
+          defaultPath="/api/posts"
+          presets={[
+            {
+              id: "anon",
+              label: { en: "No credentials", zh: "不带凭证" },
+              method: "POST",
+              path: "/api/posts",
+              body: '{"title":"试试看","body":"正文"}',
+              note: {
+                en: (
+                  <>
+                    <b>401 Unauthorized.</b> The server has no idea who you are.
+                    Look for <code>WWW-Authenticate</code> in the response
+                    headers — the spec requires a 401 to say how to authenticate.
+                  </>
+                ),
+                zh: (
+                  <>
+                    <b>401 Unauthorized。</b>服务器根本不知道你是谁。
+                    去响应头里找 <code>WWW-Authenticate</code> ——
+                    规范要求 401 必须告诉你「该怎么证明身份」。
+                  </>
+                ),
+              },
+            },
+            {
+              id: "readonly",
+              label: { en: "A read-only token", zh: "带一枚只读凭证" },
+              method: "POST",
+              path: "/api/posts",
+              headers: { Authorization: "Bearer apier-readonly-token" },
+              body: '{"title":"试试看","body":"正文"}',
+              note: {
+                en: (
+                  <>
+                    <b>403 Forbidden.</b> The token is valid, so the server knows
+                    exactly who you are — and still says no. Logging in again
+                    will not help; only different permissions will.
+                  </>
+                ),
+                zh: (
+                  <>
+                    <b>403 Forbidden。</b>凭证是有效的,服务器很清楚你是谁 ——
+                    但依然不让。重新登录一百次也没用,得换权限。
+                  </>
+                ),
+              },
+            },
+            {
+              id: "write",
+              label: { en: "A token that may write", zh: "带一枚可写凭证" },
+              method: "POST",
+              path: "/api/posts",
+              headers: { Authorization: "Bearer apier-demo-token" },
+              body: '{"title":"试试看","body":"正文"}',
+              note: {
+                en: (
+                  <>
+                    <b>201 Created</b>, with a <code>Location</code> header
+                    pointing at the new resource. Same request, same server —
+                    the only thing that changed was one header.
+                  </>
+                ),
+                zh: (
+                  <>
+                    <b>201 Created</b>,还带了 <code>Location</code> 头指向新资源。
+                    同一个请求、同一台服务器 —— 变的只有一个请求头。
+                  </>
+                ),
+              },
+            },
+          ]}
+        />
       </Section>
 
       {/* ================= §02 API Key ================= */}
