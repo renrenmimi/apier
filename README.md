@@ -16,6 +16,10 @@ Sister sites: [DataData](https://data-data.vercel.app) (data structures) and
 
 *HTTP: status codes, methods and headers, explored interactively*
 
+![The request inspector: a real round trip to the in-browser mock API, with status, timing, headers and body](docs/inspector.jpg)
+
+*The request inspector — the mock API runs in your own browser through a Service Worker, so the round trip is real: status, server and network timing, twelve response headers, the body, and the curl you would type instead.*
+
 ## Chapters
 
 | # | Chapter | What it covers |
