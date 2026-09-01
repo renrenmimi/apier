@@ -10,17 +10,17 @@ import { useL, type Loc } from "@/lib/i18n";
 
 export function useStepper(total: number, intervalMs = 1400) {
   const [step, setStep] = useState(0);
-  const [playing, setPlaying] = useState(false);
+  const [wantsToPlay, setWantsToPlay] = useState(false);
+
+  // 「播到最后一帧就停」是从 step 推出来的,不是另一个要维护的状态。
+  // 早先的写法在 effect 里补一次 setPlaying(false),那会多跑一轮渲染。
+  const playing = wantsToPlay && step < total - 1;
 
   // 自动播放:每帧重新起一个 timeout,而不是一个长跑的 interval。
-  // 好处 ①  setStep 的更新函数保持纯粹(不在里面调 setPlaying —— 那在
-  // StrictMode 下会被双调用);② 播到最后一帧时由这个 effect 自己收尾停播。
+  // setStep 的更新函数保持纯粹(不在里面调 setPlaying —— 那在 StrictMode
+  // 下会被双调用)。
   useEffect(() => {
     if (!playing) return;
-    if (step >= total - 1) {
-      setPlaying(false);
-      return;
-    }
     const id = setTimeout(
       () => setStep((s) => Math.min(s + 1, total - 1)),
       intervalMs,
@@ -32,19 +32,24 @@ export function useStepper(total: number, intervalMs = 1400) {
     step,
     playing,
     prev: () => {
-      setPlaying(false);
+      setWantsToPlay(false);
       setStep((s) => Math.max(0, s - 1));
     },
     next: () => {
-      setPlaying(false);
+      setWantsToPlay(false);
       setStep((s) => Math.min(total - 1, s + 1));
     },
     toggle: () => {
-      if (step >= total - 1) setStep(0);
-      setPlaying((p) => !p);
+      // 停在最后一帧时再点一次 = 从头重播。
+      if (step >= total - 1) {
+        setStep(0);
+        setWantsToPlay(true);
+        return;
+      }
+      setWantsToPlay((p) => !p);
     },
     reset: () => {
-      setPlaying(false);
+      setWantsToPlay(false);
       setStep(0);
     },
   };

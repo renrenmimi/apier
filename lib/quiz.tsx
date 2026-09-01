@@ -7,7 +7,7 @@
 //  - fill:填空,回车或按钮判定;可反复尝试,答对为止(计分按最终是否答对)。
 // 全部答完 → 结算面板,成绩写入进度系统(取历史最好成绩,决定章节「通关」状态)。
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useProgress } from "@/lib/progress";
 import { useL, type Loc } from "@/lib/i18n";
 import type { ChapterId } from "@/lib/curriculum";
@@ -60,7 +60,7 @@ export function Quiz({ ch, items }: { ch: ChapterId; items: QuizItem[] }) {
   );
   const [multiPicks, setMultiPicks] = useState<Record<number, number[]>>({});
   const [fillText, setFillText] = useState<Record<number, string>>({});
-  const [reported, setReported] = useState(false);
+  const reported = useRef(false);
 
   const answered = states.filter((s) => s.phase !== "idle").length;
   const firstRight = states.filter(
@@ -71,11 +71,13 @@ export function Quiz({ ch, items }: { ch: ChapterId; items: QuizItem[] }) {
   // 全部答完 → 上报成绩。放在 effect 里而不是 setStates 的更新函数里:
   // 渲染期间去改 ProgressProvider 的状态是 React 反模式,会报
   // "Cannot update a component while rendering a different component"。
+  // 「已上报」记在 ref 上而不是 state 上 —— 它只用来守住这个 effect,
+  // 谁也不渲染它,没必要为它多跑一轮。
   useEffect(() => {
-    if (reported || !allDone) return;
+    if (reported.current || !allDone) return;
+    reported.current = true;
     reportQuiz(ch, firstRight, items.length);
-    setReported(true);
-  }, [allDone, reported, firstRight, ch, items.length, reportQuiz]);
+  }, [allDone, firstRight, ch, items.length, reportQuiz]);
 
   const setState = (i: number, st: ItemState) => {
     setStates((prev) => {
@@ -89,7 +91,7 @@ export function Quiz({ ch, items }: { ch: ChapterId; items: QuizItem[] }) {
     setStates(items.map(() => ({ phase: "idle" })));
     setMultiPicks({});
     setFillText({});
-    setReported(false);
+    reported.current = false;
   };
 
   return (

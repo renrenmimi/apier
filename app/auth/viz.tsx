@@ -215,9 +215,9 @@ export function Base64Lab() {
           </div>
           {revealed && (
             <div className="au-b64-reveal">
-              <code>atob("{encoded}")</code> →{" "}
+              <code>atob(&quot;{encoded}&quot;)</code> →{" "}
               <b>
-                "
+                &quot;
                 {(() => {
                   try {
                     return atob(encoded);
@@ -225,7 +225,7 @@ export function Base64Lab() {
                     return "";
                   }
                 })()}
-                "
+                &quot;
               </b>
               <p>
                 <T

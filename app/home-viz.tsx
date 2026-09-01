@@ -508,13 +508,20 @@ type LiveState =
       offline: boolean;
     };
 
+// 计时放在组件外:读时钟对 React 来说是不纯的,编译器不允许在组件体里做,
+// 而且它本来也不是能被缓存的东西。
+function startTimer(): () => number {
+  const t0 = performance.now();
+  return () => Math.round(performance.now() - t0);
+}
+
 export function LiveFetch() {
   const L = useL();
   const [st, setSt] = useState<LiveState>({ phase: "idle" });
 
   const go = async (preset: Preset) => {
     setSt({ phase: "loading", preset });
-    const t0 = performance.now();
+    const elapsed = startTimer();
     try {
       const res = await fetch(preset.url);
       // 服务器回了话就算「通」—— 哪怕是 4xx/5xx。正文按 JSON 解析,
@@ -530,7 +537,7 @@ export function LiveFetch() {
         phase: "done",
         preset,
         status: res.status,
-        ms: Math.round(performance.now() - t0),
+        ms: elapsed(),
         body,
         offline: false,
       });
@@ -539,7 +546,7 @@ export function LiveFetch() {
         phase: "done",
         preset,
         status: null,
-        ms: Math.round(performance.now() - t0),
+        ms: elapsed(),
         body: JSON.stringify(preset.fallback, null, 2),
         offline: true,
       });
