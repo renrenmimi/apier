@@ -8,9 +8,8 @@
 import {
   createContext,
   useContext,
-  useEffect,
-  useState,
   useCallback,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 import type { ChapterId } from "@/lib/curriculum";
@@ -62,23 +61,55 @@ function load(): ProgressData {
   }
 }
 
+// localStorage 是唯一数据源。useSyncExternalStore 允许服务端快照与客户端
+// 快照不同,所以不必先渲染一次空数据、再在 effect 里补一次 setState。
+// 它要求快照的引用稳定,所以这里把读到的对象缓存住,只有写入时才换新的。
+const progressListeners = new Set<() => void>();
+let cached: ProgressData | null = null;
+
+function subscribeProgress(onChange: () => void) {
+  progressListeners.add(onChange);
+  return () => {
+    progressListeners.delete(onChange);
+  };
+}
+
+function readProgress(): ProgressData {
+  if (cached === null) cached = load();
+  return cached;
+}
+
+function progressOnServer(): ProgressData {
+  return EMPTY;
+}
+
+function writeProgress(next: ProgressData) {
+  cached = next;
+  try {
+    window.localStorage.setItem(KEY, JSON.stringify(next));
+  } catch {
+    /* 私密模式等写入失败:仅内存态 */
+  }
+  progressListeners.forEach((notify) => notify());
+}
+
+// 服务端没有本地数据,客户端第一帧就有 —— 这正是 ready 想表达的意思。
+const readyOnClient = () => true;
+const readyOnServer = () => false;
+
 export function ProgressProvider({ children }: { children: ReactNode }) {
-  const [data, setData] = useState<ProgressData>(EMPTY);
-  const [ready, setReady] = useState(false);
+  const data = useSyncExternalStore(
+    subscribeProgress,
+    readProgress,
+    progressOnServer,
+  );
+  const ready = useSyncExternalStore(
+    subscribeProgress,
+    readyOnClient,
+    readyOnServer,
+  );
 
-  useEffect(() => {
-    setData(load());
-    setReady(true);
-  }, []);
-
-  const persist = useCallback((next: ProgressData) => {
-    setData(next);
-    try {
-      window.localStorage.setItem(KEY, JSON.stringify(next));
-    } catch {
-      /* 私密模式等写入失败:仅内存态 */
-    }
-  }, []);
+  const persist = writeProgress;
 
   const isDone = useCallback((pid: string) => !!data.labs[pid], [data]);
 

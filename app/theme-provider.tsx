@@ -8,9 +8,9 @@
 import {
   createContext,
   useContext,
-  useEffect,
   useState,
   useCallback,
+  useSyncExternalStore,
   type ReactNode,
   type Dispatch,
   type SetStateAction,
@@ -34,25 +34,39 @@ const ThemeContext = createContext<ThemeCtx>({
   toggleTheme: () => {},
 });
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, set] = useState<Theme>("dark");
+// <html data-theme> 是唯一数据源:首屏由 themeScript 写好,React 读回来。
+// useSyncExternalStore 允许服务端快照与客户端快照不同,所以不用在 effect
+// 里补一次 setState 才追上真实主题 —— 那会让首屏白白多渲染一轮。
+const themeListeners = new Set<() => void>();
 
-  useEffect(() => {
-    const current = document.documentElement.dataset.theme;
-    if (current === "light" || current === "dark") set(current);
-  }, []);
+function subscribeTheme(onChange: () => void) {
+  themeListeners.add(onChange);
+  return () => {
+    themeListeners.delete(onChange);
+  };
+}
+
+function readTheme(): Theme {
+  return document.documentElement.dataset.theme === "light" ? "light" : "dark";
+}
+
+function themeOnServer(): Theme {
+  return "dark";
+}
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const theme = useSyncExternalStore(subscribeTheme, readTheme, themeOnServer);
 
   const toggleTheme = useCallback(() => {
-    set((prev) => {
-      const next: Theme = prev === "light" ? "dark" : "light";
-      document.documentElement.dataset.theme = next;
-      try {
-        window.localStorage.setItem(THEME_KEY, next);
-      } catch {
-        /* ignore */
-      }
-      return next;
-    });
+    const d = document.documentElement;
+    const next: Theme = d.dataset.theme === "light" ? "dark" : "light";
+    d.dataset.theme = next;
+    try {
+      window.localStorage.setItem(THEME_KEY, next);
+    } catch {
+      /* ignore */
+    }
+    themeListeners.forEach((notify) => notify());
   }, []);
 
   return (
@@ -84,26 +98,43 @@ const ShellContext = createContext<ShellCtx>({
   setCmdkOpen: () => {},
 });
 
+// 侧栏折叠同样以 <html data-sidebar> 为准,理由与主题相同。
+const sidebarListeners = new Set<() => void>();
+
+function subscribeSidebar(onChange: () => void) {
+  sidebarListeners.add(onChange);
+  return () => {
+    sidebarListeners.delete(onChange);
+  };
+}
+
+function readSidebarCollapsed(): boolean {
+  return document.documentElement.dataset.sidebar === "collapsed";
+}
+
+function sidebarOnServer(): boolean {
+  return false;
+}
+
 export function ShellProvider({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [cmdkOpen, setCmdkOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-
-  useEffect(() => {
-    setSidebarCollapsed(document.documentElement.dataset.sidebar === "collapsed");
-  }, []);
+  const sidebarCollapsed = useSyncExternalStore(
+    subscribeSidebar,
+    readSidebarCollapsed,
+    sidebarOnServer,
+  );
 
   const toggleSidebarCollapsed = useCallback(() => {
-    setSidebarCollapsed((prev) => {
-      const next = !prev;
-      document.documentElement.dataset.sidebar = next ? "collapsed" : "expanded";
-      try {
-        window.localStorage.setItem(SIDEBAR_KEY, next ? "collapsed" : "expanded");
-      } catch {
-        /* ignore */
-      }
-      return next;
-    });
+    const d = document.documentElement;
+    const next = d.dataset.sidebar !== "collapsed";
+    d.dataset.sidebar = next ? "collapsed" : "expanded";
+    try {
+      window.localStorage.setItem(SIDEBAR_KEY, next ? "collapsed" : "expanded");
+    } catch {
+      /* ignore */
+    }
+    sidebarListeners.forEach((notify) => notify());
   }, []);
 
   return (

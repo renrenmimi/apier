@@ -12,9 +12,8 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useState,
+  useSyncExternalStore,
   isValidElement,
   type ReactNode,
 } from "react";
@@ -32,16 +31,30 @@ export const langScript = `(function(){var d=document.documentElement;var l="en"
 type Ctx = { lang: Lang; setLang: (l: Lang) => void };
 const LangContext = createContext<Ctx>({ lang: "en", setLang: () => {} });
 
-export function LangProvider({ children }: { children: ReactNode }) {
-  const [lang, set] = useState<Lang>("en");
+// <html data-lang> 是唯一数据源:首屏由上面那段阻塞脚本写好,React 读回来。
+// useSyncExternalStore 允许服务端快照与客户端快照不同,所以不用在 effect
+// 里补一次 setState 才追上真实值 —— 那会让首屏白白多渲染一轮。
+const langListeners = new Set<() => void>();
 
-  useEffect(() => {
-    const d = document.documentElement.dataset.lang;
-    if (d === "zh" || d === "en") set(d);
-  }, []);
+function subscribeLang(onChange: () => void) {
+  langListeners.add(onChange);
+  return () => {
+    langListeners.delete(onChange);
+  };
+}
+
+function readLang(): Lang {
+  return document.documentElement.dataset.lang === "zh" ? "zh" : "en";
+}
+
+function langOnServer(): Lang {
+  return "en";
+}
+
+export function LangProvider({ children }: { children: ReactNode }) {
+  const lang = useSyncExternalStore(subscribeLang, readLang, langOnServer);
 
   const setLang = useCallback((l: Lang) => {
-    set(l);
     const d = document.documentElement;
     d.dataset.lang = l;
     d.lang = l === "zh" ? "zh-CN" : "en";
@@ -50,6 +63,7 @@ export function LangProvider({ children }: { children: ReactNode }) {
     } catch {
       /* private mode */
     }
+    langListeners.forEach((notify) => notify());
   }, []);
 
   return (

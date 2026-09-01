@@ -10,12 +10,7 @@ import { useL, T } from "@/lib/i18n";
 import { useShell } from "./theme-provider";
 
 export default function CommandPalette() {
-  const L = useL();
   const { cmdkOpen, setCmdkOpen } = useShell();
-  const [query, setQuery] = useState("");
-  const [sel, setSel] = useState(0);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -30,14 +25,23 @@ export default function CommandPalette() {
     return () => window.removeEventListener("keydown", onKey);
   }, [setCmdkOpen]);
 
+  // 关掉就卸载,打开就是一次全新挂载 —— 搜索词和选中项因此天然回到初始值,
+  // 不用在 effect 里手工清一遍。
+  if (!cmdkOpen) return null;
+  return <Palette close={() => setCmdkOpen(false)} />;
+}
+
+function Palette({ close }: { close: () => void }) {
+  const L = useL();
+  const [query, setQuery] = useState("");
+  const [sel, setSel] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
+  // 挂载即聚焦。此时 overlay 已经在 DOM 里了,不必再等一帧。
   useEffect(() => {
-    if (cmdkOpen) {
-      setQuery("");
-      setSel(0);
-      // 等 overlay 渲染完再聚焦
-      requestAnimationFrame(() => inputRef.current?.focus());
-    }
-  }, [cmdkOpen]);
+    inputRef.current?.focus();
+  }, []);
 
   // 两种语言的标题/副标/标签一起进搜索池 —— 英文界面下输中文也能命中。
   const hits = useMemo(() => {
@@ -46,10 +50,8 @@ export default function CommandPalette() {
     return CHAPTERS.filter((c) => searchText(c).includes(q));
   }, [query]);
 
-  if (!cmdkOpen) return null;
-
   const go = (href: string) => {
-    setCmdkOpen(false);
+    close();
     router.push(href);
   };
 
@@ -57,7 +59,7 @@ export default function CommandPalette() {
     <div
       className="cmdk-overlay"
       onClick={(e) => {
-        if (e.target === e.currentTarget) setCmdkOpen(false);
+        if (e.target === e.currentTarget) close();
       }}
     >
       <div
