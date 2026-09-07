@@ -39,7 +39,10 @@ Sister sites: [DataData](https://data-data.vercel.app) (data structures) and
 
 Each chapter follows the same rhythm: an intuition first, then an interactive
 visualization, then runnable code, then the common mistakes, then a hands-on
-task against a live public API, then a quiz. Progress is stored locally in the browser.
+task, then a quiz. Some of those tasks do call a live public API — chapter 02
+fetches PokéAPI and chapter 06 JSONPlaceholder — but the five chapters with a
+request inspector use the mock API below instead, which runs in your own
+browser. Progress is stored locally in the browser.
 
 ## Running locally
 
