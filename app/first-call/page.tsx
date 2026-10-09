@@ -109,9 +109,12 @@ $("go").addEventListener("click", async () => {
     if (!res.ok) throw new Error("HTTP " + res.status);
     const p = await res.json();
 
-    $("result").innerHTML =
-      '<img src="' + p.sprites.front_default + '" alt="' + p.name + '">' +
-      "<p>Height " + p.height / 10 + " m · Weight " + p.weight / 10 + " kg</p>";
+    const img = document.createElement("img");
+    img.src = p.sprites.front_default;
+    img.alt = p.name;
+    const info = document.createElement("p");
+    info.textContent = "Height " + p.height / 10 + " m · Weight " + p.weight / 10 + " kg";
+    $("result").replaceChildren(img, info);
   } catch (err) {
     $("result").textContent = "Request failed: " + err.message;
   }
@@ -591,7 +594,7 @@ export default function FirstCallPage() {
         </p>
 
         <CodeBlock
-          lang="bash"
+          lang="html"
           title="index.html"
           code={POKE_HTML}
           note={{
@@ -614,28 +617,26 @@ export default function FirstCallPage() {
           lang="js"
           title="app.js"
           code={POKE_JS}
-          hl={[5, 12, 13, 14, 16]}
+          hl={[5, 12, 13, 14, 15, 16, 17, 19]}
           note={{
             en: (
               <>
                 The highlighted lines are the ones that change the page. Before
                 the request, the container says <code>Loading...</code> so the
-                user knows something is happening. When the data arrives, fields
-                from the JSON are written into the container. When it fails, the
-                message says so. <b>fetch → res.json() → update the DOM</b> is
-                the whole loop. One caution: <code>innerHTML</code> runs whatever
-                HTML it is given, so use <code>textContent</code> for values you
-                only want to show as text.
+                user knows something is happening. When the data arrives, an
+                image and a line of text are built from the JSON fields and put
+                into the container. When it fails, the message says so.{" "}
+                <b>fetch → res.json() → update the DOM</b> is the whole loop.
+                The values come from someone else&apos;s server, so they go in
+                through <code>textContent</code> and element properties rather
+                than being pasted into <code>innerHTML</code>: HTML built from
+                untrusted text can run script through attributes such as{" "}
+                <code>onerror</code>.
               </>
             ),
             zh: (
               <>
-                高亮的几行就是改页面的地方。请求发出前先把容器写成{" "}
-                <code>Loading...</code>,让用户知道正在进行;数据到手,
-                把 JSON 里的字段拼进容器;失败了,也要给出看得懂的提示。
-                <b>fetch → res.json() → 改 DOM</b>,整个循环就这三步。
-                一点提醒:<code>innerHTML</code> 会执行传给它的 HTML,
-                所以只想当文本显示的值,请用 <code>textContent</code>。
+                高亮的几行就是改页面的地方。请求发出前先把容器写成 <code>Loading...</code>,让用户知道正在进行;数据到手,用 JSON 里的字段创建图片和一行文字,放进容器;失败了,也要给出看得懂的提示。<b>fetch → res.json() → 改 DOM</b>,整个循环就这三步。这些值来自别人的服务器,所以用 <code>textContent</code> 和元素属性写入,而不是拼进 <code>innerHTML</code>:用不可信的文本拼出来的 HTML,可以借 <code>onerror</code> 这类属性执行脚本。
               </>
             ),
           }}
@@ -857,9 +858,9 @@ export default function FirstCallPage() {
               en={
                 <>
                   Browsers follow a rule called the{" "}
-                  <b>same-origin policy</b>: a script loaded from one origin may
-                  not read a response from a different origin, unless that
-                  response says it is allowed. The response says so with a
+                  <b>same-origin policy</b>: script running in a page may not
+                  read a response from a different origin (scheme, host, and
+                  port), unless that response says it is allowed. The response says so with a
                   header, <code>Access-Control-Allow-Origin</code>. The set of
                   rules around that header is called{" "}
                   <b>CORS (Cross-Origin Resource Sharing)</b>.
@@ -868,8 +869,7 @@ export default function FirstCallPage() {
               zh={
                 <>
                   浏览器有一条规则叫<b>同源策略(same-origin policy)</b>:
-                  从一个源加载的脚本,不能读取另一个源的响应,
-                  除非那份响应明确表示允许。表示允许的方式是一个响应头:
+                  {"页面里运行的脚本,不能读取来自另一个源(源 = 协议 + 主机 + 端口)的响应,除非那份响应明确表示允许。表示允许的方式是一个响应头:"}
                   <code>Access-Control-Allow-Origin</code>。
                   围绕这个头的一整套规则,就叫{" "}
                   <b>CORS(Cross-Origin Resource Sharing,跨域资源共享)</b>。

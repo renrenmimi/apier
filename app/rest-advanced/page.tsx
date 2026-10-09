@@ -1627,7 +1627,7 @@ paths:
           {
             en: (
               <>
-                <code>?status=</code> filters, <code>?sort=-created_at</code>{" "}
+                <code>?status=</code> filters, <code>?sort=-createdAt</code>{" "}
                 sorts, <code>?fields=</code> selects fields. The path names the
                 resource; parameters describe how you want it, and they combine
                 freely.
@@ -1635,7 +1635,7 @@ paths:
             ),
             zh: (
               <>
-                <code>?status=</code> 过滤、<code>?sort=-created_at</code>{" "}
+                <code>?status=</code> 过滤、<code>?sort=-createdAt</code>{" "}
                 排序、<code>?fields=</code> 裁剪字段。
                 路径指明资源,参数说明你想怎么要它,而且可以自由组合。
               </>

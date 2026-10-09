@@ -808,18 +808,17 @@ export const QUIZ: QuizItem[] = [
     why: {
       en: (
         <>
-          The same-origin policy is a browser rule that protects the user: a
-          script from site A may not read a response from site B unless B allows
-          it with <code>Access-Control-Allow-Origin</code>. curl is not a
+          The same-origin policy is a browser rule that protects the user:
+          script running in a page may not read a response from a different
+          origin (scheme, host, and port) unless that origin allows it with{" "}
+          <code>Access-Control-Allow-Origin</code>. curl is not a
           browser, so the rule does not apply to it. Chapter 06 goes into the
           details.
         </>
       ),
       zh: (
         <>
-          同源策略(same-origin policy)是浏览器保护用户的规则:A
-          网站的脚本不能读 B 域名的响应,除非 B 用{" "}
-          <code>Access-Control-Allow-Origin</code> 点头。curl
+          同源策略(same-origin policy)是浏览器保护用户的规则:页面里运行的脚本,不能读取来自另一个源(协议 + 主机 + 端口)的响应,除非对方用 <code>Access-Control-Allow-Origin</code> 表示允许。curl
           不是浏览器,这条规则管不到它。细节在第 06 章。
         </>
       ),

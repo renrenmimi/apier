@@ -303,7 +303,7 @@ export default function RestDesignPage() {
                   The path says <b>which resource</b>. Query parameters say{" "}
                   <b>how you want it</b>: filtering{" "}
                   <code>?status=published</code>, sorting{" "}
-                  <code>?sort=-created_at</code>, pagination{" "}
+                  <code>?sort=-createdAt</code>, pagination{" "}
                   <code>?page=2&amp;limit=20</code>, and field selection{" "}
                   <code>?fields=id,title</code>. A query parameter never
                   identifies which resource you mean — that is what{" "}
@@ -314,7 +314,7 @@ export default function RestDesignPage() {
                 <>
                   路径说明<b>要哪个资源</b>,查询参数说明<b>你想怎么要它</b>:
                   过滤 <code>?status=published</code>、排序{" "}
-                  <code>?sort=-created_at</code>、分页{" "}
+                  <code>?sort=-createdAt</code>、分页{" "}
                   <code>?page=2&amp;limit=20</code>、挑字段{" "}
                   <code>?fields=id,title</code>。
                   查询参数从不负责指认你要的是哪一个资源 —— 那是{" "}
@@ -522,7 +522,7 @@ export default function RestDesignPage() {
           <T
             en={
               <>
-                Two words from chapter 02 are doing the work in the last column.{" "}
+                Two words from chapter 01 are doing the work in the last column.{" "}
                 <b>Safe</b> means the request is not meant to change anything on
                 the server. <b>Idempotent</b> means sending the same request
                 once or many times leaves the server in the same state.
@@ -530,7 +530,7 @@ export default function RestDesignPage() {
             }
             zh={
               <>
-                最后一列用到了第 02 章的两个词。<b>安全(safe)</b>:
+                最后一列用到了第 01 章的两个词。<b>安全(safe)</b>:
                 这个请求本来就不打算改服务器上的任何东西。<b>幂等(idempotent)</b>:
                 同一个请求发一次和发多次,服务器最后停在同一个状态。
               </>
@@ -1020,8 +1020,8 @@ Content-Type: application/problem+json
         index="04"
         title={{ en: "Choosing a status code", zh: "状态码决策室" }}
         desc={{
-          en: "Eleven codes cover almost every answer a REST API needs to give. Read the cards, then work through the scenes.",
-          zh: "十一个状态码几乎覆盖了 REST API 需要给出的全部答复。先看速记卡,再上牌桌。",
+          en: "Besides 200, these eleven codes cover almost every answer a REST API needs to give. Read the cards, then work through the scenes.",
+          zh: "除了 200,下面十一个状态码覆盖了 REST API 需要给出的几乎全部答复。先看速记卡,再上牌桌。",
         }}
       >
         <div className="grid-4 rd-code-legend">

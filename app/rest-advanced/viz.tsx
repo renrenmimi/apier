@@ -394,14 +394,14 @@ const URL_SEGS: UrlSeg[] = [
     },
   },
   {
-    code: "sort=-created_at",
+    code: "sort=-createdAt",
     tag: { en: "Sorting", zh: "排序 sort" },
     info: {
       en: (
         <>
           <b>Sorting</b>: by creation time, newest first. The leading{" "}
           <code>-</code> means descending. That is the JSON:API convention;
-          other APIs write <code>sort=created_at&order=desc</code> for the same
+          other APIs write <code>sort=createdAt&order=desc</code> for the same
           thing. Neither form is required by a standard, so read the API
           documentation.
         </>
@@ -410,7 +410,7 @@ const URL_SEGS: UrlSeg[] = [
         <>
           <b>排序(sort)</b>:按创建时间倒序,最新在前。前缀 <code>-</code>{" "}
           表示降序 —— 这是 JSON:API 的约定;也有 API 写成{" "}
-          <code>sort=created_at&order=desc</code>,一个意思。
+          <code>sort=createdAt&order=desc</code>,一个意思。
           两种写法都不是标准强制的,以文档为准。
         </>
       ),

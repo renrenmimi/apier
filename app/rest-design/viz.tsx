@@ -211,7 +211,7 @@ const URL_CASES: UrlCase[] = [
       },
     ],
     fixedMethod: "GET",
-    fixedPath: "/posts?sort=-created_at",
+    fixedPath: "/posts?sort=-createdAt",
     why: (
       <T
         en={

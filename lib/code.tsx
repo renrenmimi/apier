@@ -16,6 +16,7 @@ const LANG_LABEL: Record<CodeLangId, string> = {
   graphql: "GraphQL",
   bash: "Terminal",
   http: "HTTP",
+  html: "HTML",
 };
 
 export function CodeLines({

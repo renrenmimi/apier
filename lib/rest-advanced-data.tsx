@@ -501,12 +501,12 @@ export const QUIZ: QuizItem[] = [
       en: (
         <>
           In the JSON:API convention, in what order does{" "}
-          <code>GET /posts?sort=-created_at</code> return the list?
+          <code>GET /posts?sort=-createdAt</code> return the list?
         </>
       ),
       zh: (
         <>
-          按 JSON:API 的约定,<code>GET /posts?sort=-created_at</code>{" "}
+          按 JSON:API 的约定,<code>GET /posts?sort=-createdAt</code>{" "}
           返回的列表是什么顺序?
         </>
       ),
@@ -521,8 +521,8 @@ export const QUIZ: QuizItem[] = [
         zh: <>按创建时间倒序,最新的在前</>,
       },
       {
-        en: <>With the created_at field removed from the response</>,
-        zh: <>响应里去掉 created_at 字段</>,
+        en: <>With the createdAt field removed from the response</>,
+        zh: <>响应里去掉 createdAt 字段</>,
       },
       {
         en: (
@@ -587,17 +587,17 @@ export const QUIZ: QuizItem[] = [
     why: {
       en: (
         <>
-          <code>sort=-created_at</code> reads as &ldquo;sort by created_at,
+          <code>sort=-createdAt</code> reads as &ldquo;sort by createdAt,
           descending&rdquo;. Other APIs write{" "}
-          <code>sort=created_at&order=desc</code> for the same result. Neither
+          <code>sort=createdAt&order=desc</code> for the same result. Neither
           form is required by a standard, so check the documentation of the API
           you are calling.
         </>
       ),
       zh: (
         <>
-          <code>sort=-created_at</code> 读作「按 created_at 降序」。
-          也有 API 写成 <code>sort=created_at&order=desc</code>,结果一样。
+          <code>sort=-createdAt</code> 读作「按 createdAt 降序」。
+          也有 API 写成 <code>sort=createdAt&order=desc</code>,结果一样。
           两种写法都不是标准强制的,以你要调的那个 API 的文档为准。
         </>
       ),
