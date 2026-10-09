@@ -13,7 +13,7 @@
 // Usage: <Inspector presets={[...]} /> -- each chapter supplies the scenarios
 // it wants to demonstrate.
 
-import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useId, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { useL, useLang, T, type Loc } from "@/lib/i18n";
 import { CodeLines } from "@/lib/code";
 import { MOCK_BASE } from "@/lib/mock/engine";
@@ -38,19 +38,21 @@ export interface InspectorPreset {
   headers?: Record<string, string>;
   /** 这个预设想让学习者看到什么 —— 显示在结果上方 */
   note?: Loc<ReactNode>;
+  /**
+   * 说明所描述的状态码。实际得到的状态码不在其中时(例如被限流成了 429),
+   * 说明换成一句「这次得到的是别的状态码,原因见响应体」,不再讲一个没有发生的结果。
+   */
+  expect?: number | number[];
 }
 
 interface Timing {
   total: number;
-  /** 服务器自报的处理耗时(X-Mock-Latency) */
+  /** 服务器自报的处理耗时(X-Mock-Latency),也就是 mock 人为加的延迟 */
   server: number | null;
-  /** 首字节:从发出到响应头到达 */
-  ttfb: number | null;
-  /** 下载正文耗时 */
-  download: number | null;
 }
 
 interface Result {
+  method: InspectorMethod;
   status: number;
   statusText: string;
   ok: boolean;
@@ -60,7 +62,9 @@ interface Result {
   bodyLang: "json" | "http";
   bytes: number;
   timing: Timing;
-  note?: ReactNode;
+  /** 保存成 Loc 原值,渲染时再按当前语言解析:发送之后切换语言,说明也跟着换 */
+  note?: Loc<ReactNode> | null;
+  expect?: number[];
 }
 
 type State =
@@ -69,7 +73,16 @@ type State =
   | { phase: "done"; result: Result }
   | { phase: "error"; message: string };
 
-const METHODS: InspectorMethod[] = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"];
+const METHODS: InspectorMethod[] = ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"];
+
+/** 检查器只访问浏览器里的 mock:别的路径会落到真正的服务器上,得到的不是本章讲的东西。 */
+const onMock = (p: string) => p === MOCK_BASE || p.startsWith(`${MOCK_BASE}/`) || p.startsWith(`${MOCK_BASE}?`);
+
+/** 给 shell 用的单引号字面量:内部的 ' 写成 '\'' */
+const shellQuote = (s: string) => `'${s.replace(/'/g, "'\\''")}'`;
+
+const TABS = ["body", "res", "req", "curl"] as const;
+type Tab = (typeof TABS)[number];
 
 /** 只有这些方法习惯带请求体 */
 const TAKES_BODY = new Set(["POST", "PUT", "PATCH"]);
@@ -95,23 +108,37 @@ export function Inspector({
   const [path, setPath] = useState(defaultPath);
   const [body, setBody] = useState("");
   const [extraHeaders, setExtraHeaders] = useState<Record<string, string>>({});
-  const [tab, setTab] = useState<"body" | "res" | "req" | "curl">("body");
+  const [tab, setTab] = useState<Tab>("body");
   const [state, setState] = useState<State>({ phase: "idle" });
   const [activePreset, setActivePreset] = useState<string | null>(null);
-  const noteRef = useRef<ReactNode>(null);
+  // 同步的「正在发送」标记:状态更新要等下一次渲染才生效,连按 Enter 会在那之前再发一次
+  const inFlight = useRef(false);
+  const uid = useId();
+  const pathOk = onMock(path);
 
   const send = useCallback(
-    async (over?: { method: InspectorMethod; path: string; body?: string; headers?: Record<string, string>; note?: ReactNode }) => {
+    async (over?: {
+      method: InspectorMethod;
+      path: string;
+      body?: string;
+      headers?: Record<string, string>;
+      note?: Loc<ReactNode> | null;
+      expect?: number | number[];
+    }) => {
       // Never reach the network for a /mock-api path: if the worker is not in
       // control the server would answer 404 and the lesson would be a lie.
-      if (mock.phase !== "ready") return;
+      if (mock.phase !== "ready" || inFlight.current) return;
 
       const m = over?.method ?? method;
       const p = over?.path ?? path;
       const b = over?.body ?? body;
       const h = over?.headers ?? extraHeaders;
-      noteRef.current = over?.note ?? null;
+      // Nor for any other path: the real server would answer instead of the mock.
+      if (!onMock(p)) return;
+      const note = over?.note ?? null;
+      const expect = over?.expect === undefined ? undefined : ([] as number[]).concat(over.expect);
 
+      inFlight.current = true;
       setState({ phase: "loading" });
       const reqHeaders: Record<string, string> = { "Accept-Language": acceptLanguage, ...h };
       if (TAKES_BODY.has(m) && b.trim()) reqHeaders["Content-Type"] = "application/json";
@@ -123,7 +150,6 @@ export function Inspector({
           headers: reqHeaders,
           body: TAKES_BODY.has(m) && b.trim() ? b : undefined,
         });
-        const tHeaders = performance.now();
         const text = await res.text();
         const t1 = performance.now();
 
@@ -144,6 +170,7 @@ export function Inspector({
         setState({
           phase: "done",
           result: {
+            method: m,
             status: res.status,
             statusText: res.statusText,
             ok: res.ok,
@@ -155,15 +182,16 @@ export function Inspector({
             timing: {
               total: Math.round(t1 - t0),
               server: serverMs ? parseInt(serverMs, 10) : null,
-              ttfb: Math.round(tHeaders - t0),
-              download: Math.round(t1 - tHeaders),
             },
-            note: noteRef.current,
+            note,
+            expect,
           },
         });
         setTab("body");
       } catch (e) {
         setState({ phase: "error", message: (e as Error).message });
+      } finally {
+        inFlight.current = false;
       }
     },
     [method, path, body, extraHeaders, mock.phase, acceptLanguage],
@@ -181,8 +209,24 @@ export function Inspector({
       path: p.path,
       body: p.body ?? "",
       headers: p.headers ?? {},
-      note: p.note ? L(p.note) : null,
+      note: p.note ?? null,
+      expect: p.expect,
     });
+  };
+
+  // 标签页的键盘操作(WAI-ARIA tabs):左右方向键切换,Home / End 到头尾,焦点跟着走
+  const onTabKey = (e: KeyboardEvent<HTMLButtonElement>) => {
+    const i = TABS.indexOf(tab);
+    const next =
+      e.key === "ArrowRight" ? TABS[(i + 1) % TABS.length]
+      : e.key === "ArrowLeft" ? TABS[(i - 1 + TABS.length) % TABS.length]
+      : e.key === "Home" ? TABS[0]
+      : e.key === "End" ? TABS[TABS.length - 1]
+      : null;
+    if (!next) return;
+    e.preventDefault();
+    setTab(next);
+    document.getElementById(`${uid}-tab-${next}`)?.focus();
   };
 
   // curl cannot reach a Service Worker, so this deliberately targets the
@@ -192,13 +236,16 @@ export function Inspector({
     const localPath = path.startsWith(MOCK_BASE)
       ? `/api${path.slice(MOCK_BASE.length)}`
       : path;
-    const parts = [`curl -i -X ${method} http://localhost:${DEV_PORT}${localPath}`];
+    // 每个参数都用单引号包住:zsh 会把裸露的 ? 当通配符,任何 shell 都会在 & 处断开命令
+    const url = shellQuote(`http://localhost:${DEV_PORT}${localPath}`);
+    // HEAD 用 -I:-X HEAD 会让 curl 一直等一个永远不会来的响应体
+    const parts = [method === "HEAD" ? `curl -I ${url}` : `curl -i -X ${method} ${url}`];
     for (const [k, v] of Object.entries({ "Accept-Language": acceptLanguage, ...extraHeaders })) {
-      parts.push(`  -H '${k}: ${v}'`);
+      parts.push(`  -H ${shellQuote(`${k}: ${v}`)}`);
     }
     if (TAKES_BODY.has(method) && body.trim()) {
       parts.push(`  -H 'Content-Type: application/json'`);
-      parts.push(`  -d '${body.replace(/\n\s*/g, "")}'`);
+      parts.push(`  -d ${shellQuote(body.replace(/\n\s*/g, ""))}`);
     }
     return parts.join(" \\\n");
   }, [method, path, body, extraHeaders, acceptLanguage]);
@@ -262,12 +309,14 @@ export function Inspector({
           }}
           disabled={blocked}
           aria-label={L({ en: "Request path", zh: "请求路径" })}
+          aria-invalid={!pathOk}
+          aria-describedby={pathOk ? undefined : `${uid}-path-hint`}
         />
         <button
           type="button"
           className="btn btn-sm btn-primary"
           onClick={() => send()}
-          disabled={blocked || state.phase === "loading"}
+          disabled={blocked || state.phase === "loading" || !pathOk}
         >
           {state.phase === "loading" ? (
             <T en="Sending…" zh="发送中…" />
@@ -277,12 +326,23 @@ export function Inspector({
         </button>
       </div>
 
+      {!pathOk && (
+        <div className="insp-err" id={`${uid}-path-hint`}>
+          <T
+            en={<>This inspector only reaches the mock API in your browser, so the path must start with <code>{MOCK_BASE}</code>.</>}
+            zh={<>这个检查器只能访问你浏览器里的 Mock API,路径必须以 <code>{MOCK_BASE}</code> 开头。</>}
+          />
+        </div>
+      )}
+
       {TAKES_BODY.has(method) && (
         <textarea
           className="insp-body-in"
           value={body}
           spellCheck={false}
           rows={3}
+          disabled={blocked}
+          aria-label={L({ en: "Request body (JSON)", zh: "请求体(JSON)" })}
           placeholder={L({
             en: 'Request body (JSON), e.g. {"title":"hello"}',
             zh: '请求体(JSON),例如 {"title":"hello"}',
@@ -305,15 +365,34 @@ export function Inspector({
       {state.phase === "error" && (
         <div className="insp-err">
           <T
-            en={<>Request failed: {state.message}. Is the dev server running?</>}
-            zh={<>请求失败:{state.message}。开发服务器还开着吗?</>}
+            en={<>The request failed before the mock API could answer it: {state.message}.</>}
+            zh={<>请求在 Mock API 作答之前就失败了:{state.message}。</>}
           />
         </div>
       )}
 
       {state.phase === "done" && (
         <div className="insp-result">
-          {state.result.note && <div className="insp-note">{state.result.note}</div>}
+          {state.result.note &&
+            (!state.result.expect || state.result.expect.includes(state.result.status) ? (
+              <div className="insp-note">{L(state.result.note)}</div>
+            ) : (
+              <div className="insp-note">
+                <T
+                  en={
+                    <>
+                      This time the answer was <b>{state.result.status} {statusName(state.result.status)}</b>, not the{" "}
+                      {state.result.expect.join(" or ")} this step is about. The response body says why.
+                    </>
+                  }
+                  zh={
+                    <>
+                      这一次得到的是 <b>{state.result.status} {statusName(state.result.status)}</b>,而不是这一步要演示的 {state.result.expect.join(" 或 ")}。原因写在响应体里。
+                    </>
+                  }
+                />
+              </div>
+            ))}
 
           <div className="insp-meta">
             <span className="status" data-x={Math.floor(state.result.status / 100)}>
@@ -324,15 +403,30 @@ export function Inspector({
             </span>
             {state.result.timing.server !== null && (
               <span className="insp-dim">
-                <T en="server" zh="服务器" /> {state.result.timing.server} ms ·{" "}
-                <T en="network" zh="网络" />{" "}
-                {Math.max(0, state.result.timing.total - state.result.timing.server)} ms
+                <span
+                  title={L({
+                    en: "Simulated server time (X-Mock-Latency); change it with ?delay=",
+                    zh: "模拟的服务器耗时(X-Mock-Latency),可用 ?delay= 调整",
+                  })}
+                >
+                  <T en="server" zh="服务器" /> {state.result.timing.server} ms
+                </span>{" "}
+                ·{" "}
+                <span
+                  title={L({
+                    en: "The rest: the Service Worker, IndexedDB and the page. The request never leaves your browser.",
+                    zh: "其余时间花在 Service Worker、IndexedDB 和页面上;请求没有离开你的浏览器。",
+                  })}
+                >
+                  <T en="in the browser" zh="浏览器内" />{" "}
+                  {Math.max(0, state.result.timing.total - state.result.timing.server)} ms
+                </span>
               </span>
             )}
             <span className="insp-dim">{formatBytes(state.result.bytes)}</span>
           </div>
 
-          <div className="insp-tabs" role="tablist">
+          <div className="insp-tabs" role="tablist" aria-label={L({ en: "Result", zh: "结果" })}>
             {(
               [
                 ["body", { en: "Response body", zh: "响应体" }],
@@ -343,36 +437,53 @@ export function Inspector({
             ).map(([k, label]) => (
               <button
                 key={k}
+                id={`${uid}-tab-${k}`}
                 type="button"
                 role="tab"
                 aria-selected={tab === k}
+                aria-controls={`${uid}-panel`}
+                tabIndex={tab === k ? 0 : -1}
                 className={`insp-tab${tab === k ? " on" : ""}`}
                 onClick={() => setTab(k)}
+                onKeyDown={onTabKey}
               >
                 {L(label)}
               </button>
             ))}
           </div>
 
-          <div className="insp-pane">
+          <div
+            className="insp-pane"
+            role="tabpanel"
+            id={`${uid}-panel`}
+            aria-labelledby={`${uid}-tab-${tab}`}
+            tabIndex={0}
+          >
             {tab === "body" &&
               (state.result.body ? (
                 <CodeLines code={state.result.body} lang={state.result.bodyLang} />
               ) : (
                 <div className="insp-empty">
-                  <T
-                    en={
-                      <>
-                        No response body — that is the point of{" "}
-                        <b>{state.result.status}</b>.
-                      </>
-                    }
-                    zh={
-                      <>
-                        没有响应体 —— <b>{state.result.status}</b> 的含义就在这里。
-                      </>
-                    }
-                  />
+                  {state.result.method === "HEAD" ? (
+                    <T
+                      en={<>No response body — HEAD asks for the headers only.</>}
+                      zh={<>没有响应体 —— HEAD 只要响应头。</>}
+                    />
+                  ) : (
+                    <T
+                      en={
+                        <>
+                          No response body — that is the point of{" "}
+                          <b>{state.result.status}</b>.
+                        </>
+                      }
+                      zh={
+                        <>
+                          没有响应体 —— <b>{state.result.status}</b> 的含义就在这里。
+                        </>
+                      }
+                    />
+                  )}
                 </div>
               ))}
 
@@ -565,10 +676,12 @@ function statusName(code: number) {
     401: "Unauthorized",
     403: "Forbidden",
     404: "Not Found",
+    405: "Method Not Allowed",
     409: "Conflict",
     422: "Unprocessable Content",
     429: "Too Many Requests",
     500: "Internal Server Error",
+    501: "Not Implemented",
   };
   return m[code] ?? "";
 }

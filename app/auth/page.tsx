@@ -240,6 +240,7 @@ export default function AuthPage() {
               label: { en: "No credentials", zh: "不带凭证" },
               method: "POST",
               path: "/mock-api/posts",
+              expect: 401,
               body: '{"title":"Trying it out","body":"Hello, API world!"}',
               note: {
                 en: (
@@ -263,6 +264,7 @@ export default function AuthPage() {
               label: { en: "A read-only token", zh: "带一枚只读凭证" },
               method: "POST",
               path: "/mock-api/posts",
+              expect: 403,
               headers: { Authorization: "Bearer apier-readonly-token" },
               body: '{"title":"Trying it out","body":"Hello, API world!"}',
               note: {
@@ -288,6 +290,7 @@ export default function AuthPage() {
               label: { en: "A token that may write", zh: "带一枚可写凭证" },
               method: "POST",
               path: "/mock-api/posts",
+              expect: 201,
               headers: { Authorization: "Bearer apier-demo-token" },
               body: '{"title":"Trying it out","body":"Hello, API world!"}',
               note: {

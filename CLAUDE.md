@@ -174,10 +174,16 @@ Full architecture: `docs/mock-api.md`. The rules that matter when writing chapte
 ### `<Inspector />` (lib/inspector.tsx)
 
 - `<Inspector presets={[...]} defaultPath defaultMethod title />`.
-- Shows the status badge, timing split (total / server / network), response size,
-  response headers, the request headers you set, and an equivalent curl command.
-- `InspectorPreset = { id, label, method, path, body?, headers?, note? }`; `note` says
-  what the learner should notice, and is bilingual like every other string.
+- Shows the status badge, timing split (total / simulated server time / time spent in
+  the browser), response size, response headers, the request headers it sent, and an
+  equivalent curl command (every argument single-quoted).
+- `InspectorPreset = { id, label, method, path, body?, headers?, note?, expect? }`; `note`
+  says what the learner should notice, and is bilingual like every other string.
+  `expect` is the status code (or codes) the note describes: give it on every preset with
+  a note, so a different answer (a 429 after too many requests, a 404 after the learner
+  deleted the post) shows a short "this time the answer was …" line instead of a note
+  about something that did not happen.
+- Paths must start with `/mock-api`; anything else is refused before it is sent.
 - **Send stays disabled until the worker proves it is in control.** Do not add a
   fallback to the network: a server 404 rendered as a lesson would teach the wrong
   thing. Failure and non-durable storage each have their own visible state.

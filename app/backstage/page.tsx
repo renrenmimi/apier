@@ -556,6 +556,7 @@ const resolvers = {
               label: { en: "10 posts + author (no loader)", zh: "10 篇文章带作者(没有 loader)" },
               method: "POST",
               path: "/mock-api/graphql",
+              expect: 200,
               body: '{"query":"{ posts(limit: 10) { title author { name } } }"}',
               note: {
                 en: (
@@ -582,6 +583,7 @@ const resolvers = {
               label: { en: "Same query, loader on", zh: "同一个查询,开 loader" },
               method: "POST",
               path: "/mock-api/graphql?dataloader=1",
+              expect: 200,
               body: '{"query":"{ posts(limit: 10) { title author { name } } }"}',
               note: {
                 en: (
@@ -606,6 +608,7 @@ const resolvers = {
               label: { en: "Now add comments", zh: "再加上评论试试" },
               method: "POST",
               path: "/mock-api/graphql",
+              expect: 200,
               body: '{"query":"{ posts(limit: 5) { title author { name } comments { body author { name } } } }"}',
               note: {
                 en: (

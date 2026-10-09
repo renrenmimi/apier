@@ -929,6 +929,7 @@ Content-Type: application/problem+json
               label: { en: "1 · Look at post 7", zh: "1 · 先看看 7 号文章" },
               method: "GET",
               path: "/mock-api/posts/7",
+              expect: 200,
               note: {
                 en: (
                   <>
@@ -951,6 +952,7 @@ Content-Type: application/problem+json
               label: { en: "2 · PUT only the title", zh: "2 · PUT 只发标题" },
               method: "PUT",
               path: "/mock-api/posts/7",
+              expect: 200,
               headers: { Authorization: "Bearer apier-demo-token" },
               body: '{"title":"Just changing the title"}',
               note: {
@@ -977,6 +979,7 @@ Content-Type: application/problem+json
               label: { en: "3 · Undo it", zh: "3 · 还原" },
               method: "POST",
               path: "/mock-api/reset",
+              expect: 200,
               note: {
                 en: <>Back to the original data. Now try the same edit with PATCH.</>,
                 zh: <>数据回到初始状态。现在换 PATCH 做同一件事。</>,
@@ -987,6 +990,7 @@ Content-Type: application/problem+json
               label: { en: "4 · PATCH only the title", zh: "4 · PATCH 只发标题" },
               method: "PATCH",
               path: "/mock-api/posts/7",
+              expect: 200,
               headers: { Authorization: "Bearer apier-demo-token" },
               body: '{"title":"Just changing the title"}',
               note: {
