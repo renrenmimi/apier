@@ -35,8 +35,7 @@ export const LABS: Lab[] = [
             zh={
               <>
                 纸笔任务。下面这条 query 打到服务器上,假设这篇文章有{" "}
-                <b>2 条评论</b>。总共会触发多少次 resolver 调用?
-                默认 resolver 也要算 —— 它也是函数,也要跑。
+                <b>2 条评论</b>。总共会触发多少次 resolver 调用?默认 resolver 也要算 —— 它也是函数,也要跑。
               </>
             }
           />
@@ -123,8 +122,7 @@ Comment.body        2 次   # 数组里每条评论各 1 次
               <>
                 注意这里的乘法:如果有 200 条评论,光 <code>body</code>{" "}
                 就是 200 次调用;评论里再嵌一层{" "}
-                <code>author {"{ name }"}</code>,又多 200 × 2 次。
-                这正是下一个任务的引子。
+                <code>author {"{ name }"}</code>,又多 200 × 2 次。这正是下一个任务的引子。
               </>
             }
           />
@@ -159,11 +157,7 @@ Comment.body        2 次   # 数组里每条评论各 1 次
             }
             zh={
               <>
-                不用真数据库,浏览器 Console 就够了。给你一张假的「用户表」,
-                请实现 <code>batchUsers(ids)</code>:传入一批 id,
-                返回<b>与 ids 同序</b>的用户数组。
-                这是 DataLoader 依赖的规则:第 i 个结果必须对应第 i 个 id,
-                查不到的位置放 <code>null</code>。
+                不用真数据库,浏览器 Console 就够了。给你一张假的「用户表」,请实现 <code>batchUsers(ids)</code>:传入一批 id,返回<b>与 ids 同序</b>的用户数组。这是 DataLoader 依赖的规则:第 i 个结果必须对应第 i 个 id,查不到的位置放 <code>null</code>。
               </>
             }
           />
@@ -229,9 +223,7 @@ batchUsers([9, 12, 99, 9]).then(console.log);`,
       ),
       zh: (
         <>
-          数据库不保证返回顺序(上面故意 reverse 了)。
-          先把查回来的行建成一张 <code>Map</code>,
-          再照着 <code>ids</code> 的顺序逐个取。
+          数据库不保证返回顺序(上面故意 reverse 了)。先把查回来的行建成一张 <code>Map</code>,再照着 <code>ids</code> 的顺序逐个取。
         </>
       ),
     },
@@ -262,8 +254,7 @@ batchUsers([9, 12, 99, 9]).then(console.log);`,
             zh={
               <>
                 两步:<b>建索引,按序取</b>。真实项目里把它交给{" "}
-                <code>new DataLoader(batchUsers)</code> 就能用。
-                「同序、等长」这条规则之所以重要,是因为 DataLoader
+                <code>new DataLoader(batchUsers)</code> 就能用。「同序、等长」这条规则之所以重要,是因为 DataLoader
                 要把批量结果拆开,一一还给当初调用 <code>load(id)</code>{" "}
                 {"的那些 resolver —— 顺序一错位,本该挂 9 号作者的文章,就会挂上 12 号用户。"}
               </>
@@ -301,8 +292,7 @@ batchUsers([9, 12, 99, 9]).then(console.log);`,
               <>
                 你是这套博客 API 的守门人。定价规则:
                 <b>标量 1 分,对象 2 分,列表 = <code>first</code>{" "}
-                参数 × 它子选择集的总分</b>。预算上限 500 分,超了就拒绝。
-                请给下面两条 query 算总分,判断谁能过、谁被拒:
+                参数 × 它子选择集的总分</b>。预算上限 500 分,超了就拒绝。请给下面两条 query 算总分,判断谁能过、谁被拒:
               </>
             }
           />
@@ -342,8 +332,7 @@ batchUsers([9, 12, 99, 9]).then(console.log);`,
       ),
       zh: (
         <>
-          从最里层往外算:先算 <code>comments</code> 子选择集的分数,乘以 10;
-          再把结果算进每篇 post,乘以 20。
+          从最里层往外算:先算 <code>comments</code> 子选择集的分数,乘以 10;再把结果算进每篇 post,乘以 20。
         </>
       ),
     },
@@ -384,9 +373,7 @@ Query B(从里往外):
             }
             zh={
               <>
-                两条 query 文本长度差不多,代价差了一百多倍。
-                这就是为什么在 GraphQL 里「按请求次数限流」不够用:
-                限制必须跟着<b>代价</b>走。GitHub GraphQL API
+                两条 query 文本长度差不多,代价差了一百多倍。这就是为什么在 GraphQL 里「按请求次数限流」不够用:限制必须跟着<b>代价</b>走。GitHub GraphQL API
                 就是这么做的:先给查询估分,再从你的点数余额里扣。
               </>
             }
@@ -421,8 +408,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            那是 Express 中间件的签名。GraphQL 的 resolver 不处理路由,
-            它产生的是一个字段的值。
+            那是 Express 中间件的签名。GraphQL 的 resolver 不处理路由,它产生的是一个字段的值。
           </>
         ),
       },
@@ -552,8 +538,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            只有<b>根字段</b>的 <code>parent</code> 是空的。
-            再往下每一层,<code>parent</code> 都是上一层 resolver 的返回值。
+            只有<b>根字段</b>的 <code>parent</code> 是空的。再往下每一层,<code>parent</code> 都是上一层 resolver 的返回值。
           </>
         ),
       },
@@ -569,8 +554,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          执行过程是沿字段树往下走:父字段先跑,
-          它的返回值原样传给子字段。<code>Post.author</code> 就是拿{" "}
+          执行过程是沿字段树往下走:父字段先跑,它的返回值原样传给子字段。<code>Post.author</code> 就是拿{" "}
           <code>parent.authorId</code> 去换一个用户的。
         </>
       ),
@@ -637,8 +621,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            不报错。要是每个标量字段都得手写一个「取属性」的函数,
-            那会是一大堆没有意义的代码。
+            不报错。要是每个标量字段都得手写一个「取属性」的函数,那会是一大堆没有意义的代码。
           </>
         ),
       },
@@ -652,8 +635,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            只要 <code>parent</code> 上真有 <code>title</code> 属性,
-            就能取到值。返回 null 的前提是属性不存在。
+            只要 <code>parent</code> 上真有 <code>title</code> 属性,就能取到值。返回 null 的前提是属性不存在。
           </>
         ),
       },
@@ -681,8 +663,7 @@ export const QUIZ: QuizItem[] = [
       zh: (
         <>
           没写 resolver 的字段走<b>默认 resolver</b>:取 <code>parent</code>{" "}
-          上的同名属性。只有「字段名和数据属性对不上」或
-          「值需要计算、需要查库」时才自己写 —— 比如 <code>author</code>{" "}
+          上的同名属性。只有「字段名和数据属性对不上」或「值需要计算、需要查库」时才自己写 —— 比如 <code>author</code>{" "}
           要拿 <code>authorId</code> 去换一个用户。
         </>
       ),
@@ -705,8 +686,7 @@ export const QUIZ: QuizItem[] = [
           query 是{" "}
           <code>{`{ posts { title author { name } comments { body } } }`}</code>
           ,<code>posts</code> 返回 3 篇文章;<code>author</code> 和{" "}
-          <code>comments</code> 的 resolver 各自单独查一次数据库。
-          最坏情况下总共几次数据库查询?
+          <code>comments</code> 的 resolver 各自单独查一次数据库。最坏情况下总共几次数据库查询?
         </>
       ),
     },
@@ -744,9 +724,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            4 次是只嵌套 <code>author</code> 时的账(1 + 3)。
-            这条 query 里 <code>comments</code> 也在每篇文章上各查一次,
-            还得加 3。
+            4 次是只嵌套 <code>author</code> 时的账(1 + 3)。这条 query 里 <code>comments</code> 也在每篇文章上各查一次,还得加 3。
           </>
         ),
       },
@@ -780,9 +758,7 @@ export const QUIZ: QuizItem[] = [
       zh: (
         <>
           <code>posts</code> 1 次 + <code>author</code> 3 次 +{" "}
-          <code>comments</code> 3 次 = <b>7 次</b>,也就是 1 + 2N。
-          文章涨到 100 篇就是 201 次。而客户端只要多加一个嵌套字段就能触发,
-          服务器一行代码都不用改。
+          <code>comments</code> 3 次 = <b>7 次</b>,也就是 1 + 2N。文章涨到 100 篇就是 201 次。而客户端只要多加一个嵌套字段就能触发,服务器一行代码都不用改。
         </>
       ),
     },
@@ -848,8 +824,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          多选了。DataLoader 只是一个很小的调度库,
-          它不改变你的数据库选型,也不会替你建索引。
+          多选了。DataLoader 只是一个很小的调度库,它不改变你的数据库选型,也不会替你建索引。
         </>
       ),
     },
@@ -868,8 +843,7 @@ export const QUIZ: QuizItem[] = [
           <b>批处理</b>把很多次单独查询变成一次。
           <b>每请求缓存</b>让重复的 id 连批量查询都不用进 ——
           <code>load(9)、load(12)、load(9)</code> 最终只发一条{" "}
-          <code>WHERE id IN (9, 12)</code>。
-          这个缓存只活一个请求,请求结束就丢掉,不会在用户之间串数据。
+          <code>WHERE id IN (9, 12)</code>。这个缓存只活一个请求,请求结束就丢掉,不会在用户之间串数据。
         </>
       ),
     },
@@ -930,8 +904,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            响应就是普通 JSON,浏览器读得懂。问题出在<b>请求</b>那一侧:
-            缓存拿什么当键?
+            响应就是普通 JSON,浏览器读得懂。问题出在<b>请求</b>那一侧:缓存拿什么当键?
           </>
         ),
       },
@@ -945,8 +918,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            GraphQL 绝大多数时候就跑在 HTTP 上。
-            正因为如此,「在 HTTP 上却用不上 HTTP 缓存」才值得一讲。
+            GraphQL 绝大多数时候就跑在 HTTP 上。正因为如此,「在 HTTP 上却用不上 HTTP 缓存」才值得一讲。
           </>
         ),
       },
@@ -960,8 +932,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            大小不是问题,CDN 每天都在存大得多的文件。
-            问题是 POST 加上不断变化的请求体,让缓存认不出「这是同一个请求」。
+            大小不是问题,CDN 每天都在存大得多的文件。问题是 POST 加上不断变化的请求体,让缓存认不出「这是同一个请求」。
           </>
         ),
       },
@@ -978,10 +949,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          HTTP 缓存建立在「GET + URL 就是缓存键」之上。
-          GraphQL 的传统做法是所有查询都 POST 到同一个 <code>/graphql</code>,
-          查询文本放在请求体里 —— 浏览器、CDN、代理分不清两条不同的查询,
-          自然也没法缓存。
+          HTTP 缓存建立在「GET + URL 就是缓存键」之上。GraphQL 的传统做法是所有查询都 POST 到同一个 <code>/graphql</code>,查询文本放在请求体里 —— 浏览器、CDN、代理分不清两条不同的查询,自然也没法缓存。
         </>
       ),
     },
@@ -1009,8 +977,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            查询文本换成 SHA-256 哈希:请求更小、能改用 GET 吃 CDN 缓存、
-            只接受注册过的哈希时还是一张白名单
+            查询文本换成 SHA-256 哈希:请求更小、能改用 GET 吃 CDN 缓存、只接受注册过的哈希时还是一张白名单
           </>
         ),
       },
@@ -1037,8 +1004,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            没有什么机器码。服务器顶多缓存一下解析结果,
-            该跑的 resolver 一个都不少。收益在传输和缓存,不在执行。
+            没有什么机器码。服务器顶多缓存一下解析结果,该跑的 resolver 一个都不少。收益在传输和缓存,不在执行。
           </>
         ),
       },
@@ -1052,8 +1018,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            查询还是你写的,只是<b>注册</b>到了服务器,
-            日常请求用哈希指代它。没有任何「猜」的成分。
+            查询还是你写的,只是<b>注册</b>到了服务器,日常请求用哈希指代它。没有任何「猜」的成分。
           </>
         ),
       },
@@ -1066,8 +1031,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            persisted 的是<b>查询文本</b>,不是查询结果。
-            数据每次照常现取,新鲜度不受影响。
+            persisted 的是<b>查询文本</b>,不是查询结果。数据每次照常现取,新鲜度不受影响。
           </>
         ),
       },
@@ -1084,9 +1048,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          用哈希代替文本有三个效果:请求体从几 KB 缩到几十字节;
-          哈希加变量能放进 URL,于是可以用 GET,CDN 也能缓存;
-          如果服务器只接受注册过的哈希,没见过的查询在执行前就被拒绝。
+          用哈希代替文本有三个效果:请求体从几 KB 缩到几十字节;哈希加变量能放进 URL,于是可以用 GET,CDN 也能缓存;如果服务器只接受注册过的哈希,没见过的查询在执行前就被拒绝。
         </>
       ),
     },
@@ -1109,8 +1071,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            利用 schema 里的循环(文章 → 作者 → 文章 → …)构造的深层嵌套查询,
-            让服务器要做的工作成倍增长
+            利用 schema 里的循环(文章 → 作者 → 文章 → …)构造的深层嵌套查询,让服务器要做的工作成倍增长
           </>
         ),
       },
@@ -1133,9 +1094,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            SQL 注入是在访问数据库的代码里防住的:把值作为参数传给数据库,
-            而不是用字符串拼出 SQL。深度限制管的是另一个问题:
-            查询本身合法,但执行代价太大。
+            SQL 注入是在访问数据库的代码里防住的:把值作为参数传给数据库,而不是用字符串拼出 SQL。深度限制管的是另一个问题:查询本身合法,但执行代价太大。
           </>
         ),
       },
@@ -1150,8 +1109,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            破解密码打的是登录接口,由限流和账号锁定来管。
-            深度限制约束的是查询的<b>形状</b>。
+            破解密码打的是登录接口,由限流和账号锁定来管。深度限制约束的是查询的<b>形状</b>。
           </>
         ),
       },
@@ -1165,8 +1123,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            <code>JSON.parse</code> 不在乎嵌套深浅。受影响的是服务器:
-            每多一层,resolver 的调用次数就再乘一次。
+            <code>JSON.parse</code> 不在乎嵌套深浅。受影响的是服务器:每多一层,resolver 的调用次数就再乘一次。
           </>
         ),
       },
@@ -1185,10 +1142,7 @@ export const QUIZ: QuizItem[] = [
       zh: (
         <>
           schema 里 <code>Post.author</code> 指向 <code>User</code>,
-          <code>User.posts</code> 又指回 <code>Post</code>。
-          这种循环是正常设计,同时也给了攻击者素材:
-          几百字节的查询就可能让服务器忙上几秒。
-          深度限制给嵌套层数封顶,再配合成本打分和超时,门才算守住。
+          <code>User.posts</code> 又指回 <code>Post</code>。这种循环是正常设计,同时也给了攻击者素材:几百字节的查询就可能让服务器忙上几秒。深度限制给嵌套层数封顶,再配合成本打分和超时,门才算守住。
         </>
       ),
     },

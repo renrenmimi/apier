@@ -56,10 +56,8 @@ export const LABS: Lab[] = [
       ),
       zh: (
         <p>
-          把 §03 的代码抄进一个 HTML 文件,或者直接在浏览器 Console 里做。
-          改成查 <code>ditto</code>,并在身高体重之外<b>多显示一个字段</b> ——{" "}
-          <code>types</code> 或 <code>base_experience</code> 都可以。
-          先用 <code>console.log</code> 把整个响应对象打印出来,看看有哪些字段。
+          把 §03 的代码抄进一个 HTML 文件,或者直接在浏览器 Console 里做。改成查 <code>ditto</code>,并在身高体重之外<b>多显示一个字段</b> ——{" "}
+          <code>types</code> 或 <code>base_experience</code> 都可以。先用 <code>console.log</code> 把整个响应对象打印出来,看看有哪些字段。
         </p>
       ),
     },
@@ -102,8 +100,7 @@ export const LABS: Lab[] = [
             <code>
               {'"<p>Type: " + p.types.map((t) => t.type.name).join(", ") + "</p>"'}
             </code>
-            。真实 API 的响应经常嵌套好几层,先打印、再顺着路径往下找,
-            是前端每天都在做的事。
+            。真实 API 的响应经常嵌套好几层,先打印、再顺着路径往下找,是前端每天都在做的事。
           </p>
         </>
       ),
@@ -168,9 +165,7 @@ export const LABS: Lab[] = [
         <>
           <CodeBlock lang="js" title="console" code={POST_LAB_CODE} />
           <p>
-            201 Created 加一个新 id,就是「创建成功」的标准回应。
-            JSONPlaceholder 只是假装保存(id 永远是 101,数据不落库),
-            但这一来一回的请求和响应是真的。
+            201 Created 加一个新 id,就是「创建成功」的标准回应。JSONPlaceholder 只是假装保存(id 永远是 101,数据不落库),但这一来一回的请求和响应是真的。
           </p>
         </>
       ),
@@ -205,8 +200,7 @@ export const LABS: Lab[] = [
           <code>
             https://api.open-meteo.com/v1/forecast?latitude=30.25&amp;longitude=120.17&amp;current_weather=true
           </code>
-          ,从响应里取出<b>当前气温</b>,打印成「xx°C」。
-          这个坐标是杭州 —— 跑通之后,换成你所在城市的经纬度再来一次。
+          ,从响应里取出<b>当前气温</b>,打印成「xx°C」。这个坐标是杭州 —— 跑通之后,换成你所在城市的经纬度再来一次。
         </p>
       ),
     },
@@ -241,9 +235,7 @@ export const LABS: Lab[] = [
           <CodeBlock lang="js" title="console" code={WEATHER_CODE} />
           <p>
             注意这次的查询参数:<code>latitude</code>、<code>longitude</code>、
-            <code>current_weather</code> —— 第 01 章讲的 URL 结构,
-            在真实 API 里就是这么用的。到这里,
-            你已经跑通了一条和生产环境同款的数据链路。
+            <code>current_weather</code> —— 第 01 章讲的 URL 结构,在真实 API 里就是这么用的。到这里,你已经跑通了一条和生产环境同款的数据链路。
           </p>
         </>
       ),
@@ -480,8 +472,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            在 fetch 看来,404 是一次<b>成功的交互</b>:
-            请求送到了,服务器也回了话,只是回的是「查无此物」。
+            在 fetch 看来,404 是一次<b>成功的交互</b>:请求送到了,服务器也回了话,只是回的是「查无此物」。
           </>
         ),
       },
@@ -517,9 +508,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          fetch 只关心请求有没有发出去、回应有没有收到。收到了,
-          不管状态码好坏都 resolve;请求没法完成才 reject:连不上、
-          域名解析不了、请求被中止、响应被 CORS 拦下。所以{" "}
+          fetch 只关心请求有没有发出去、回应有没有收到。收到了,不管状态码好坏都 resolve;请求没法完成才 reject:连不上、域名解析不了、请求被中止、响应被 CORS 拦下。所以{" "}
           <code>if (!res.ok)</code> 必须你自己写。
         </>
       ),
@@ -565,8 +554,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            流读完不会自动倒带 —— 想要同样的数据,直接用变量 <code>a</code>,
-            它还在那儿。
+            流读完不会自动倒带 —— 想要同样的数据,直接用变量 <code>a</code>,它还在那儿。
           </>
         ),
       },
@@ -595,8 +583,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            <code>res</code> 只是那一次响应的封装,
-            再怎么折腾它也不会触发新的网络请求。
+            <code>res</code> 只是那一次响应的封装,再怎么折腾它也不会触发新的网络请求。
           </>
         ),
       },
@@ -666,8 +653,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          有一项纯属多余 —— fetch 返回的 Promise 自己会等响应,
-          不需要你手动计时。
+          有一项纯属多余 —— fetch 返回的 Promise 自己会等响应,不需要你手动计时。
         </>
       ),
     },
@@ -685,8 +671,7 @@ export const QUIZ: QuizItem[] = [
         <>
           三件套各管一段:<code>method</code> 换方法(默认是 GET,而 GET
           带正文会被 fetch 直接拒绝);<code>Content-Type</code> 让服务器按 JSON
-          解析正文;<code>JSON.stringify</code> 把对象变成能发出去的文本。
-          缺哪件,哪件的活就没人干。
+          解析正文;<code>JSON.stringify</code> 把对象变成能发出去的文本。缺哪件,哪件的活就没人干。
         </>
       ),
     },
@@ -728,8 +713,7 @@ export const QUIZ: QuizItem[] = [
       zh: (
         <>
           <code>JSON.stringify</code>:对象转文本,发出去之前用。
-          <code>JSON.parse</code>:文本转对象,收进来之后用 —— 在 fetch 里,
-          这一步由 <code>res.json()</code> 代劳。
+          <code>JSON.parse</code>:文本转对象,收进来之后用 —— 在 fetch 里,这一步由 <code>res.json()</code> 代劳。
         </>
       ),
     },

@@ -52,8 +52,7 @@ export default function RestDesignPage() {
           ),
           zh: (
             <>
-              前三章你一直在看别人的图纸。这一章轮到你画:一套博客 API,
-              从第一个 URL,到最后一张能拍在桌上的端点总表。
+              前三章你一直在看别人的图纸。这一章轮到你画:一套博客 API,从第一个 URL,到最后一张能拍在桌上的端点总表。
             </>
           ),
         }}
@@ -121,8 +120,7 @@ export default function RestDesignPage() {
               }
               zh={
                 <>
-                  团队要做一个博客产品:用户能注册、能发文章、能在文章下评论。
-                  三种资源已经摆在桌上 —— <b>users、posts、comments</b>
+                  团队要做一个博客产品:用户能注册、能发文章、能在文章下评论。三种资源已经摆在桌上 —— <b>users、posts、comments</b>
                   。后端同事问了第一个问题:接口怎么定?
                 </>
               }
@@ -141,8 +139,7 @@ export default function RestDesignPage() {
               }
               zh={
                 <>
-                  这一章结束时,你能交出一张完整的端点总表。
-                  这套博客数据还会一路跟着你:第 08 章用同一套数据写 GraphQL
+                  这一章结束时,你能交出一张完整的端点总表。这套博客数据还会一路跟着你:第 08 章用同一套数据写 GraphQL
                   schema,终章拿它做两种风格的对比。
                 </>
               }
@@ -168,8 +165,7 @@ export default function RestDesignPage() {
                 zh={
                   <>
                     <b>路径写名词,不写动作。</b>
-                    <code>/posts</code>,不是 <code>/getPosts</code>。
-                    动词已经由方法承担,再写进路径就是重复一遍。
+                    <code>/posts</code>,不是 <code>/getPosts</code>。动词已经由方法承担,再写进路径就是重复一遍。
                   </>
                 }
               />
@@ -195,9 +191,7 @@ export default function RestDesignPage() {
                   <>
                     <b>集合用名词复数。</b>
                     <code>/posts</code> 是集合,<code>/posts/42</code>{" "}
-                    是集合里的一项。复数是被广泛采用的<b>约定</b>,
-                    并不是哪份规范里的硬性规则,有些 API 用单数也运转得很好。
-                    真正要紧的是:同一个 API 里别两种混用。
+                    是集合里的一项。复数是被广泛采用的<b>约定</b>,并不是哪份规范里的硬性规则,有些 API 用单数也运转得很好。真正要紧的是:同一个 API 里别两种混用。
                   </>
                 }
               />
@@ -222,10 +216,8 @@ export default function RestDesignPage() {
                 zh={
                   <>
                     <b>只用一种写法,全站统一。</b>
-                    全小写、单词间用连字符是常见选择:<code>/blog-posts</code>。
-                    路径区分大小写,<code>/BlogPosts</code> 和{" "}
-                    <code>/blogposts</code> 是两个不同的 URL。
-                    在一个 API 里混用几种写法,会造出「看着一样、其实不是」的地址。
+                    全小写、单词间用连字符是常见选择:<code>/blog-posts</code>。路径区分大小写,<code>/BlogPosts</code> 和{" "}
+                    <code>/blogposts</code> 是两个不同的 URL。在一个 API 里混用几种写法,会造出「看着一样、其实不是」的地址。
                   </>
                 }
               />
@@ -248,8 +240,7 @@ export default function RestDesignPage() {
                 zh={
                   <>
                     <b>别把实现写进路径。</b>路径里出现 <code>.php</code>、
-                    <code>.jsp</code>,等于把 URL 和你今天恰好用的语言绑死。
-                    换一门语言,所有存下来的链接、书签和已接入的系统全部作废。
+                    <code>.jsp</code>,等于把 URL 和你今天恰好用的语言绑死。换一门语言,所有存下来的链接、书签和已接入的系统全部作废。
                   </>
                 }
               />
@@ -276,9 +267,7 @@ export default function RestDesignPage() {
                     <b>嵌套一层就够。</b>
                     <code>collection/id/collection</code>,例如{" "}
                     <code>/posts/42/comments</code>
-                    ,刚好说明评论从属于文章。再深下去,
-                    就把一套以后可能改变的层级关系写死进了 URL。
-                    更深的关系改用顶层集合加过滤:
+                    ,刚好说明评论从属于文章。再深下去,就把一套以后可能改变的层级关系写死进了 URL。更深的关系改用顶层集合加过滤:
                     <code>GET /replies?commentId=3</code>。
                   </>
                 }
@@ -312,12 +301,10 @@ export default function RestDesignPage() {
               }
               zh={
                 <>
-                  路径说明<b>要哪个资源</b>,查询参数说明<b>你想怎么要它</b>:
-                  过滤 <code>?status=published</code>、排序{" "}
+                  路径说明<b>要哪个资源</b>,查询参数说明<b>你想怎么要它</b>:过滤 <code>?status=published</code>、排序{" "}
                   <code>?sort=-createdAt</code>、分页{" "}
                   <code>?page=2&amp;limit=20</code>、挑字段{" "}
-                  <code>?fields=id,title</code>。
-                  查询参数从不负责指认你要的是哪一个资源 —— 那是{" "}
+                  <code>?fields=id,title</code>。查询参数从不负责指认你要的是哪一个资源 —— 那是{" "}
                   <code>/posts/42</code> 的活。
                 </>
               }
@@ -342,11 +329,7 @@ export default function RestDesignPage() {
               zh={
                 <>
                   分页有一个现在就该知道的取舍。
-                  <code>?offset=40&amp;limit=20</code> 写起来最简单,
-                  但读者翻页的这段时间里只要有行被插入或删除,窗口就会滑动:
-                  按时间倒序的列表中,在读者请求第 3 页之前插进一篇新文章,
-                  整体后移一位,第 2 页的最后一条就会在第 3 页开头再出现一次。
-                  游标分页改为传「你上次收到的最后一项在哪儿」——
+                  <code>?offset=40&amp;limit=20</code> 写起来最简单,但读者翻页的这段时间里只要有行被插入或删除,窗口就会滑动:按时间倒序的列表中,在读者请求第 3 页之前插进一篇新文章,整体后移一位,第 2 页的最后一条就会在第 3 页开头再出现一次。游标分页改为传「你上次收到的最后一项在哪儿」——
                   <code>?after=eyJpZCI6NjB9</code>
                   ,列表别处的插入就不会让窗口错位。第 05 章两种都会写一遍。
                 </>
@@ -530,9 +513,7 @@ export default function RestDesignPage() {
             }
             zh={
               <>
-                最后一列用到了第 01 章的两个词。<b>安全(safe)</b>:
-                这个请求本来就不打算改服务器上的任何东西。<b>幂等(idempotent)</b>:
-                同一个请求发一次和发多次,服务器最后停在同一个状态。
+                最后一列用到了第 01 章的两个词。<b>安全(safe)</b>:这个请求本来就不打算改服务器上的任何东西。<b>幂等(idempotent)</b>:同一个请求发一次和发多次,服务器最后停在同一个状态。
               </>
             }
           />
@@ -561,10 +542,7 @@ export default function RestDesignPage() {
               zh={
                 <>
                   <Method m="POST" /> <code>/posts/42</code>
-                  ,也就是对单个资源 POST,没有约定俗成的含义,
-                  读代码的人无法判断它在做什么 —— 除非你在文档里写死,否则别用。
-                  另外 <Method m="GET" /> 永远不该改数据:它是安全方法,
-                  浏览器会预取,爬虫会自己跟进去。§01
+                  ,也就是对单个资源 POST,没有约定俗成的含义,读代码的人无法判断它在做什么 —— 除非你在文档里写死,否则别用。另外 <Method m="GET" /> 永远不该改数据:它是安全方法,浏览器会预取,爬虫会自己跟进去。§01
                   诊断台里那起数据丢失,就是这么来的。
                 </>
               }
@@ -636,8 +614,7 @@ Content-Type: application/json
                     三个细节。状态码是 <b>201</b> 不是 200 ——
                     因为一个原本不存在的资源现在存在了。<b>Location</b>{" "}
                     头给出这个新资源的 URL。响应体完整回显资源,因为{" "}
-                    <code>id</code> 和 <code>createdAt</code> 是服务器生成的,
-                    客户端没有别的途径知道它们。
+                    <code>id</code> 和 <code>createdAt</code> 是服务器生成的,客户端没有别的途径知道它们。
                   </>
                 ),
               }}
@@ -666,8 +643,7 @@ Content-Type: application/json
             }
             zh={
               <>
-                「更新」有两种,选错会丢数据。43 号文章现在有五个字段,
-                下面两个请求发的 body 完全一样,都只带一个 <code>title</code>
+                「更新」有两种,选错会丢数据。43 号文章现在有五个字段,下面两个请求发的 body 完全一样,都只带一个 <code>title</code>
                 。把两份响应并排读一遍。
               </>
             }
@@ -768,8 +744,7 @@ Content-Type: application/json
                 ),
                 zh: (
                   <>
-                    没提到的字段原样保留。PATCH 发的是「改动的描述」,
-                    由服务器把它应用到已有的资源上。
+                    没提到的字段原样保留。PATCH 发的是「改动的描述」,由服务器把它应用到已有的资源上。
                   </>
                 ),
               }}
@@ -800,11 +775,7 @@ Content-Type: application/json
               }
               zh={
                 <>
-                  用 PUT 传半个对象。只想改一个字段,就用 PATCH;
-                  非用 PUT 不可,就先读回当前资源,改完再<b>整份</b>发回去。
-                  这个区别也解释了两者在幂等上的差异:PUT 声明的是最终内容,
-                  重复发结果不变;PATCH 声明的是一次改动,
-                  而「浏览数加 1」这样的改动,执行两次就是加 2。§07
+                  用 PUT 传半个对象。只想改一个字段,就用 PATCH;非用 PUT 不可,就先读回当前资源,改完再<b>整份</b>发回去。这个区别也解释了两者在幂等上的差异:PUT 声明的是最终内容,重复发结果不变;PATCH 声明的是一次改动,而「浏览数加 1」这样的改动,执行两次就是加 2。§07
                   的第二个任务会在真实 API 上复现这次字段丢失 ——
                   亲手跑一遍就忘不掉了。
                 </>
@@ -878,10 +849,7 @@ Content-Type: application/problem+json
             ),
             zh: (
               <>
-                404 表示这个 URL 上现在没有东西。如果你的服务器保留了已删除文章的
-                记录,<b>410 Gone</b> 更精确:它还说明资源存在过、且是被有意移除的,
-                客户端可以丢掉缓存副本,搜索引擎可以删掉这个 URL。
-                只有当你确实知道这一点时才用 410。这个响应体的格式,§05 讲。
+                404 表示这个 URL 上现在没有东西。如果你的服务器保留了已删除文章的记录,<b>410 Gone</b> 更精确:它还说明资源存在过、且是被有意移除的,客户端可以丢掉缓存副本,搜索引擎可以删掉这个 URL。只有当你确实知道这一点时才用 410。这个响应体的格式,§05 讲。
               </>
             ),
           }}
@@ -907,9 +875,7 @@ Content-Type: application/problem+json
               }
               zh={
                 <>
-                  因为幂等是按<b>服务器状态</b>定义的,不看响应码。
-                  删一次和删十次,服务器都停在同一个状态:43 号不存在。
-                  响应码只是对那一次请求的回话。完整名单:GET、PUT、DELETE
+                  因为幂等是按<b>服务器状态</b>定义的,不看响应码。删一次和删十次,服务器都停在同一个状态:43 号不存在。响应码只是对那一次请求的回话。完整名单:GET、PUT、DELETE
                   幂等,POST 不幂等,PATCH 不作承诺。
                 </>
               }
@@ -941,8 +907,7 @@ Content-Type: application/problem+json
                 zh: (
                   <>
                     记住它现在有哪些字段:<code>title</code>、<code>body</code>、
-                    <code>authorId</code>、<code>status</code>。
-                    尤其记住 <code>body</code> 里那句话。
+                    <code>authorId</code>、<code>status</code>。尤其记住 <code>body</code> 里那句话。
                   </>
                 ),
               },
@@ -1004,8 +969,7 @@ Content-Type: application/problem+json
                 zh: (
                   <>
                     请求体一模一样,结果完全不同:
-                    <b>标题改了,其余字段全都还在</b>。
-                    PATCH 只合并你发的那部分,没发的它不碰。
+                    <b>标题改了,其余字段全都还在</b>。PATCH 只合并你发的那部分,没发的它不碰。
                   </>
                 ),
               },
@@ -1205,12 +1169,9 @@ Content-Type: application/problem+json
                 <>
                   两种都说得通,现实中的 API 也确实分成两派。422 最早出现在
                   WebDAV 规范(RFC 4918)里,后来被 RFC 9110
-                  收进 HTTP 核心语义,并改名为 Unprocessable Content。
-                  它比 400 更精确,因为它把「我读不懂你的请求」和
-                  「我读懂了,但有一个值不合法」分开了。不少 API 仍然两种情况都回
+                  收进 HTTP 核心语义,并改名为 Unprocessable Content。它比 400 更精确,因为它把「我读不懂你的请求」和「我读懂了,但有一个值不合法」分开了。不少 API 仍然两种情况都回
                   400。选一种,然后在整个 API 里保持一致 ——
-                  客户端如果猜不到会收到哪个,最后还是得两个都处理。
-                  本课把校验失败统一记在 422 上。
+                  客户端如果猜不到会收到哪个,最后还是得两个都处理。本课把校验失败统一记在 422 上。
                 </>
               }
             />
@@ -1259,11 +1220,7 @@ Content-Type: application/json
             ),
             zh: (
               <>
-                三个独立的问题。第一,<code>res.ok</code> 是 true,
-                每个客户端都得先拆开 body 才知道这次调用成没成。第二,
-                中间的缓存和代理可能把这次失败当成成功响应存起来,下次直接发给别人。
-                第三,<code>errCode: 10086</code> 是你们内部才懂的词汇,
-                每个来对接的团队都要重新学一遍。
+                三个独立的问题。第一,<code>res.ok</code> 是 true,每个客户端都得先拆开 body 才知道这次调用成没成。第二,中间的缓存和代理可能把这次失败当成成功响应存起来,下次直接发给别人。第三,<code>errCode: 10086</code> 是你们内部才懂的词汇,每个来对接的团队都要重新学一遍。
               </>
             ),
           }}
@@ -1328,8 +1285,7 @@ Content-Type: application/problem+json
             ),
             zh: (
               <>
-                <code>errors</code> 是扩展成员 —— 规范本来就允许你加自己的字段。
-                注意媒体类型是 <b>application/problem+json</b>
+                <code>errors</code> 是扩展成员 —— 规范本来就允许你加自己的字段。注意媒体类型是 <b>application/problem+json</b>
                 :客户端一看见它,不必先读你的文档,就知道 body 是这套结构。
               </>
             ),
@@ -1358,11 +1314,7 @@ Content-Type: application/problem+json
               }
               zh={
                 <>
-                  很多设计良好的 API 一直用着自己那套 JSON 错误结构,以后也会继续用。
-                  选 RFC 9457 的理由是:该做的决定别人已经替你做完了,
-                  而且有些客户端本来就认得它。更要紧的是不可让步的那部分:
-                  状态码要与实际发生的事情相符,要说清是哪个字段、哪条规则没过,
-                  并且在同一个 API 里始终用同一种结构。
+                  很多设计良好的 API 一直用着自己那套 JSON 错误结构,以后也会继续用。选 RFC 9457 的理由是:该做的决定别人已经替你做完了,而且有些客户端本来就认得它。更要紧的是不可让步的那部分:状态码要与实际发生的事情相符,要说清是哪个字段、哪条规则没过,并且在同一个 API 里始终用同一种结构。
                 </>
               }
             />
@@ -1617,8 +1569,7 @@ Content-Type: application/problem+json
               }
               zh={
                 <>
-                  方法、路径、成功码、失败码。后端照它写实现,前端照它写调用,
-                  测试照它写用例。<b>它就是一份接口文档的初稿</b>
+                  方法、路径、成功码、失败码。后端照它写实现,前端照它写调用,测试照它写用例。<b>它就是一份接口文档的初稿</b>
                   ,早点对齐,谁也不用猜。第 05 章会给你它的机器可读版:OpenAPI ——
                   一份 YAML,文档、Mock 服务和生成的客户端都从它长出来。
                 </>
@@ -1701,8 +1652,7 @@ Content-Type: application/problem+json
             ),
             zh: (
               <>
-                <b>PUT 替换整份表述</b>,并且幂等:你没写的字段,
-                含义是「不存在」,不是「不改」。<b>PATCH 描述的是一次改动</b>
+                <b>PUT 替换整份表述</b>,并且幂等:你没写的字段,含义是「不存在」,不是「不改」。<b>PATCH 描述的是一次改动</b>
                 ,一般不幂等。只改一个字段,用 PATCH。
               </>
             ),
@@ -1742,8 +1692,7 @@ Content-Type: application/problem+json
             ),
             zh: (
               <>
-                别把错误装成 200。返回与实际情况相符的状态码,
-                并在整个 API 里使用同一种错误结构。RFC 9457 的{" "}
+                别把错误装成 200。返回与实际情况相符的状态码,并在整个 API 里使用同一种错误结构。RFC 9457 的{" "}
                 <code>application/problem+json</code>{" "}
                 是标准写法;自己那套只要文档写清楚,同样可行。
               </>
@@ -1758,8 +1707,7 @@ Content-Type: application/problem+json
             ),
             zh: (
               <>
-                幂等看的是服务器状态,不看响应码 —— 第二次 DELETE 回 404,
-                照样幂等。
+                幂等看的是服务器状态,不看响应码 —— 第二次 DELETE 回 404,照样幂等。
               </>
             ),
           },

@@ -76,8 +76,7 @@ const SCENARIOS: FcScenario[] = [
         zh={
           <>
             第 3 行:fetch 的 Promise 兑现,<code>res.status</code> 是 200,
-            <code>res.ok</code> 是 true,跳过 <code>if</code>。
-            第 7 行解析正文,第 8 行打印。全程没进 <code>catch</code>。
+            <code>res.ok</code> 是 true,跳过 <code>if</code>。第 7 行解析正文,第 8 行打印。全程没进 <code>catch</code>。
           </>
         }
       />
@@ -104,10 +103,8 @@ const SCENARIOS: FcScenario[] = [
         zh={
           <>
             第 3 行:注意,fetch 的 Promise <b>照样兑现了</b> ——
-            服务器回了话,只是回的是 404。所以 <code>res.ok</code> 是 false,
-            第 4、5 行把这个状态升级成错误,第 9、10 行的 <code>catch</code>{" "}
-            接住。要是不写这个 <code>if</code>,程序会带着 404 的响应正文继续往下跑,
-            在离出错点很远的地方才失败。
+            服务器回了话,只是回的是 404。所以 <code>res.ok</code> 是 false,第 4、5 行把这个状态升级成错误,第 9、10 行的 <code>catch</code>{" "}
+            接住。要是不写这个 <code>if</code>,程序会带着 404 的响应正文继续往下跑,在离出错点很远的地方才失败。
           </>
         }
       />
@@ -136,8 +133,7 @@ const SCENARIOS: FcScenario[] = [
           <>
             第 3 行:域名解析不了,请求根本发不出去。这才是 fetch 自己
             reject 的情形,直接跳到第 9、10 行的 <code>catch</code>,
-            <code>err</code> 是 <code>TypeError: Failed to fetch</code>。
-            只有网络层失败会走这条路,404、500 不会。
+            <code>err</code> 是 <code>TypeError: Failed to fetch</code>。只有网络层失败会走这条路,404、500 不会。
           </>
         }
       />
@@ -262,8 +258,7 @@ export function FetchLab() {
             }
             zh={
               <>
-                点一个按钮,你的浏览器会<b>真的</b>发出这个请求,
-                下面的代码会高亮出这次走过的行。三个都点一遍。
+                点一个按钮,你的浏览器会<b>真的</b>发出这个请求,下面的代码会高亮出这次走过的行。三个都点一遍。
               </>
             }
           />
@@ -494,8 +489,7 @@ export function PokedexWidget() {
             }
             zh={
               <>
-                —— 没有叫「{st.name}」的宝可梦。服务器认真地回答了,
-                这正是状态码的用处。试试 pikachu、ditto、eevee 或
+                —— 没有叫「{st.name}」的宝可梦。服务器认真地回答了,这正是状态码的用处。试试 pikachu、ditto、eevee 或
                 snorlax,名字要用英文。
               </>
             }
@@ -570,9 +564,7 @@ export function PokedexWidget() {
               }
               zh={
                 <>
-                  这条链路是 <code>fetch → res.json() → 改 DOM</code>。
-                  响应里的单位是分米和百克,所以两个数字都除以了 10。
-                  光看数字猜不出来,这种事只能以<b>文档</b>为准。
+                  这条链路是 <code>fetch → res.json() → 改 DOM</code>。响应里的单位是分米和百克,所以两个数字都除以了 10。光看数字猜不出来,这种事只能以<b>文档</b>为准。
                 </>
               }
             />
@@ -616,8 +608,7 @@ const DT_TABS: DtTab[] = [
               <>
                 分三组:<b>General</b>(完整 URL、请求方法、状态码)、
                 <b>Response Headers</b>(服务器回的头)、
-                <b>Request Headers</b>(浏览器发出的头)。
-                这些头分别是什么意思,第 01 章讲过。
+                <b>Request Headers</b>(浏览器发出的头)。这些头分别是什么意思,第 01 章讲过。
               </>
             }
           />
@@ -659,8 +650,7 @@ const DT_TABS: DtTab[] = [
             }
             zh={
               <>
-                两样:URL 里的<b>查询参数</b>(已经按一行一个拆好),
-                以及 POST 或 PUT 的<b>请求正文</b>。
+                两样:URL 里的<b>查询参数</b>(已经按一行一个拆好),以及 POST 或 PUT 的<b>请求正文</b>。
               </>
             }
           />
@@ -677,9 +667,7 @@ const DT_TABS: DtTab[] = [
             }
             zh={
               <>
-                「参数明明传了却没生效」的问题一般在这里收场:
-                多半是名字拼错了,或者忘了 JSON.stringify。
-                查参数问题就从这里开始。
+                「参数明明传了却没生效」的问题一般在这里收场:多半是名字拼错了,或者忘了 JSON.stringify。查参数问题就从这里开始。
               </>
             }
           />
@@ -771,8 +759,7 @@ const DT_TABS: DtTab[] = [
             }
             zh={
               <>
-                接口慢的时候,这里能告诉你是服务器答得慢(TTFB 长),
-                还是响应太大、下载得慢。两种问题的解法完全不同。
+                接口慢的时候,这里能告诉你是服务器答得慢(TTFB 长),还是响应太大、下载得慢。两种问题的解法完全不同。
               </>
             }
           />

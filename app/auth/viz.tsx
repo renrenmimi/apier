@@ -192,8 +192,7 @@ export function Base64Lab() {
             }
             zh={
               <>
-                ⚠️ btoa 只吃 Latin-1 字符,换成英文字母和数字试试。
-                真实客户端会先把文本转成 UTF-8 再编码。
+                ⚠️ btoa 只吃 Latin-1 字符,换成英文字母和数字试试。真实客户端会先把文本转成 UTF-8 再编码。
               </>
             }
           />
@@ -310,13 +309,8 @@ const JWT_INFOS: JwtSegInfo[] = [
             }
             zh={
               <>
-                解码回来是一小段 JSON:签名算法(HS256)和令牌类型,
-                没有任何秘密。<b>服务器不能拿这个 header 里的算法去验签</b>,
-                必须按自己预期的算法来验。否则攻击者可以把
-                <code>alg</code> 改成 <code>none</code> 直接去掉签名;
-                或者对一台预期 RS256 的服务器,改用 HS256 签名、
-                拿服务器的 RSA 公钥当 HMAC 密钥。这两种攻击都很老,
-                但至今仍然有效。
+                解码回来是一小段 JSON:签名算法(HS256)和令牌类型,没有任何秘密。<b>服务器不能拿这个 header 里的算法去验签</b>,必须按自己预期的算法来验。否则攻击者可以把
+                <code>alg</code> 改成 <code>none</code> 直接去掉签名;或者对一台预期 RS256 的服务器,改用 HS256 签名、拿服务器的 RSA 公钥当 HMAC 密钥。这两种攻击都很老,但至今仍然有效。
               </>
             }
           />
@@ -352,8 +346,7 @@ const JWT_INFOS: JwtSegInfo[] = [
                 <b>这一段没有加密。</b>
                 <code>sub</code> 是用户 id,<code>exp</code> 是过期时间(Unix
                 秒,这里指向 2027-01-01)。Base64URL
-                只是把字节写成 URL 安全文本的一种方式,
-                拿到令牌的人都能解开。手机号、余额、身份证号一律别放进来
+                只是把字节写成 URL 安全文本的一种方式,拿到令牌的人都能解开。手机号、余额、身份证号一律别放进来
                 —— 只放一个 id,其余的到服务器上查。
               </>
             }
@@ -398,11 +391,7 @@ const JWT_INFOS: JwtSegInfo[] = [
             }
             zh={
               <>
-                这一段解不出可读内容,因为它不是数据,
-                而是用只有服务器掌握的密钥、对前两段算出的签名。
-                header 或 payload 改一个字符,签名就对不上,服务器直接拒收。
-                签名能证明的只有两件事:令牌由持有密钥的一方签发,
-                且签发之后没被改过。它<b>完全不负责</b>保密。
+                这一段解不出可读内容,因为它不是数据,而是用只有服务器掌握的密钥、对前两段算出的签名。header 或 payload 改一个字符,签名就对不上,服务器直接拒收。签名能证明的只有两件事:令牌由持有密钥的一方签发,且签发之后没被改过。它<b>完全不负责</b>保密。
               </>
             }
           />
@@ -569,8 +558,7 @@ const OAUTH_FRAMES: OauthFrameDef[] = [
       ),
       zh: (
         <>
-          你的照片存在 photos.example。PhotoPrint 是另一家做冲印的服务,
-          它需要读取这些照片,而你绝不能把 photos.example
+          你的照片存在 photos.example。PhotoPrint 是另一家做冲印的服务,它需要读取这些照片,而你绝不能把 photos.example
           的密码给它。这就是 OAuth 2.0 要解决的问题。
         </>
       ),
@@ -593,8 +581,7 @@ const OAUTH_FRAMES: OauthFrameDef[] = [
       zh: (
         <>
           浏览器被重定向到 photos.example 的授权服务器。URL
-          里带着 client id、回调地址、申请的<b>权限范围(scope)</b>、
-          一个随机的 <code>state</code>,以及一个{" "}
+          里带着 client id、回调地址、申请的<b>权限范围(scope)</b>、一个随机的 <code>state</code>,以及一个{" "}
           <code>code_challenge</code>。接下来你在
           <b>photos.example 自己的页面上</b>输密码,PhotoPrint 全程看不见。
         </>
@@ -615,9 +602,7 @@ const OAUTH_FRAMES: OauthFrameDef[] = [
       ),
       zh: (
         <>
-          photos.example 问你:PhotoPrint 想读取你的照片,同意吗?
-          这份申请的权限清单就叫 <b>scope</b>,能申请多小就申请多小。
-          你点了同意。
+          photos.example 问你:PhotoPrint 想读取你的照片,同意吗?这份申请的权限清单就叫 <b>scope</b>,能申请多小就申请多小。你点了同意。
         </>
       ),
     },
@@ -639,8 +624,7 @@ const OAUTH_FRAMES: OauthFrameDef[] = [
       zh: (
         <>
           浏览器被送回 PhotoPrint 事先登记的回调地址,并带上一个
-          <b>授权码(code)</b>。这个码寿命很短、只能用一次;
-          它不是令牌,单凭它也换不到令牌。
+          <b>授权码(code)</b>。这个码寿命很短、只能用一次;它不是令牌,单凭它也换不到令牌。
         </>
       ),
     },
@@ -665,9 +649,7 @@ const OAUTH_FRAMES: OauthFrameDef[] = [
         <>
           PhotoPrint 把这个码直接发给授权服务器 —— 不经过浏览器 ——
           同时附上 <code>code_verifier</code>,也就是刚才那个{" "}
-          <code>code_challenge</code> 的原文。这就是 <b>PKCE</b>:
-          半路截到码的人没有 verifier,换不到令牌。
-          能保管密钥的客户端还会在这一步验证自己的身份。
+          <code>code_challenge</code> 的原文。这就是 <b>PKCE</b>:半路截到码的人没有 verifier,换不到令牌。能保管密钥的客户端还会在这一步验证自己的身份。
         </>
       ),
     },
@@ -687,10 +669,7 @@ const OAUTH_FRAMES: OauthFrameDef[] = [
       ),
       zh: (
         <>
-          授权服务器发回一枚 <b>access token</b>:
-          权限被限制在刚才同意的 scope 内,而且会过期。
-          注意它到底说了什么 —— 它说的是「持有者可以做什么」,
-          不是「你是谁」。
+          授权服务器发回一枚 <b>access token</b>:权限被限制在刚才同意的 scope 内,而且会过期。注意它到底说了什么 —— 它说的是「持有者可以做什么」,不是「你是谁」。
         </>
       ),
     },
@@ -711,8 +690,7 @@ const OAUTH_FRAMES: OauthFrameDef[] = [
       zh: (
         <>
           PhotoPrint 带着令牌调资源服务器的 API,读到照片。回看整个过程:
-          <b>你的密码从未离开 photos.example</b>,
-          授出去的权限只有「读照片」,而且会自动过期。
+          <b>你的密码从未离开 photos.example</b>,授出去的权限只有「读照片」,而且会自动过期。
         </>
       ),
     },
@@ -811,9 +789,7 @@ const CORS_FRAMES: CorsFrameDef[] = [
       zh: (
         <>
           你的页面来自 http://localhost:3000,想拿
-          https://api.example.com 的数据。协议、域名、端口只要有一个不同,
-          这就是一个<b>跨源(cross-origin)</b>请求,
-          浏览器会对它执行同源策略。
+          https://api.example.com 的数据。协议、域名、端口只要有一个不同,这就是一个<b>跨源(cross-origin)</b>请求,浏览器会对它执行同源策略。
         </>
       ),
     },
@@ -832,8 +808,7 @@ const CORS_FRAMES: CorsFrameDef[] = [
       ),
       zh: (
         <>
-          这个请求带了 Authorization 头,所以它不是<b>简单请求</b>。
-          发送之前,浏览器会先问服务器一句「这样的请求你收不收」——
+          这个请求带了 Authorization 头,所以它不是<b>简单请求</b>。发送之前,浏览器会先问服务器一句「这样的请求你收不收」——
           这一问就是<b>预检(preflight)</b>。
         </>
       ),
@@ -855,8 +830,7 @@ const CORS_FRAMES: CorsFrameDef[] = [
       ),
       zh: (
         <>
-          预检是一条 <b>OPTIONS</b> 请求,由<b>浏览器自动发出</b>,
-          你的代码里根本没写它。它说明三件事:页面来自哪里(
+          预检是一条 <b>OPTIONS</b> 请求,由<b>浏览器自动发出</b>,你的代码里根本没写它。它说明三件事:页面来自哪里(
           <code>Origin</code>)、真请求会用什么方法、会带哪些头。
         </>
       ),
@@ -880,10 +854,7 @@ const CORS_FRAMES: CorsFrameDef[] = [
       ),
       zh: (
         <>
-          服务器回答:这个来源可以,这个方法可以,这些头可以。
-          它还可以加一句 <b>Access-Control-Max-Age: 86400</b>,
-          请求浏览器在一天之内不要为同样的组合重复预检。
-          浏览器会按自己的上限截断这个值,所以它是请求,不是保证。
+          服务器回答:这个来源可以,这个方法可以,这些头可以。它还可以加一句 <b>Access-Control-Max-Age: 86400</b>,请求浏览器在一天之内不要为同样的组合重复预检。浏览器会按自己的上限截断这个值,所以它是请求,不是保证。
         </>
       ),
     },
@@ -903,8 +874,7 @@ const CORS_FRAMES: CorsFrameDef[] = [
       ),
       zh: (
         <>
-          回答是肯定的,浏览器这才发出真正的请求。注意这里的代价:
-          一个非简单的跨源调用是两次往返,不是一次 ——
+          回答是肯定的,浏览器这才发出真正的请求。注意这里的代价:一个非简单的跨源调用是两次往返,不是一次 ——
           除非上一次的预检结果还在缓存里。
         </>
       ),
@@ -926,9 +896,7 @@ const CORS_FRAMES: CorsFrameDef[] = [
       ),
       zh: (
         <>
-          响应回来,浏览器在把正文交给你的脚本之前,
-          再核对一次 <code>Access-Control-Allow-Origin</code>。
-          服务器要是漏了这个头,你的脚本什么也拿不到 ——
+          响应回来,浏览器在把正文交给你的脚本之前,再核对一次 <code>Access-Control-Allow-Origin</code>。服务器要是漏了这个头,你的脚本什么也拿不到 ——
           <b>哪怕状态码明明是 200</b>。
         </>
       ),
@@ -951,12 +919,10 @@ const CORS_FRAMES: CorsFrameDef[] = [
       ),
       zh: (
         <>
-          三条要记住:CORS 报错不等于 API 出了故障,
-          只是服务器没说你的来源可以;curl
+          三条要记住:CORS 报错不等于 API 出了故障,只是服务器没说你的来源可以;curl
           和任何跑在服务器上的代码都不是浏览器,这条规则管不到它们;
           CORS 也不是保护 API 的手段 —— 它决定的是<b>页面脚本</b>
-          能不能读取跨源响应,保护的是用户。
-          服务端该做的认证和授权,一样都不能省。
+          能不能读取跨源响应,保护的是用户。服务端该做的认证和授权,一样都不能省。
         </>
       ),
     },

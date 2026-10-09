@@ -38,8 +38,7 @@ export const LABS: Lab[] = [
             <>
               打开一个空文件(或者就用纸笔),给「图书馆系统」写一份 SDL:
               <b>Book</b>(书名、ISBN)、<b>Member</b>(姓名、邮箱)、
-              <b>Loan</b>(借阅记录:哪本书、谁借的、借出时间、归还时间),
-              再加一个 <code>type Query</code> 提供查询入口。有一个问题决定你的答案:
+              <b>Loan</b>(借阅记录:哪本书、谁借的、借出时间、归还时间),再加一个 <code>type Query</code> 提供查询入口。有一个问题决定你的答案:
               <b>还没还的书,归还时间该是什么?</b>你的可空性要答对它。
             </>
           }
@@ -116,9 +115,7 @@ type Loan {
             zh={
               <>
                 关键在最后一行:<code>returnedAt: String</code> 没有{" "}
-                <code>!</code> —— 书还没还回来时,归还时间就该是 null,
-                这条业务规则因此被写进了类型里。字段名有出入没关系,
-                结构和可空性对了就算过关。
+                <code>!</code> —— 书还没还回来时,归还时间就该是 null,这条业务规则因此被写进了类型里。字段名有出入没关系,结构和可空性对了就算过关。
               </>
             }
           />
@@ -151,10 +148,7 @@ type Loan {
           zh={
             <>
               打开 <code>https://rickandmortyapi.com/graphql</code>,运行内省查询{" "}
-              <code>{"{ __schema { types { name } } }"}</code>。
-              数一数一共回来多少个类型,并注意其中两类你没有定义、
-              却出现在名单里的类型:名字以 <code>__</code> 开头的,
-              以及 <code>String</code>、<code>Int</code> 这些眼熟的。
+              <code>{"{ __schema { types { name } } }"}</code>。数一数一共回来多少个类型,并注意其中两类你没有定义、却出现在名单里的类型:名字以 <code>__</code> 开头的,以及 <code>String</code>、<code>Int</code> 这些眼熟的。
             </>
           }
         />
@@ -211,8 +205,7 @@ type Loan {
             zh={
               <>
                 名单大致分三类:这个 API 自己的类型(<code>Character</code>、
-                <code>Location</code>、<code>Episode</code>,
-                以及包装它们的分页类型)、五个内置标量(<code>Int</code>、
+                <code>Location</code>、<code>Episode</code>,以及包装它们的分页类型)、五个内置标量(<code>Int</code>、
                 <code>Float</code>、<code>String</code>、<code>Boolean</code>、
                 <code>ID</code>),还有内省家族(<code>__Schema</code>、
                 <code>__Type</code>、<code>__Field</code>……)。GraphiQL
@@ -243,8 +236,7 @@ type Loan {
             }
             zh={
               <>
-                五组「字段声明 → 服务器想返回的值」。
-                你来当一次类型检查器,判断每一组是合法还是非法。
+                五组「字段声明 → 服务器想返回的值」。你来当一次类型检查器,判断每一组是合法还是非法。
               </>
             }
           />
@@ -309,8 +301,7 @@ type Loan {
             }
             zh={
               <>
-                第 4、5 案是真实项目里最容易出错的两处。
-                五道全对,说明这条规则你已经掌握了。
+                第 4、5 案是真实项目里最容易出错的两处。五道全对,说明这条规则你已经掌握了。
               </>
             }
           />
@@ -365,8 +356,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          你选中了不属于内置标量的项。<code>Date</code> 很常见,
-          但它是需要有人定义的<b>自定义标量</b>;<code>Number</code> 是
+          你选中了不属于内置标量的项。<code>Date</code> 很常见,但它是需要有人定义的<b>自定义标量</b>;<code>Number</code> 是
           JavaScript 的说法,GraphQL 把它分成了 <code>Int</code> 和{" "}
           <code>Float</code>。
         </>
@@ -384,8 +374,7 @@ export const QUIZ: QuizItem[] = [
       zh: (
         <>
           五个内置标量是 <code>Int</code>、<code>Float</code>、
-          <code>String</code>、<code>Boolean</code>、<code>ID</code>。日期呢?
-          要么用 <code>String</code> 传,要么自定义标量(例如{" "}
+          <code>String</code>、<code>Boolean</code>、<code>ID</code>。日期呢?要么用 <code>String</code> 传,要么自定义标量(例如{" "}
           <code>DateTime</code>),自己写序列化和解析函数。
         </>
       ),
@@ -402,8 +391,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          schema 里写着 <code>{"type User { name: String }"}</code>,
-          服务器返回 <code>name: null</code> —— 合法吗?
+          schema 里写着 <code>{"type User { name: String }"}</code>,服务器返回 <code>name: null</code> —— 合法吗?
         </>
       ),
     },
@@ -462,8 +450,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            「必填」得自己声明。GraphQL 和 TypeScript、Java 的直觉正好相反:
-            不写 <code>!</code>,字段就允许 null。
+            「必填」得自己声明。GraphQL 和 TypeScript、Java 的直觉正好相反:不写 <code>!</code>,字段就允许 null。
           </>
         ),
       },
@@ -494,9 +481,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            schema 是一份独立的契约,与数据库的约束无关。
-            数据库允许 NULL、但 schema 写了 <code>!</code>?
-            那返回 null 就是服务器违约,查询会返回错误。
+            schema 是一份独立的契约,与数据库的约束无关。数据库允许 NULL、但 schema 写了 <code>!</code>?那返回 null 就是服务器违约,查询会返回错误。
           </>
         ),
       },
@@ -512,9 +497,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          默认可空是 GraphQL 最出人意料的一条设定。
-          好处是某个字段失败时可以只让它为 null,响应的其余部分照常返回;
-          代价是客户端要在更多地方判空。
+          默认可空是 GraphQL 最出人意料的一条设定。好处是某个字段失败时可以只让它为 null,响应的其余部分照常返回;代价是客户端要在更多地方判空。
         </>
       ),
     },
@@ -587,8 +570,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            你读的是 <code>[String!]</code>,只有里层的 <code>!</code>。
-            外层再加一个 <code>!</code>,列表本身也不许缺席了。
+            你读的是 <code>[String!]</code>,只有里层的 <code>!</code>。外层再加一个 <code>!</code>,列表本身也不许缺席了。
           </>
         ),
       },
@@ -618,8 +600,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          <code>!</code> 作用于紧挨着它左边的类型:里层的说「元素不许是 null」,
-          外层的说「列表本身不许是 null」。空列表不是 null,所以 <code>[]</code>{" "}
+          <code>!</code> 作用于紧挨着它左边的类型:里层的说「元素不许是 null」,外层的说「列表本身不许是 null」。空列表不是 null,所以 <code>[]</code>{" "}
           合法。
         </>
       ),
@@ -693,8 +674,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            自增数字、UUID、哈希都行 —— <code>ID</code> 不规定值长什么样,
-            只表示「这是一个唯一标识」。
+            自增数字、UUID、哈希都行 —— <code>ID</code> 不规定值长什么样,只表示「这是一个唯一标识」。
           </>
         ),
       },
@@ -710,8 +690,7 @@ export const QUIZ: QuizItem[] = [
         zh: (
           <>
             差别很大:<code>Int</code> 是拿来做算术的 32 位整数,
-            <code>ID</code> 是拿来定位对象的钥匙,序列化成字符串,
-            客户端不该拿它算数。
+            <code>ID</code> 是拿来定位对象的钥匙,序列化成字符串,客户端不该拿它算数。
           </>
         ),
       },
@@ -741,9 +720,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          <code>ID</code> 的关键词是「不透明的唯一标识」:别去解读它的内容,
-          也别拿它算数,拿着它能换回对象就够了。
-          这也是缓存和全局对象标识的地基,第 10 章会回到这里。
+          <code>ID</code> 的关键词是「不透明的唯一标识」:别去解读它的内容,也别拿它算数,拿着它能换回对象就够了。这也是缓存和全局对象标识的地基,第 10 章会回到这里。
         </>
       ),
     },
@@ -857,8 +834,7 @@ export const QUIZ: QuizItem[] = [
       zh: (
         <>
           取值有限、拼错代价大、改动要全局可见 —— 三个条件齐了就用{" "}
-          <code>enum</code>。把 <code>PUBLISHED</code> 写成 <code>PUBLISH</code>,
-          服务器在执行查询之前就会拒绝。
+          <code>enum</code>。把 <code>PUBLISHED</code> 写成 <code>PUBLISH</code>,服务器在执行查询之前就会拒绝。
         </>
       ),
     },
@@ -935,8 +911,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            区别是实打实的:一个声明共有字段,一个只列出可能是哪几种类型。
-            针对它们写出来的查询也不一样。
+            区别是实打实的:一个声明共有字段,一个只列出可能是哪几种类型。针对它们写出来的查询也不一样。
           </>
         ),
       },
@@ -988,8 +963,7 @@ export const QUIZ: QuizItem[] = [
       zh: (
         <>
           <code>interface</code> 说的是「你们都得有这些字段」;<code>union</code>{" "}
-          说的是「结果是这几种类型之一,彼此不必有共同点」。
-          搜索结果混着 <code>Post</code> 和 <code>User</code>?用{" "}
+          说的是「结果是这几种类型之一,彼此不必有共同点」。搜索结果混着 <code>Post</code> 和 <code>User</code>?用{" "}
           <code>union</code>。一批类型都有 <code>id</code>、要统一处理?用{" "}
           <code>interface</code>。
         </>
@@ -1025,8 +999,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            专门用于参数的对象类型:mutation 用它一次传进一整包数据;
-            普通的 <code>type</code> 不能当参数用
+            专门用于参数的对象类型:mutation 用它一次传进一整包数据;普通的 <code>type</code> 不能当参数用
           </>
         ),
       },
@@ -1127,8 +1100,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          schema 自我描述的机制 —— GraphiQL 的文档面板和自动补全都靠它,
-          查询以两个下划线开头(<code>__schema</code>)。它的英文名是____。
+          schema 自我描述的机制 —— GraphiQL 的文档面板和自动补全都靠它,查询以两个下划线开头(<code>__schema</code>)。它的英文名是____。
         </>
       ),
     },

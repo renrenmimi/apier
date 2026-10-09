@@ -29,10 +29,8 @@ export const LABS: Lab[] = [
       ),
       zh: (
         <p>
-          打开 <code>https://rickandmortyapi.com/graphql</code>,免注册,
-          浏览器直接开。在左边的编辑器里写下你的第一句 GraphQL 查询:
-          <code>{"{ character(id: 1) { name species status } }"}</code>,
-          按左上角的 ▶ 运行,看看右边返回了什么。然后<b>加一个字段</b>
+          打开 <code>https://rickandmortyapi.com/graphql</code>,免注册,浏览器直接开。在左边的编辑器里写下你的第一句 GraphQL 查询:
+          <code>{"{ character(id: 1) { name species status } }"}</code>,按左上角的 ▶ 运行,看看右边返回了什么。然后<b>加一个字段</b>
           (比如 <code>gender</code>)再跑一次。
         </p>
       ),
@@ -47,8 +45,7 @@ export const LABS: Lab[] = [
       ),
       zh: (
         <>
-          在花括号里按 Ctrl+Space(Mac 上是 ⌥Space 或 Ctrl+Space),
-          自动补全会把此处能选的字段全部列出来 —— 不必去背字段名。
+          在花括号里按 Ctrl+Space(Mac 上是 ⌥Space 或 Ctrl+Space),自动补全会把此处能选的字段全部列出来 —— 不必去背字段名。
         </>
       ),
     },
@@ -123,12 +120,10 @@ export const LABS: Lab[] = [
       ),
       zh: (
         <p>
-          打开 <code>https://countries.trevorblades.com</code>,同样免注册。
-          运行 <code>{'{ country(code: "CN") { name capital currency } }'}</code>
+          打开 <code>https://countries.trevorblades.com</code>,同样免注册。运行 <code>{'{ country(code: "CN") { name capital currency } }'}</code>
           ,看看返回什么。然后把 <code>&quot;CN&quot;</code> 换成{" "}
           <code>&quot;JP&quot;</code>、<code>&quot;FR&quot;</code>、
-          <code>&quot;BR&quot;</code> 再跑几次。最后打开文档面板,
-          看看 <code>Country</code> 类型还有哪些字段。
+          <code>&quot;BR&quot;</code> 再跑几次。最后打开文档面板,看看 <code>Country</code> 类型还有哪些字段。
         </p>
       ),
     },
@@ -216,12 +211,10 @@ export const LABS: Lab[] = [
       ),
       zh: (
         <p>
-          这次不用 GraphiQL。随便打开一个网页,按 F12 进 Console,
-          用第 02 章学过的 <code>fetch</code> 直接向{" "}
+          这次不用 GraphiQL。随便打开一个网页,按 F12 进 Console,用第 02 章学过的 <code>fetch</code> 直接向{" "}
           <code>rickandmortyapi.com/graphql</code> 发一个 POST 请求:
           header 带 <code>Content-Type: application/json</code>,body 是{" "}
-          <code>{'JSON.stringify({ query: "..." })'}</code>。
-          目标是:不借助任何 GraphQL 库或工具,拿到 Rick 的名字。
+          <code>{'JSON.stringify({ query: "..." })'}</code>。目标是:不借助任何 GraphQL 库或工具,拿到 Rick 的名字。
         </p>
       ),
     },
@@ -235,8 +228,7 @@ export const LABS: Lab[] = [
       ),
       zh: (
         <>
-          查询就是一个普通字符串,放进 JSON 对象的 <code>query</code> 键里。
-          响应照旧用 <code>res.json()</code> 读 —— 和调 REST API 没有区别。
+          查询就是一个普通字符串,放进 JSON 对象的 <code>query</code> 键里。响应照旧用 <code>res.json()</code> 读 —— 和调 REST API 没有区别。
         </>
       ),
     },
@@ -286,8 +278,7 @@ console.log(json.data.character.name); // "Rick Sanchez"`}
           />
           <p>
             做完这个实验,你就亲手验证了本章最重要的一点:
-            <b>GraphQL 不是新协议,它就是一个普通的 HTTP POST</b>。
-            前六章学的东西一样都没作废。也注意倒数第二行:先看{" "}
+            <b>GraphQL 不是新协议,它就是一个普通的 HTTP POST</b>。前六章学的东西一样都没作废。也注意倒数第二行:先看{" "}
             <code>json.errors</code>,再去信 <code>json.data</code> ——
             字段失败时状态码依然是 200。
           </p>
@@ -344,8 +335,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            恰恰相反,REST 很简单,这正是它的优点之一。他们的问题不是「难」,
-            是「贵」:在 2G/3G 网络下,每一趟往返、每一个多余字段都是实打实的时间和钱。
+            恰恰相反,REST 很简单,这正是它的优点之一。他们的问题不是「难」,是「贵」:在 2G/3G 网络下,每一趟往返、每一个多余字段都是实打实的时间和钱。
           </>
         ),
       },
@@ -361,8 +351,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            GraphQL 不碰数据库 —— 它是客户端与服务器之间的查询语言。
-            服务器怎么读数据库还是怎么读;resolver 写得随意,还会出现 N+1
+            GraphQL 不碰数据库 —— 它是客户端与服务器之间的查询语言。服务器怎么读数据库还是怎么读;resolver 写得随意,还会出现 N+1
             问题(第 10 章)。
           </>
         ),
@@ -377,8 +366,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            GraphQL 恰恰跑在 HTTP 上:一个普通的 POST 请求。
-            它替代的不是协议,而是「响应形状由服务器定死」这个做法。
+            GraphQL 恰恰跑在 HTTP 上:一个普通的 POST 请求。它替代的不是协议,而是「响应形状由服务器定死」这个做法。
           </>
         ),
       },
@@ -395,8 +383,7 @@ export const QUIZ: QuizItem[] = [
       zh: (
         <>
           2012 年的移动网络又慢又贵。响应形状固定,同时带来了
-          over-fetching(用不上的字段)和 under-fetching(多跑几趟),
-          而弱网把这两笔账都放大了 —— GraphQL 就是冲着这两个问题去的。
+          over-fetching(用不上的字段)和 under-fetching(多跑几趟),而弱网把这两笔账都放大了 —— GraphQL 就是冲着这两个问题去的。
         </>
       ),
     },
@@ -454,8 +441,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          还漏了一个。判断标准很简单:响应里有没有你根本用不上的数据?
-          再扫一遍选项。
+          还漏了一个。判断标准很简单:响应里有没有你根本用不上的数据?再扫一遍选项。
         </>
       ),
     },
@@ -574,8 +560,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            「全部字段」正是 GraphQL 要避免的 over-fetching。
-            你没有选的字段,服务器不会去解析,也不会发给你。
+            「全部字段」正是 GraphQL 要避免的 over-fetching。你没有选的字段,服务器不会去解析,也不会发给你。
           </>
         ),
       },
@@ -590,8 +575,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            在前端删字段没有用:字节已经在网络上跑过一趟了,流量和时间都已经花掉。
-            GraphQL 是让多余的字段根本不出发。
+            在前端删字段没有用:字节已经在网络上跑过一趟了,流量和时间都已经花掉。GraphQL 是让多余的字段根本不出发。
           </>
         ),
       },
@@ -606,8 +590,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          「响应的形状和查询的形状一一对应」是最值得记住的一条规律:
-          把查询里的字段名原样映进 <code>data</code>,就是你将收到的 JSON。
+          「响应的形状和查询的形状一一对应」是最值得记住的一条规律:把查询里的字段名原样映进 <code>data</code>,就是你将收到的 JSON。
         </>
       ),
     },
@@ -644,8 +627,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          惯例是 <code>POST /graphql</code>:一个入口,承接所有请求。
-          「调哪个 URL」的问题,变成了「选哪些字段」。
+          惯例是 <code>POST /graphql</code>:一个入口,承接所有请求。「调哪个 URL」的问题,变成了「选哪些字段」。
         </>
       ),
     },
@@ -708,8 +690,7 @@ export const QUIZ: QuizItem[] = [
         zh: (
           <>
             用 <code>GET</code> 发 GraphQL 确实可行,持久化查询配合 CDN
-            缓存就是这么做的(第 10 章)。但参数名是 <code>query</code>,
-            不是 <code>fields</code>;而且默认惯例仍然是 POST 加 JSON body。
+            缓存就是这么做的(第 10 章)。但参数名是 <code>query</code>,不是 <code>fields</code>;而且默认惯例仍然是 POST 加 JSON body。
           </>
         ),
       },
@@ -755,8 +736,7 @@ export const QUIZ: QuizItem[] = [
       zh: (
         <>
           GraphQL 请求就是一个普通的 HTTP POST:body 是一个 JSON 对象,
-          <code>query</code> 键里装着查询字符串;用到变量时,
-          旁边再放一个 <code>variables</code> 键。
+          <code>query</code> 键里装着查询字符串;用到变量时,旁边再放一个 <code>variables</code> 键。
         </>
       ),
     },
@@ -791,8 +771,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            HTTP 200,<code>data.post.author</code> 是 <code>null</code>,
-            失败的原因写在 <code>errors</code> 数组里
+            HTTP 200,<code>data.post.author</code> 是 <code>null</code>,失败的原因写在 <code>errors</code> 数组里
           </>
         ),
       },
@@ -943,8 +922,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            图数据库是另一类东西,比如 Neo4j。GraphiQL 不存任何数据,
-            它只是帮你写查询、发查询的工具。
+            图数据库是另一类东西,比如 Neo4j。GraphiQL 不存任何数据,它只是帮你写查询、发查询的工具。
           </>
         ),
       },
@@ -974,8 +952,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          GraphiQL 是 GraphQL 官方的浏览器编辑器。它的自动补全和文档面板
-          都来自内省(introspection)—— 服务器描述自己的 schema。第 08 章展开讲。
+          GraphiQL 是 GraphQL 官方的浏览器编辑器。它的自动补全和文档面板都来自内省(introspection)—— 服务器描述自己的 schema。第 08 章展开讲。
         </>
       ),
     },
@@ -1157,8 +1134,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            三分之一的团队在用,GitHub、Shopify 都在跑大规模 GraphQL API,
-            谈不上淘汰。只是它的适用范围更清楚了:多客户端、多团队、聚合层。
+            三分之一的团队在用,GitHub、Shopify 都在跑大规模 GraphQL API,谈不上淘汰。只是它的适用范围更清楚了:多客户端、多团队、聚合层。
           </>
         ),
       },
@@ -1172,8 +1148,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            GitHub 就是反例:REST API 和 GraphQL API 并行提供,
-            官方还写了什么时候用哪个的指南。两种风格完全可以在一家公司里共存。
+            GitHub 就是反例:REST API 和 GraphQL API 并行提供,官方还写了什么时候用哪个的指南。两种风格完全可以在一家公司里共存。
           </>
         ),
       },

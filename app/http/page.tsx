@@ -103,8 +103,7 @@ export default function HttpPage() {
           zh: (
             <>
               每一次 API 调用,都是一个 HTTP 请求加一个 HTTP
-              响应。请求由方法、目标、Header 和可选的正文组成;
-              响应由状态码、Header 和可选的正文组成。这一章把两边逐段拆开读。
+              响应。请求由方法、目标、Header 和可选的正文组成;响应由状态码、Header 和可选的正文组成。这一章把两边逐段拆开读。
             </>
           ),
         }}
@@ -273,8 +272,7 @@ export default function HttpPage() {
                 zh={
                   <>
                     一行一条 <code>名字: 值</code>
-                    。Header 装的是元信息:这封信寄给哪台主机(Host)、
-                    正文是什么格式(Content-Type)、调用者是谁(Authorization)。
+                    。Header 装的是元信息:这封信寄给哪台主机(Host)、正文是什么格式(Content-Type)、调用者是谁(Authorization)。
                   </>
                 }
               />
@@ -298,8 +296,7 @@ export default function HttpPage() {
                 }
                 zh={
                   <>
-                    这个空行标记「Header 结束、正文开始」。
-                    解析程序只认它这一个界标,所以它一行都不能少。
+                    这个空行标记「Header 结束、正文开始」。解析程序只认它这一个界标,所以它一行都不能少。
                   </>
                 }
               />
@@ -328,8 +325,7 @@ export default function HttpPage() {
                 zh={
                   <>
                     这次要发送的数据,一段 JSON。真实请求还会带{" "}
-                    <code>Content-Length</code>(或者用分块传输编码),
-                    好让接收方知道正文有多少字节。GET 这类只读请求通常不带正文 ——
+                    <code>Content-Length</code>(或者用分块传输编码),好让接收方知道正文有多少字节。GET 这类只读请求通常不带正文 ——
                     只是读一样东西,不需要附材料。
                     {"正文(body)在请求里也叫请求体,在响应里也叫响应体;检查器的标签用的是后一种叫法。"}
                   </>
@@ -351,8 +347,7 @@ export default function HttpPage() {
             zh={
               <>
                 服务器的回信是<b>响应报文(response message)</b>
-                ,结构完全一样。只有第一行换了内容:
-                从「我要干什么」变成「办得怎么样」。
+                ,结构完全一样。只有第一行换了内容:从「我要干什么」变成「办得怎么样」。
               </>
             }
           />
@@ -408,8 +403,7 @@ export default function HttpPage() {
                   上面两段不是示意图,是 HTTP/1.1
                   客户端真正写到连接上的<b>原文</b> ——
                   所以你可以在终端里一个字一个字敲出请求,拿到真的响应。HTTP/2 和
-                  HTTP/3 把这段文本换成了压缩过的二进制格式,但传的还是同样几件东西:
-                  方法、目标、Header、状态码、正文。
+                  HTTP/3 把这段文本换成了压缩过的二进制格式,但传的还是同样几件东西:方法、目标、Header、状态码、正文。
                   <b>把这几部分读明白,底层用什么格式传就不重要了。</b>
                 </>
               }
@@ -647,9 +641,7 @@ export default function HttpPage() {
               <>
                 表里那两列术语,是这一节真正的重点。<b>安全(safe)</b>=
                 这个请求本来就不打算改服务器上的任何东西;<b>幂等(idempotent)</b>=
-                同一个请求发 1 次和发 N 次,服务器最后的状态一样。
-                幂等看的是<b>效果</b>,不是回信:第二次 DELETE 可能回 404,
-                但效果没变。安全的方法一定幂等,反过来不成立 —— PUT
+                同一个请求发 1 次和发 N 次,服务器最后的状态一样。幂等看的是<b>效果</b>,不是回信:第二次 DELETE 可能回 404,但效果没变。安全的方法一定幂等,反过来不成立 —— PUT
                 会写数据(不安全),但同一份写几次结果相同(幂等)。
               </>
             }
@@ -699,8 +691,7 @@ export default function HttpPage() {
               zh={
                 <>
                   顺带解决一个经典疑惑:「DELETE 第二次返回 404,那还幂等吗?」——
-                  幂等是按<b>服务器状态的变化</b>定义的,不看响应码。
-                  删一次和删两次,资源都是没了,状态相同,幂等成立。
+                  幂等是按<b>服务器状态的变化</b>定义的,不看响应码。删一次和删两次,资源都是没了,状态相同,幂等成立。
                 </>
               }
             />
@@ -733,8 +724,7 @@ export default function HttpPage() {
                   <b>PUT = 整体替换。</b>你只传半个对象,漏掉的字段按语义会被清空 ——
                   资料表里 email、bio 一夜蒸发,就是这么来的。
                   <b>PATCH = 部分修改</b>,只动你提到的字段。另外 PATCH
-                  一般不幂等:像「库存 +1」这样的补丁,执行两次就是 +2。
-                  想只改几个字段?用 PATCH。想整份覆盖?用 PUT,并且传
+                  一般不幂等:像「库存 +1」这样的补丁,执行两次就是 +2。想只改几个字段?用 PATCH。想整份覆盖?用 PUT,并且传
                   <b>完整</b>的一份。
                 </>
               }
@@ -871,9 +861,7 @@ export default function HttpPage() {
                   响应必须带 <code>WWW-Authenticate</code> 头,告诉客户端该怎么认证
                   —— 带上有效凭证再来,请求就能成功。
                   <b>403 说的是「认识你,但你不许。」</b>
-                  身份很明确,就是权限不够,重新登录也没用。401 这个名字
-                  (Unauthorized,未授权)其实容易误导:它管的是认证,不是授权。
-                  这是历史遗留的命名。
+                  身份很明确,就是权限不够,重新登录也没用。401 这个名字(Unauthorized,未授权)其实容易误导:它管的是认证,不是授权。这是历史遗留的命名。
                 </>
               }
             />
@@ -934,8 +922,7 @@ export default function HttpPage() {
                 zh={
                   <>
                     描述<b>这条报文里正文</b>的格式。请求和响应都可能带它 ——
-                    只要有正文就该有它。发 JSON 忘了带,服务器可能按表单或纯文本解析,
-                    轻则字段全空,重则 400。
+                    只要有正文就该有它。发 JSON 忘了带,服务器可能按表单或纯文本解析,轻则字段全空,重则 400。
                   </>
                 }
               />
@@ -962,9 +949,7 @@ export default function HttpPage() {
                 }
                 zh={
                   <>
-                    <b>请求</b>头。它说明客户端能处理哪些格式,由服务器挑一个,
-                    这叫内容协商(content negotiation)。同一个资源,可以返回 JSON,
-                    也可以返回别的表述。
+                    <b>请求</b>头。它说明客户端能处理哪些格式,由服务器挑一个,这叫内容协商(content negotiation)。同一个资源,可以返回 JSON,也可以返回别的表述。
                   </>
                 }
               />
@@ -1019,9 +1004,7 @@ export default function HttpPage() {
                 }
                 zh={
                   <>
-                    主要是<b>响应</b>头,说明这份响应能不能存、能存多久。
-                    下面这行的意思是「一小时内可以直接复用,不用再来问我」。
-                    请求也可以带它,用来说明自己能接受多旧的缓存。
+                    主要是<b>响应</b>头,说明这份响应能不能存、能存多久。下面这行的意思是「一小时内可以直接复用,不用再来问我」。请求也可以带它,用来说明自己能接受多旧的缓存。
                   </>
                 }
               />
@@ -1050,8 +1033,7 @@ export default function HttpPage() {
                 zh={
                   <>
                     <b>响应</b>头,标识资源当前的版本。下次请求带上{" "}
-                    <code>If-None-Match: &quot;33a64df5&quot;</code>,
-                    资源没变服务器就回 304,正文一个字节都不发。
+                    <code>If-None-Match: &quot;33a64df5&quot;</code>,资源没变服务器就回 304,正文一个字节都不发。
                   </>
                 }
               />
@@ -1085,9 +1067,7 @@ export default function HttpPage() {
               zh={
                 <>
                   Header 的<b>名字不区分大小写</b>:DevTools 里显示{" "}
-                  <code>content-type</code>,文档里写 <code>Content-Type</code>,
-                  是同一个 header。但 header 的<b>值</b>是另一回事:区不区分大小写
-                  要看具体字段 —— <code>application/json</code>{" "}
+                  <code>content-type</code>,文档里写 <code>Content-Type</code>,是同一个 header。但 header 的<b>值</b>是另一回事:区不区分大小写要看具体字段 —— <code>application/json</code>{" "}
                   这类媒体类型不区分,ETag 的值则区分。
                 </>
               }
@@ -1108,8 +1088,7 @@ export default function HttpPage() {
                 <>
                   非标准的自定义 header 过去习惯加 <code>X-</code> 前缀,比如{" "}
                   <code>X-API-Key</code>。RFC 6648 已经不建议这么做 ——
-                  这类 header 后来常常被标准化,前缀反而成了错名字。
-                  不过现实里还是会经常见到 <code>X-</code>,见到也不必奇怪。
+                  这类 header 后来常常被标准化,前缀反而成了错名字。不过现实里还是会经常见到 <code>X-</code>,见到也不必奇怪。
                 </>
               }
             />
@@ -1175,8 +1154,7 @@ export default function HttpPage() {
                   <>
                     200 表示请求成功。<code>Cache-Control</code> 允许客户端在 60
                     秒内直接复用这份响应;<code>ETag</code> 标识版本 ——
-                    下次把它放进 <code>If-None-Match</code> 发回来,
-                    资源没变就回 304。
+                    下次把它放进 <code>If-None-Match</code> 发回来,资源没变就回 304。
                   </>
                 ),
               }}
@@ -1273,8 +1251,7 @@ export default function HttpPage() {
                 zh: (
                   <>
                     <b>404</b>。注意响应体不是干巴巴一句话,而是
-                    <code>application/problem+json</code> —— 会好好说话的错误格式,
-                    第 04 章专门设计它。
+                    <code>application/problem+json</code> —— 会好好说话的错误格式,第 04 章专门设计它。
                   </>
                 ),
               },
@@ -1298,8 +1275,7 @@ export default function HttpPage() {
                 zh: (
                   <>
                     <b>401</b>,而且带了 <code>WWW-Authenticate</code> 响应头 ——
-                    规范要求的。401 说的是「你是谁?」,不是「不许你」。
-                    这条界线第 06 章会划清楚。
+                    规范要求的。401 说的是「你是谁?」,不是「不许你」。这条界线第 06 章会划清楚。
                   </>
                 ),
               },
@@ -1387,8 +1363,7 @@ export default function HttpPage() {
             ),
             zh: (
               <>
-                目标回答「对哪个资源」,方法回答「干什么」:GET 读、POST 创建、
-                PUT 整体替换、PATCH 部分修改、DELETE 删除。
+                目标回答「对哪个资源」,方法回答「干什么」:GET 读、POST 创建、PUT 整体替换、PATCH 部分修改、DELETE 删除。
               </>
             ),
           },
@@ -1433,8 +1408,7 @@ export default function HttpPage() {
             ),
             zh: (
               <>
-                Header 五常客:Content-Type(我发的格式)、Accept(我想要的格式)、
-                Authorization(凭证)、Cache-Control 与 ETag(缓存这一对)。
+                Header 五常客:Content-Type(我发的格式)、Accept(我想要的格式)、Authorization(凭证)、Cache-Control 与 ETag(缓存这一对)。
               </>
             ),
           },

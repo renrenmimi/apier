@@ -90,8 +90,7 @@ const QA_LINES: QaLine[] = [
         zh={
           <>
             一行里有三件事。<code>query</code> 说明这是读操作。
-            <code>PostPage</code> 是操作名,报错、日志和监控里显示的就是它。
-            括号里是<b>变量声明</b>:<code>$id</code> 必须是 <code>ID</code>{" "}
+            <code>PostPage</code> 是操作名,报错、日志和监控里显示的就是它。括号里是<b>变量声明</b>:<code>$id</code> 必须是 <code>ID</code>{" "}
             且不能缺省(那个 <code>!</code>),<code>$withComments</code>{" "}
             是布尔值。值不写在这里 —— 它们作为另一份 JSON 随请求一起发送。
           </>
@@ -116,9 +115,7 @@ const QA_LINES: QaLine[] = [
         }
         zh={
           <>
-            <code>post</code> 字段带了一个名为 <code>id</code> 的参数。
-            它的值不是写死的字符串,而是变量 <code>$id</code>。
-            执行之前,服务器先检查传来的值是否符合声明的类型{" "}
+            <code>post</code> 字段带了一个名为 <code>id</code> 的参数。它的值不是写死的字符串,而是变量 <code>$id</code>。执行之前,服务器先检查传来的值是否符合声明的类型{" "}
             <code>ID!</code>,再把它传进去。
           </>
         }
@@ -142,8 +139,7 @@ const QA_LINES: QaLine[] = [
         zh={
           <>
             三个点的意思是「把名为 <code>postFields</code>{" "}
-            的选择集插到这里」。选择集本身定义在文档最下面。
-            写一次,处处展开,只改一处。
+            的选择集插到这里」。选择集本身定义在文档最下面。写一次,处处展开,只改一处。
           </>
         }
       />
@@ -172,9 +168,7 @@ const QA_LINES: QaLine[] = [
             这里有两个点。其一,参数不是顶层字段的专利:
             schema 想在哪一层声明就在哪一层声明,这里 <code>comments</code>{" "}
             带了 <code>first: 3</code>。其二,
-            <code>@include(if: $withComments)</code> 是指令:
-            变量为 true 时这一块属于本次请求,为 false 时整块被排除。
-            它的镜像是 <code>@skip(if:)</code>,条件为 true 时移除该字段。
+            <code>@include(if: $withComments)</code> 是指令:变量为 true 时这一块属于本次请求,为 false 时整块被排除。它的镜像是 <code>@skip(if:)</code>,条件为 true 时移除该字段。
           </>
         }
       />
@@ -195,8 +189,7 @@ const QA_LINES: QaLine[] = [
         }
         zh={
           <>
-            评论正文,一个普通的 <code>String</code> 字段。
-            标量就是叶子:它只装一个值,所以不能再带自己的选择集。
+            评论正文,一个普通的 <code>String</code> 字段。标量就是叶子:它只装一个值,所以不能再带自己的选择集。
           </>
         }
       />
@@ -219,8 +212,7 @@ const QA_LINES: QaLine[] = [
         zh={
           <>
             评论的作者是对象类型,所以必须带选择集 —— 这里只要 <code>name</code>
-            。文章、评论、作者,三层关联数据在一次请求里取齐。
-            在 REST 里,这通常是三趟往返。
+            。文章、评论、作者,三层关联数据在一次请求里取齐。在 REST 里,这通常是三趟往返。
           </>
         }
       />
@@ -246,8 +238,7 @@ const QA_LINES: QaLine[] = [
         }
         zh={
           <>
-            <code>post</code> 字段第二次出现,这回用的是写死的 id。
-            问题来了:响应的键默认就是字段名,两份结果都想占 <code>post</code>{" "}
+            <code>post</code> 字段第二次出现,这回用的是写死的 id。问题来了:响应的键默认就是字段名,两份结果都想占 <code>post</code>{" "}
             这个键。别名 <code>pinned:</code> 给这一份改名 ——
             响应里它是 <code>data.pinned</code>,上面那份仍是{" "}
             <code>data.post</code>。
@@ -271,8 +262,7 @@ const QA_LINES: QaLine[] = [
         }
         zh={
           <>
-            同一个 fragment 又用了一次。这正是给它起名的意义:
-            文章卡片、置顶位、搜索结果都要这组字段,谁也不用抄第二遍。
+            同一个 fragment 又用了一次。这正是给它起名的意义:文章卡片、置顶位、搜索结果都要这组字段,谁也不用抄第二遍。
           </>
         }
       />
@@ -299,8 +289,7 @@ const QA_LINES: QaLine[] = [
         zh={
           <>
             选择集的定义。名字是 <code>postFields</code>,<code>on Post</code>{" "}
-            是类型条件:它只能展开在正在选取 <code>Post</code> 的位置上。
-            展开到 <code>User</code> 上,校验会在执行开始前就拒绝这份文档。
+            是类型条件:它只能展开在正在选取 <code>Post</code> 的位置上。展开到 <code>User</code> 上,校验会在执行开始前就拒绝这份文档。
           </>
         }
       />
@@ -321,8 +310,7 @@ const QA_LINES: QaLine[] = [
         }
         zh={
           <>
-            字段组的成员之一。产品要给所有文章卡片加个阅读量时,
-            你在这里加一行,所有展开这个 fragment 的地方都有了。
+            字段组的成员之一。产品要给所有文章卡片加个阅读量时,你在这里加一行,所有展开这个 fragment 的地方都有了。
           </>
         }
       />
@@ -343,8 +331,7 @@ const QA_LINES: QaLine[] = [
         }
         zh={
           <>
-            发布时间。注意 fragment 就是一个普通的选择集:
-            里面的字段照样可以带参数、带指令、继续嵌套。五样工具可以自由组合。
+            发布时间。注意 fragment 就是一个普通的选择集:里面的字段照样可以带参数、带指令、继续嵌套。五样工具可以自由组合。
           </>
         }
       />
@@ -438,9 +425,7 @@ const SUB_FRAMES: SubFrame[] = [
         zh={
           <>
             客户端发出{" "}
-            <code>subscription {'{ newComment(postId: "1") … }'}</code>,
-            协商建立一条会保持打开的连接,通常是 WebSocket。
-            服务器上登记下这条订阅。
+            <code>subscription {'{ newComment(postId: "1") … }'}</code>,协商建立一条会保持打开的连接,通常是 WebSocket。服务器上登记下这条订阅。
           </>
         }
       />
@@ -484,8 +469,7 @@ const SUB_FRAMES: SubFrame[] = [
         zh={
           <>
             另一个用户评论了 1 号文章。服务器立刻通过这条打开的连接把{" "}
-            <code>newComment</code> 的结果发过来。
-            它的形状就是你订阅时写下的那个选择集。这一刻客户端什么都没问。
+            <code>newComment</code> 的结果发过来。它的形状就是你订阅时写下的那个选择集。这一刻客户端什么都没问。
           </>
         }
       />
@@ -507,8 +491,7 @@ const SUB_FRAMES: SubFrame[] = [
         }
         zh={
           <>
-            又一条评论,又一条消息。只要连接开着,
-            每次匹配的事件都会再产生一个结果。一次订阅,多次结果 ——
+            又一条评论,又一条消息。只要连接开着,每次匹配的事件都会再产生一个结果。一次订阅,多次结果 ——
             这就是它和 query 的根本区别。
           </>
         }
@@ -530,9 +513,7 @@ const SUB_FRAMES: SubFrame[] = [
         }
         zh={
           <>
-            用户离开页面,客户端<b>取消订阅</b>,连接随之关闭(虚线)。
-            这一步一定要做:每条打开的连接,只要还开着,
-            就一直在占用服务器的内存和心跳消息。
+            用户离开页面,客户端<b>取消订阅</b>,连接随之关闭(虚线)。这一步一定要做:每条打开的连接,只要还开着,就一直在占用服务器的内存和心跳消息。
           </>
         }
       />
@@ -635,8 +616,7 @@ const EA_LINES: EaLine[] = [
         zh={
           <>
             <b>data 还在。</b>下面有一个字段失败了,但 <code>data</code>{" "}
-            并没有整个变成 <code>null</code> —— 成功的字段照常返回。
-            这就是<b>部分结果</b>,REST 里没有这种中间状态。
+            并没有整个变成 <code>null</code> —— 成功的字段照常返回。这就是<b>部分结果</b>,REST 里没有这种中间状态。
           </>
         }
       />
@@ -682,8 +662,7 @@ const EA_LINES: EaLine[] = [
         }
         zh={
           <>
-            成功的字段:<code>title</code> 的 resolver 正常执行,
-            值原样返回。即使这次请求有一部分失败了,页面照样能渲染标题。
+            成功的字段:<code>title</code> 的 resolver 正常执行,值原样返回。即使这次请求有一部分失败了,页面照样能渲染标题。
           </>
         }
       />
@@ -705,9 +684,7 @@ const EA_LINES: EaLine[] = [
         }
         zh={
           <>
-            失败点:<code>comments</code> 的 resolver 抛了错,
-            比如评论服务超时。这个字段被置为 <code>null</code>。
-            原因不放在这里 —— 它在下面的 <code>errors</code> 数组里。
+            失败点:<code>comments</code> 的 resolver 抛了错,比如评论服务超时。这个字段被置为 <code>null</code>。原因不放在这里 —— 它在下面的 <code>errors</code> 数组里。
           </>
         }
       />
@@ -732,10 +709,7 @@ const EA_LINES: EaLine[] = [
         }
         zh={
           <>
-            <code>errors</code> 数组记录本次执行中出的问题,
-            它和 <code>data</code> <b>并排</b>存在,不是二选一。
-            失败几处就有几条记录。注意 HTTP 状态码传统上仍是 <code>200</code>:
-            只看状态码,你会以为一切正常。
+            <code>errors</code> 数组记录本次执行中出的问题,它和 <code>data</code> <b>并排</b>存在,不是二选一。失败几处就有几条记录。注意 HTTP 状态码传统上仍是 <code>200</code>:只看状态码,你会以为一切正常。
           </>
         }
       />
@@ -778,8 +752,7 @@ const EA_LINES: EaLine[] = [
         }
         zh={
           <>
-            失败字段在<b>查询文本</b>里的位置:行号和列号。
-            它帮你在自己发出的文档里定位到具体那一行。
+            失败字段在<b>查询文本</b>里的位置:行号和列号。它帮你在自己发出的文档里定位到具体那一行。
           </>
         }
       />
@@ -801,9 +774,7 @@ const EA_LINES: EaLine[] = [
         }
         zh={
           <>
-            失败字段在<b>响应数据</b>里的路径:<code>data.post.comments</code>。
-            客户端据此可以只在界面的那一块显示「加载失败,点击重试」,
-            其余部分照常渲染。
+            失败字段在<b>响应数据</b>里的路径:<code>data.post.comments</code>。客户端据此可以只在界面的那一块显示「加载失败,点击重试」,其余部分照常渲染。
           </>
         }
       />
@@ -828,12 +799,10 @@ const EA_LINES: EaLine[] = [
         }
         zh={
           <>
-            <code>extensions</code> 用来放任何附加信息,
-            惯例是在里面放一个机器可读的错误码。REST 用 HTTP
+            <code>extensions</code> 用来放任何附加信息,惯例是在里面放一个机器可读的错误码。REST 用 HTTP
             状态码区分错误种类,GraphQL 里对应的就是它:
             <code>UNAUTHENTICATED</code>、<code>FORBIDDEN</code>、
-            <code>BAD_USER_INPUT</code>。这些码是惯例,不是规范的一部分,
-            所以要看你调用的那个服务器怎么定。
+            <code>BAD_USER_INPUT</code>。这些码是惯例,不是规范的一部分,所以要看你调用的那个服务器怎么定。
           </>
         }
       />
@@ -941,8 +910,7 @@ const BUB_FRAMES: BubFrame[] = [
         zh={
           <>
             执行到一半,<code>author</code> 字段的 resolver 抛了错 ——
-            比如用户服务出了故障。<code>title</code> 已经解析好了。
-            现在的问题是:<code>author</code> 这个位置该放什么。
+            比如用户服务出了故障。<code>title</code> 已经解析好了。现在的问题是:<code>author</code> 这个位置该放什么。
           </>
         }
       />
@@ -969,8 +937,7 @@ const BUB_FRAMES: BubFrame[] = [
         zh={
           <>
             正常做法是把失败的字段置为 <code>null</code>。但 schema 写的是{" "}
-            <code>User!</code>,这个承诺说该位置绝不会是 <code>null</code>。
-            所以 <code>null</code> 放不进去。
+            <code>User!</code>,这个承诺说该位置绝不会是 <code>null</code>。所以 <code>null</code> 放不进去。
           </>
         }
       />
@@ -995,9 +962,7 @@ const BUB_FRAMES: BubFrame[] = [
         }
         zh={
           <>
-            于是 <code>null</code> 向上移动到最近的、允许为空的父字段:
-            整个 <code>post</code> 变成 <code>null</code>,
-            已经解析好的 <code>title</code> 也随之丢弃。
+            于是 <code>null</code> 向上移动到最近的、允许为空的父字段:整个 <code>post</code> 变成 <code>null</code>,已经解析好的 <code>title</code> 也随之丢弃。
             <code>errors</code> 里的 <code>path</code> 仍然指向真正的原因:
             <code>[&quot;post&quot;, &quot;author&quot;]</code>。
           </>
@@ -1026,9 +991,7 @@ const BUB_FRAMES: BubFrame[] = [
           <>
             作对照:如果 schema 声明的是可空的 <code>User</code>,
             <code>null</code> 就地停下,<code>title</code> 保住了。
-            <code>!</code> 同时朝两个方向起作用:
-            它是客户端可以依赖的保证,也会在字段失败时扩大影响面。
-            值得为这个保证付出代价的地方,才用它。
+            <code>!</code> 同时朝两个方向起作用:它是客户端可以依赖的保证,也会在字段失败时扩大影响面。值得为这个保证付出代价的地方,才用它。
           </>
         }
       />
@@ -1132,10 +1095,8 @@ const PG_FRAMES: PgFrame[] = [
         }
         zh={
           <>
-            第一页:只有 <code>first: 3</code>,没有 <code>after</code>,
-            所以服务器从头开始。返回 P1–P3。<code>pageInfo</code>{" "}
-            告诉你后面还有(<code>hasNextPage: true</code>),
-            本页最后一条的书签是 <code>&quot;c3&quot;</code>。
+            第一页:只有 <code>first: 3</code>,没有 <code>after</code>,所以服务器从头开始。返回 P1–P3。<code>pageInfo</code>{" "}
+            告诉你后面还有(<code>hasNextPage: true</code>),本页最后一条的书签是 <code>&quot;c3&quot;</code>。
           </>
         }
       />
@@ -1159,8 +1120,7 @@ const PG_FRAMES: PgFrame[] = [
         zh={
           <>
             翻页就是把上一页的 <code>endCursor</code> 原样填进{" "}
-            <code>after</code>:「从书签 c3 <b>之后</b>再给我 3 条」。
-            返回 P4–P6,新书签是 <code>&quot;c6&quot;</code>。
+            <code>after</code>:「从书签 c3 <b>之后</b>再给我 3 条」。返回 P4–P6,新书签是 <code>&quot;c6&quot;</code>。
           </>
         }
       />
@@ -1183,8 +1143,7 @@ const PG_FRAMES: PgFrame[] = [
         }
         zh={
           <>
-            再翻一次:只剩 P7、P8 两条。不足 3 条也没关系,服务器有多少给多少。
-            这次 <code>hasNextPage: false</code> ——
+            再翻一次:只剩 P7、P8 两条。不足 3 条也没关系,服务器有多少给多少。这次 <code>hasNextPage: false</code> ——
             服务器明确告诉你,后面没有了。
           </>
         }
@@ -1208,9 +1167,7 @@ const PG_FRAMES: PgFrame[] = [
         }
         zh={
           <>
-            看到 <code>false</code> 就别再发请求了。
-            另外记住 cursor 是什么:一个<b>不透明书签</b>,
-            长得像乱码是故意的。别解析它,也别自己造 —— 收到什么就原样送回什么。
+            看到 <code>false</code> 就别再发请求了。另外记住 cursor 是什么:一个<b>不透明书签</b>,长得像乱码是故意的。别解析它,也别自己造 —— 收到什么就原样送回什么。
           </>
         }
       />

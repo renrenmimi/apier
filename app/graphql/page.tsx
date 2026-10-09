@@ -57,8 +57,7 @@ export default function GraphqlPage() {
           ),
           zh: (
             <>
-              GraphQL 是一门面向 API 的查询语言,也是执行这些查询的运行时。
-              客户端写清楚自己要哪些字段,服务器就只返回这些字段,不多不少。
+              GraphQL 是一门面向 API 的查询语言,也是执行这些查询的运行时。客户端写清楚自己要哪些字段,服务器就只返回这些字段,不多不少。
             </>
           ),
         }}
@@ -132,10 +131,8 @@ export default function GraphqlPage() {
               zh={
                 <>
                   Facebook 决定把越来越卡的移动版 News Feed 推倒,用原生 App
-                  重写。当年的移动网络是 2G/3G:一次往返动辄几百毫秒,
-                  流量按 KB 收费。性能剖析里反复出现两件事:REST
-                  响应里带回来一堆 App 根本不显示的字段;
-                  而一屏内容又得串着调好几个端点才凑得齐。
+                  重写。当年的移动网络是 2G/3G:一次往返动辄几百毫秒,流量按 KB 收费。性能剖析里反复出现两件事:REST
+                  响应里带回来一堆 App 根本不显示的字段;而一屏内容又得串着调好几个端点才凑得齐。
                 </>
               }
             />
@@ -156,9 +153,7 @@ export default function GraphqlPage() {
               }
               zh={
                 <>
-                  Lee Byron、Nick Schrock、Dan Schafer 三个人设计了另一种分工:
-                  客户端把想要的字段写成一张清单交上去,服务器就只返回这些字段。
-                  2015 年 Facebook 把它开源,起名 GraphQL;2018
+                  Lee Byron、Nick Schrock、Dan Schafer 三个人设计了另一种分工:客户端把想要的字段写成一张清单交上去,服务器就只返回这些字段。2015 年 Facebook 把它开源,起名 GraphQL;2018
                   年把规范移交给中立的 GraphQL Foundation。最新的正式版是{" "}
                   <b>September 2025 Edition</b>,距上一版隔了四年。
                 </>
@@ -180,9 +175,7 @@ export default function GraphqlPage() {
             }
             zh={
               <>
-                第一个问题是 <b>over-fetching(拿多了)</b>:
-                响应里带回了客户端根本不需要的字段。文章页只想显示作者的名字和头像,
-                可 <code>GET /users/9</code> 会把整条 user
+                第一个问题是 <b>over-fetching(拿多了)</b>:响应里带回了客户端根本不需要的字段。文章页只想显示作者的名字和头像,可 <code>GET /users/9</code> 会把整条 user
                 记录都返回 —— 这个形状在你的页面存在之前就已经定死了。
               </>
             }
@@ -204,9 +197,7 @@ export default function GraphqlPage() {
             }
             zh={
               <>
-                第二个问题是 <b>under-fetching(拿不够)</b>:
-                一个端点给不全这一屏需要的数据,客户端只能再发一次请求。
-                而且下一个 URL 往往要等上一个响应回来才拼得出来 ——
+                第二个问题是 <b>under-fetching(拿不够)</b>:一个端点给不全这一屏需要的数据,客户端只能再发一次请求。而且下一个 URL 往往要等上一个响应回来才拼得出来 ——
                 于是几次请求只能排队跑,没法并发。
               </>
             }
@@ -238,10 +229,7 @@ export default function GraphqlPage() {
               zh={
                 <>
                   你当然可以给 <code>/posts/1</code>{" "}
-                  加个参数,把作者和评论一起带上。这确实管用。
-                  但每来一种新页面就要加一个变体,端点清单只会越来越长。
-                  根源是结构性的:<b>响应形状由服务器预先定死</b>,它只能猜。
-                  给多了,有的客户端在浪费流量;给少了,有的客户端还得再跑一趟。
+                  加个参数,把作者和评论一起带上。这确实管用。但每来一种新页面就要加一个变体,端点清单只会越来越长。根源是结构性的:<b>响应形状由服务器预先定死</b>,它只能猜。给多了,有的客户端在浪费流量;给少了,有的客户端还得再跑一趟。
                 </>
               }
             />
@@ -406,8 +394,7 @@ GET /posts/1/comments HTTP/1.1`}
               zh={
                 <>
                   读完查询,你就已经知道将要收到的 JSON
-                  长什么样,不用翻文档,也不用把响应打印出来猜结构。
-                  只多出两样东西:最外层的 <code>data</code>{" "}
+                  长什么样,不用翻文档,也不用把响应打印出来猜结构。只多出两样东西:最外层的 <code>data</code>{" "}
                   对象,以及列表字段(比如 <code>comments</code>)会以数组形式返回。
                 </>
               }
@@ -447,8 +434,7 @@ GET /posts/1/comments HTTP/1.1`}
               }
               zh={
                 <>
-                  在 REST 里,这个决定权在服务器手上,客户端只能改调另一个端点;
-                  在 GraphQL 里,决定权在客户端。列表页只选 <code>name</code> 和{" "}
+                  在 REST 里,这个决定权在服务器手上,客户端只能改调另一个端点;在 GraphQL 里,决定权在客户端。列表页只选 <code>name</code> 和{" "}
                   <code>image</code>,详情页把七个字段全选上 ——
                   同一个 API、同一个端点,两份不同的查询。
                 </>
@@ -524,9 +510,7 @@ GET /posts/1/comments HTTP/1.1`}
                 }
                 zh={
                   <>
-                    所有请求都发往这一条路径,路径背后是 schema,
-                    由它规定什么可以被查询。问题从「该调哪个 URL」
-                    变成了「该选哪些字段」。
+                    所有请求都发往这一条路径,路径背后是 schema,由它规定什么可以被查询。问题从「该调哪个 URL」变成了「该选哪些字段」。
                   </>
                 }
               />
@@ -669,8 +653,7 @@ GET /posts/1/comments HTTP/1.1`}
                   <code>query</code> 用来读数据。<code>mutation</code>{" "}
                   用来写数据;规范要求顶层 mutation
                   字段按书写顺序串行执行,而 query 的字段可以并行执行。
-                  <code>subscription</code> 让服务器在事件发生时主动推送,
-                  走的是一条保持打开的连接 —— 通常是 WebSocket,不是这个 POST
+                  <code>subscription</code> 让服务器在事件发生时主动推送,走的是一条保持打开的连接 —— 通常是 WebSocket,不是这个 POST
                   端点。这三种操作,第 09 章逐个展开。
                 </>
               }
@@ -745,10 +728,7 @@ Content-Type: application/json
               }
               zh={
                 <>
-                  这里没有任何新协议:一个普通的 POST 请求,body 是 JSON,
-                  查询语句是 JSON 里的一个字符串。GraphQL 不替代 HTTP,
-                  而是由 HTTP 承载。你前面学的 <code>fetch</code>、Header、
-                  DevTools 全都继续有效。
+                  这里没有任何新协议:一个普通的 POST 请求,body 是 JSON,查询语句是 JSON 里的一个字符串。GraphQL 不替代 HTTP,而是由 HTTP 承载。你前面学的 <code>fetch</code>、Header、DevTools 全都继续有效。
                 </>
               }
             />
@@ -809,9 +789,7 @@ Content-Type: application/json
             zh: (
               <>
                 状态码是 <code>200 OK</code>。<code>author</code> 字段是{" "}
-                <code>null</code>,失败的原因在 <code>errors</code> 里,
-                并用 <code>path</code> 指出是哪个字段。其余数据照常返回,
-                仍然可用。
+                <code>null</code>,失败的原因在 <code>errors</code> 里,并用 <code>path</code> 指出是哪个字段。其余数据照常返回,仍然可用。
               </>
             ),
           }}
@@ -866,10 +844,8 @@ Content-Type: application/json
               }
               zh={
                 <>
-                  那数据部分会怎样?出错的字段变成 <code>null</code>,
-                  服务器继续执行查询的其余部分。如果这个字段在 schema
-                  里被声明为非空(non-null),那里放不下 <code>null</code>,
-                  于是这个 <code>null</code> 会向上冒泡到最近的、允许为空的父字段。
+                  那数据部分会怎样?出错的字段变成 <code>null</code>,服务器继续执行查询的其余部分。如果这个字段在 schema
+                  里被声明为非空(non-null),那里放不下 <code>null</code>,于是这个 <code>null</code> 会向上冒泡到最近的、允许为空的父字段。
                   {"所以一个字段出错,通常只会清空响应的一整枝;只有当这条链一路到根都是非空字段时,整个 data 才会变成 null。"}
                   第 09、10 章还会细说。
                 </>
@@ -915,12 +891,9 @@ Content-Type: application/json
               }
               zh={
                 <>
-                  GraphQL 服务器能描述自己的 schema:
-                  客户端发一个查询,问它有哪些类型、哪些字段,
-                  服务器像回答任何普通查询一样回答。这个机制叫
+                  GraphQL 服务器能描述自己的 schema:客户端发一个查询,问它有哪些类型、哪些字段,服务器像回答任何普通查询一样回答。这个机制叫
                   <b>内省(introspection)</b>,第 08 章展开讲。REST
-                  的协议里没有对应机制 —— OpenAPI 这类文档要单独写、单独发布,
-                  也就可能和代码逐渐脱节。
+                  的协议里没有对应机制 —— OpenAPI 这类文档要单独写、单独发布,也就可能和代码逐渐脱节。
                 </>
               }
             />
@@ -937,9 +910,7 @@ Content-Type: application/json
               }
               zh={
                 <>
-                  一点提醒:很多生产环境会关掉内省,
-                  因为它同样会把 API 的全部内容原样告诉攻击者。
-                  如果某个在线环境提示内省被禁用,那通常是有意为之。
+                  一点提醒:很多生产环境会关掉内省,因为它同样会把 API 的全部内容原样告诉攻击者。如果某个在线环境提示内省被禁用,那通常是有意为之。
                 </>
               }
             />
@@ -993,8 +964,7 @@ Content-Type: application/json
             }
             zh={
               <>
-                把这个决定权交给客户端,是要付代价的。有三笔账现在就该知道,
-                尽管真正学会怎么应付它们是在第 10 章。
+                把这个决定权交给客户端,是要付代价的。有三笔账现在就该知道,尽管真正学会怎么应付它们是在第 10 章。
               </>
             }
           />
@@ -1022,10 +992,8 @@ Content-Type: application/json
                 zh={
                   <>
                     HTTP 缓存是按 URL 和方法建索引的。而每个 GraphQL
-                    请求都是发往同一条路径的 <code>POST</code>,
-                    代理和 CDN 没有可用的键,也就无法像复用 <code>GET</code>{" "}
-                    资源那样复用响应。GraphQL 客户端只能自己解决:
-                    它们维护一个归一化缓存,按对象的 <code>id</code> 和{" "}
+                    请求都是发往同一条路径的 <code>POST</code>,代理和 CDN 没有可用的键,也就无法像复用 <code>GET</code>{" "}
+                    资源那样复用响应。GraphQL 客户端只能自己解决:它们维护一个归一化缓存,按对象的 <code>id</code> 和{" "}
                     <code>__typename</code> 组成的键,把每个对象只存一份。
                   </>
                 }
@@ -1054,12 +1022,8 @@ Content-Type: application/json
                 }
                 zh={
                   <>
-                    这既是它的卖点,也是风险:一个嵌套很深的查询,
-                    执行起来可能极其昂贵。服务器要设最大深度和复杂度预算,
-                    超出就拒绝。很多团队还会用<b>持久化查询(persisted queries)</b>
-                    :服务器只接受事先登记过的一组查询,客户端发的是标识符而不是查询正文。
-                    注意这些都不是授权 —— GraphQL 本身不提供授权。
-                    谁能读哪个字段,仍然要由你自己的代码来判断。
+                    这既是它的卖点,也是风险:一个嵌套很深的查询,执行起来可能极其昂贵。服务器要设最大深度和复杂度预算,超出就拒绝。很多团队还会用<b>持久化查询(persisted queries)</b>
+                    :服务器只接受事先登记过的一组查询,客户端发的是标识符而不是查询正文。注意这些都不是授权 —— GraphQL 本身不提供授权。谁能读哪个字段,仍然要由你自己的代码来判断。
                   </>
                 }
               />
@@ -1089,10 +1053,7 @@ Content-Type: application/json
                     在服务器上,每个字段的值都由一个函数产生,这个函数叫{" "}
                     <b>resolver</b>。按最直觉的写法,<code>author</code>{" "}
                     的 resolver 会为每篇文章各发一次数据库查询:20
-                    篇文章先查 1 次,再为作者查 20 次。标准解法是<b>批处理</b>:
-                    用一个 loader 收集同一个事件循环 tick 内请求的全部 id,
-                    合成一次查询取回,再把各自的那条数据分发给对应的 resolver。
-                    常见实现是 DataLoader。
+                    篇文章先查 1 次,再为作者查 20 次。标准解法是<b>批处理</b>:用一个 loader 收集同一个事件循环 tick 内请求的全部 id,合成一次查询取回,再把各自的那条数据分发给对应的 resolver。常见实现是 DataLoader。
                   </>
                 }
               />
@@ -1117,9 +1078,7 @@ Content-Type: application/json
                 }
                 zh={
                   <>
-                    多个客户端各要各的字段(iOS、Android、Web);
-                    一屏内容需要聚合多个来源的数据;
-                    前端要频繁调整取哪些数据,不想每次都等后端加新端点。
+                    多个客户端各要各的字段(iOS、Android、Web);一屏内容需要聚合多个来源的数据;前端要频繁调整取哪些数据,不想每次都等后端加新端点。
                   </>
                 }
               />
@@ -1142,8 +1101,7 @@ Content-Type: application/json
                 }
                 zh={
                   <>
-                    只有一类客户端的公开 API;读多写少的内容;文件上传下载;
-                    以及任何你希望交给 CDN 缓存的东西。这些正好是{" "}
+                    只有一类客户端的公开 API;读多写少的内容;文件上传下载;以及任何你希望交给 CDN 缓存的东西。这些正好是{" "}
                     <code>GET</code> 加 HTTP 缓存已经解决好了的场景。
                   </>
                 }
@@ -1169,10 +1127,7 @@ Content-Type: application/json
               }
               zh={
                 <>
-                  接下来三章把 GraphQL 讲透:schema 作为契约(第 08 章)、
-                  三种操作(第 09 章)、服务器与性能(第 10 章)。
-                  终章再把 REST 和 GraphQL 摆在一起对比,给你一份选型指南。
-                  先把两边都学明白,再谈选谁。
+                  接下来三章把 GraphQL 讲透:schema 作为契约(第 08 章)、三种操作(第 09 章)、服务器与性能(第 10 章)。终章再把 REST 和 GraphQL 摆在一起对比,给你一份选型指南。先把两边都学明白,再谈选谁。
                 </>
               }
             />
@@ -1219,8 +1174,7 @@ Content-Type: application/json
             ),
             zh: (
               <>
-                GraphQL 是一门面向 API 的查询语言,也是执行这些查询的运行时。
-                它的存在是为了解决「响应形状固定」带来的两个问题:
+                GraphQL 是一门面向 API 的查询语言,也是执行这些查询的运行时。它的存在是为了解决「响应形状固定」带来的两个问题:
                 over-fetching(带回客户端不需要的字段)和
                 under-fetching(一屏数据要跑好几趟)。
               </>
@@ -1236,8 +1190,7 @@ Content-Type: application/json
             ),
             zh: (
               <>
-                字段由客户端选择,响应的形状和查询的形状一一对应。
-                这里没有 <code>SELECT *</code> —— 每个字段都必须点名。
+                字段由客户端选择,响应的形状和查询的形状一一对应。这里没有 <code>SELECT *</code> —— 每个字段都必须点名。
               </>
             ),
           },
@@ -1268,10 +1221,7 @@ Content-Type: application/json
             ),
             zh: (
               <>
-                它由普通 HTTP 承载,用 <code>fetch</code> 就能发出去。
-                但字段失败时 GraphQL 服务器通常仍返回 <code>200 OK</code>:
-                该字段变成 <code>null</code>,原因写进 <code>errors</code>。
-                判断成败要看 <code>errors</code>,不是 <code>res.ok</code>。
+                它由普通 HTTP 承载,用 <code>fetch</code> 就能发出去。但字段失败时 GraphQL 服务器通常仍返回 <code>200 OK</code>:该字段变成 <code>null</code>,原因写进 <code>errors</code>。判断成败要看 <code>errors</code>,不是 <code>res.ok</code>。
               </>
             ),
           },
@@ -1287,8 +1237,7 @@ Content-Type: application/json
             ),
             zh: (
               <>
-                取舍是实打实的:单个 POST 端点用不上 HTTP 缓存,
-                服务器必须限制查询的深度和开销,写得随意的 resolver 会带来 N+1
+                取舍是实打实的:单个 POST 端点用不上 HTTP 缓存,服务器必须限制查询的深度和开销,写得随意的 resolver 会带来 N+1
                 查询。93% 的团队在使用 REST API,33% 在使用 GraphQL(Postman,
                 2025)。两者的正面对比留给终章。
               </>

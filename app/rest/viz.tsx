@@ -82,8 +82,7 @@ Content-Type: application/json
         }
         zh={
           <>
-            给<b>程序</b>看的表述 —— 你的 <code>fetch</code> 代码要的就是这份。
-            它是资源此刻的一份副本,不是资源本身。
+            给<b>程序</b>看的表述 —— 你的 <code>fetch</code> 代码要的就是这份。它是资源此刻的一份副本,不是资源本身。
           </>
         }
       />
@@ -110,8 +109,7 @@ Content-Type: text/html
         }
         zh={
           <>
-            同一个 42 号用户,换成<b>浏览器</b>能直接显示的形式。
-            资源没有任何变化,变的只是表述。
+            同一个 42 号用户,换成<b>浏览器</b>能直接显示的形式。资源没有任何变化,变的只是表述。
           </>
         }
       />
@@ -236,8 +234,7 @@ const CONSTRAINTS: Constraint[] = [
         }
         zh={
           <>
-            界面和数据长在同一个程序里:网页、App、手表想共用同一份后端?
-            做不到,每一端都得自己写一套。
+            界面和数据长在同一个程序里:网页、App、手表想共用同一份后端?做不到,每一端都得自己写一套。
           </>
         }
       />
@@ -257,8 +254,7 @@ const CONSTRAINTS: Constraint[] = [
         }
         zh={
           <>
-            每个请求自带理解它所需的全部信息。两次请求之间,
-            服务器不保留任何会话状态。
+            每个请求自带理解它所需的全部信息。两次请求之间,服务器不保留任何会话状态。
           </>
         }
       />
@@ -274,8 +270,7 @@ const CONSTRAINTS: Constraint[] = [
         }
         zh={
           <>
-            你的会话被锁在某一台服务器的内存里:它一重启你就被登出,
-            加机器分担流量也帮不上忙。下面的对比专门演这一幕。
+            你的会话被锁在某一台服务器的内存里:它一重启你就被登出,加机器分担流量也帮不上忙。下面的对比专门演这一幕。
           </>
         }
       />
@@ -331,8 +326,7 @@ const CONSTRAINTS: Constraint[] = [
         }
         zh={
           <>
-            所有资源都用同一套方式访问。这是把 REST 与其他风格区分开的约束,
-            它内含 4 个子约束。
+            所有资源都用同一套方式访问。这是把 REST 与其他风格区分开的约束,它内含 4 个子约束。
           </>
         }
       />
@@ -348,8 +342,7 @@ const CONSTRAINTS: Constraint[] = [
         }
         zh={
           <>
-            每个站点自定一套私有格式:浏览器没法通用,缓存、代理、
-            爬虫也根本写不出来。
+            每个站点自定一套私有格式:浏览器没法通用,缓存、代理、爬虫也根本写不出来。
           </>
         }
       />
@@ -417,8 +410,7 @@ const CONSTRAINTS: Constraint[] = [
         }
         zh={
           <>
-            什么也不会坏 —— 它是六条里唯一可选的。不过你每天打开网页时,
-            浏览器下载并执行的那些 JavaScript,正是这条约束本身。
+            什么也不会坏 —— 它是六条里唯一可选的。不过你每天打开网页时,浏览器下载并执行的那些 JavaScript,正是这条约束本身。
           </>
         }
       />
@@ -543,8 +535,7 @@ const STATEFUL_FRAMES: SFFrame[] = [
         }
         zh={
           <>
-            请求短得只剩三个字 —— 因为 A 记得你的进度。此刻很省事,
-            问题稍后才出现。
+            请求短得只剩三个字 —— 因为 A 记得你的进度。此刻很省事,问题稍后才出现。
           </>
         }
       />
@@ -614,8 +605,7 @@ const STATELESS_FRAMES: SFFrame[] = [
         zh={
           <>
             每个请求都<b>自报家门</b>:我是谁(token)、要哪一页(
-            <code>page=2</code>)。写起来啰嗦一点,
-            但它不依赖服务器记住任何事。
+            <code>page=2</code>)。写起来啰嗦一点,但它不依赖服务器记住任何事。
           </>
         }
       />
@@ -669,8 +659,7 @@ const STATELESS_FRAMES: SFFrame[] = [
         }
         zh={
           <>
-            B 无缝接手 —— 答案只取决于请求本身,谁接都一样。想扛十倍流量?
-            加十台机器就行。<b>这就是无状态能横向扩展的原因。</b>
+            B 无缝接手 —— 答案只取决于请求本身,谁接都一样。想扛十倍流量?加十台机器就行。<b>这就是无状态能横向扩展的原因。</b>
           </>
         }
       />
@@ -813,10 +802,7 @@ Content-Type: application/json
             }
             zh={
               <>
-                响应亲口告诉你:接下来可以取消、可以追踪。
-                客户端不再按自己代码里写死的规则拼 URL,而是跟着给出的链接走。
-                Fowler 把这一级叫作 <b>the glory of REST</b>。
-                它为什么好看却很少有人做?§05 展开。
+                响应亲口告诉你:接下来可以取消、可以追踪。客户端不再按自己代码里写死的规则拼 URL,而是跟着给出的链接走。Fowler 把这一级叫作 <b>the glory of REST</b>。它为什么好看却很少有人做?§05 展开。
               </>
             }
           />
@@ -869,14 +855,10 @@ Content-Type: application/json
             zh={
               <>
                 下单是 <code>POST /orders</code>,成功返回{" "}
-                <code>201 Created</code>,并在 <code>Location</code> 头里给出
-                新订单的地址;查单是 <code>GET /orders/66</code>;
-                订单不存在则返回 <code>404</code>。
+                <code>201 Created</code>,并在 <code>Location</code> 头里给出新订单的地址;查单是 <code>GET /orders/66</code>;订单不存在则返回 <code>404</code>。
                 <b>动作交给方法,结果交给状态码</b> ——
                 这就是业界通常所说的「REST」。一个提醒:
-                <code>DELETE /orders/66</code> 删掉的是订单本身。
-                如果业务需要保留「已取消」的记录,
-                就该把「取消」建模成一个独立资源,像上面 L3 那样。
+                <code>DELETE /orders/66</code> 删掉的是订单本身。如果业务需要保留「已取消」的记录,就该把「取消」建模成一个独立资源,像上面 L3 那样。
               </>
             }
           />
@@ -914,10 +896,7 @@ Content-Type: application/json
             }
             zh={
               <>
-                进步在于:系统被拆成了一个个资源,66 号订单有了自己的地址。
-                但动作依旧塞在 body 的 <code>action</code> 字段里,
-                方法一律用 <code>POST</code> —— 地址有了,
-                「怎么操作它」还没有共同语言。
+                进步在于:系统被拆成了一个个资源,66 号订单有了自己的地址。但动作依旧塞在 body 的 <code>action</code> 字段里,方法一律用 <code>POST</code> —— 地址有了,「怎么操作它」还没有共同语言。
               </>
             }
           />
@@ -961,12 +940,8 @@ Content-Type: application/json
             }
             zh={
               <>
-                查订单?还是 <code>POST /pizzaService</code>,
-                把 <code>action</code> 换成 <code>checkOrder</code>。取消?
-                再换一个 action 值。URL 永远只有一个,方法永远是{" "}
-                <code>POST</code>,响应永远 <code>200</code>,
-                错误藏在 body 里 —— HTTP 沦为一根传数据的管子。
-                Fowler 管这一级叫 the swamp of POX(plain old XML)。
+                查订单?还是 <code>POST /pizzaService</code>,把 <code>action</code> 换成 <code>checkOrder</code>。取消?再换一个 action 值。URL 永远只有一个,方法永远是{" "}
+                <code>POST</code>,响应永远 <code>200</code>,错误藏在 body 里 —— HTTP 沦为一根传数据的管子。Fowler 管这一级叫 the swamp of POX(plain old XML)。
               </>
             }
           />

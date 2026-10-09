@@ -27,9 +27,7 @@ export const LABS: Lab[] = [
       zh: (
         <p>
           打开浏览器 Console,fetch 一下{" "}
-          <code>https://api.github.com/users/octocat</code>,
-          把响应里所有以 <code>_url</code> 结尾的字段挑出来,数数有几个。
-          再想一想:这些链接是干什么用的?
+          <code>https://api.github.com/users/octocat</code>,把响应里所有以 <code>_url</code> 结尾的字段挑出来,数数有几个。再想一想:这些链接是干什么用的?
         </p>
       ),
     },
@@ -81,11 +79,7 @@ console.log(links.length, links); // 11 个左右,GitHub 偶尔增减字段`}
           />
           <p>
             <code>followers_url</code>、<code>repos_url</code>、
-            <code>gists_url</code>…… 一口气十来个。
-            服务器在告诉你「从我这儿还能去哪」,客户端因此不必自己拼这些 URL。
-            这是超媒体想法的前半段,但还不是完整的 HATEOAS:
-            链接只说了「去哪」,没说「你现在能做什么」,
-            所以客户端仍然要读文档。
+            <code>gists_url</code>…… 一口气十来个。服务器在告诉你「从我这儿还能去哪」,客户端因此不必自己拼这些 URL。这是超媒体想法的前半段,但还不是完整的 HATEOAS:链接只说了「去哪」,没说「你现在能做什么」,所以客户端仍然要读文档。
           </p>
         </>
       ),
@@ -135,12 +129,10 @@ console.log(links.length, links); // 11 个左右,GitHub 偶尔增减字段`}
             <code>addOrder</code>……不管成败,一律返回 200。
             <br />
             <b>B.</b> 每种东西有自己的 URL(<code>/users/7</code>、
-            <code>/orders/33</code>),但不管读还是删,全用 POST,
-            动作写在 body 里。
+            <code>/orders/33</code>),但不管读还是删,全用 POST,动作写在 body 里。
             <br />
             <b>C.</b> <code>GET /users/7</code> 拿用户,
-            <code>DELETE /orders/33</code> 删订单;建单成功回 201,
-            查无此单回 404。响应里没有任何链接。
+            <code>DELETE /orders/33</code> 删订单;建单成功回 201,查无此单回 404。响应里没有任何链接。
           </p>
         </>
       ),
@@ -179,8 +171,7 @@ console.log(links.length, links); // 11 个左右,GitHub 偶尔增减字段`}
           <br />
           <b>B = L1</b>:资源有了自己的地址,但方法没有分化 —— 只爬了一格。
           <br />
-          <b>C = L2</b>:方法和状态码都用对了;差的只是超媒体链接,
-          所以到不了 L3 —— 而这正是业界绝大多数「REST API」的真实位置。
+          <b>C = L2</b>:方法和状态码都用对了;差的只是超媒体链接,所以到不了 L3 —— 而这正是业界绝大多数「REST API」的真实位置。
         </p>
       ),
     },
@@ -208,10 +199,7 @@ console.log(links.length, links); // 11 个左右,GitHub 偶尔增减字段`}
       ),
       zh: (
         <p>
-          一个图书馆借书系统:藏书可以检索,读者可以注册,读者能借书、还书。
-          请把它拆成<b>资源清单</b>:每种资源起一个名词,
-          写出集合和单个条目的 URI。有一个难点:「借书」是个动词,
-          它怎么变成资源?
+          一个图书馆借书系统:藏书可以检索,读者可以注册,读者能借书、还书。请把它拆成<b>资源清单</b>:每种资源起一个名词,写出集合和单个条目的 URI。有一个难点:「借书」是个动词,它怎么变成资源?
         </p>
       ),
     },
@@ -254,12 +242,9 @@ console.log(links.length, links); // 11 个左右,GitHub 偶尔增减字段`}
           <code>/members/7</code>)、<code>loans</code>(借阅记录:
           <code>/loans</code>、<code>/loans/1001</code>,也可以挂成{" "}
           <code>/members/7/loans</code>)。「借书」=&nbsp;
-          <code>POST /loans</code>:创建一条借阅记录,标识符由服务器分配。
-          「还书」= <code>PATCH /loans/1001</code>,把{" "}
-          <code>returnedAt</code> 填上 —— 这是对已有记录的部分更新。
-          只有在不需要保留历史时才用 <code>DELETE</code>。要记住的招式是:
-          <b>把动作变成一条记录</b>,REST 的世界里就没有装不下的动词。
-          另外,上面用复数名词是业界通行的约定,不是 REST 的规定。
+          <code>POST /loans</code>:创建一条借阅记录,标识符由服务器分配。「还书」= <code>PATCH /loans/1001</code>,把{" "}
+          <code>returnedAt</code> 填上 —— 这是对已有记录的部分更新。只有在不需要保留历史时才用 <code>DELETE</code>。要记住的招式是:
+          <b>把动作变成一条记录</b>,REST 的世界里就没有装不下的动词。另外,上面用复数名词是业界通行的约定,不是 REST 的规定。
         </p>
       ),
     },
@@ -336,8 +321,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            装不了 —— REST 没有安装包,也没有官方实现。它是一套设计原则,
-            用任何语言、任何框架都能遵守(或违反)。
+            装不了 —— REST 没有安装包,也没有官方实现。它是一套设计原则,用任何语言、任何框架都能遵守(或违反)。
           </>
         ),
       },
@@ -352,8 +336,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          REST 是架构风格(architectural style):一组约束。守得越多,
-          系统就越能复用 Web 已有的基础设施。
+          REST 是架构风格(architectural style):一组约束。守得越多,系统就越能复用 Web 已有的基础设施。
         </>
       ),
     },
@@ -369,8 +352,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          你 <code>GET /users/42</code>,拿到一份 JSON。严格说,
-          这份 JSON 是什么?
+          你 <code>GET /users/42</code>,拿到一份 JSON。严格说,这份 JSON 是什么?
         </>
       ),
     },
@@ -403,8 +385,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            资源是抽象的「42 号用户」;JSON 只是它的一份副本。
-            换个 <code>Accept</code> 头,同一个资源能给你 XML 或 HTML。
+            资源是抽象的「42 号用户」;JSON 只是它的一份副本。换个 <code>Accept</code> 头,同一个资源能给你 XML 或 HTML。
           </>
         ),
       },
@@ -434,8 +415,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            REST 不关心底层怎么存 —— 表述是服务器为你生成的,
-            它可以和背后的数据行毫无相似之处。
+            REST 不关心底层怎么存 —— 表述是服务器为你生成的,它可以和背后的数据行毫无相似之处。
           </>
         ),
       },
@@ -450,8 +430,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          三件套要分清:资源是那个事物,URI 是它的标识符,
-          表述是它在某一刻、某种格式下的副本。REST 里的 R 就是
+          三件套要分清:资源是那个事物,URI 是它的标识符,表述是它在某一刻、某种格式下的副本。REST 里的 R 就是
           representation —— 客户端手里永远只有副本。
         </>
       ),
@@ -482,8 +461,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          还有约束没选全 —— 六条是:客户端-服务器、无状态、可缓存、统一接口、
-          分层系统、按需代码。
+          还有约束没选全 —— 六条是:客户端-服务器、无状态、可缓存、统一接口、分层系统、按需代码。
         </>
       ),
     },
@@ -497,8 +475,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          你选进了具体的技术选型 —— REST 对数据格式和加密方式只字未提,
-          六条约束全是架构层面的原则,没有一条点名某个技术。
+          你选进了具体的技术选型 —— REST 对数据格式和加密方式只字未提,六条约束全是架构层面的原则,没有一条点名某个技术。
         </>
       ),
     },
@@ -512,9 +489,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          六大约束:客户端-服务器、无状态、可缓存、统一接口、分层系统、
-          按需代码(唯一可选)。JSON 和 HTTPS 都是好的工程选择,
-          但不是 REST 的要求。
+          六大约束:客户端-服务器、无状态、可缓存、统一接口、分层系统、按需代码(唯一可选)。JSON 和 HTTPS 都是好的工程选择,但不是 REST 的要求。
         </>
       ),
     },
@@ -560,8 +535,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            无状态说的是「会话状态」不留在服务器上,文章、用户这些资源数据
-            当然照存数据库 —— 不然 API 还有什么可提供的?
+            无状态说的是「会话状态」不留在服务器上,文章、用户这些资源数据当然照存数据库 —— 不然 API 还有什么可提供的?
           </>
         ),
       },
@@ -575,8 +549,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            恰恰相反:会话状态正该由客户端带着(比如 token、页码),
-            每次请求随身送来。
+            恰恰相反:会话状态正该由客户端带着(比如 token、页码),每次请求随身送来。
           </>
         ),
       },
@@ -590,8 +563,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            把会话挪进 Redis 是常见的工程手段,但那是共享的服务端状态。
-            这条约束要求的是服务端根本不保留会话。
+            把会话挪进 Redis 是常见的工程手段,但那是共享的服务端状态。这条约束要求的是服务端根本不保留会话。
           </>
         ),
       },
@@ -606,8 +578,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          每个请求都自成一体,于是哪台服务器都能接。挂一台换一台,
-          加机器就能加容量 —— 这就是无状态让水平扩展成为可能的原因。
+          每个请求都自成一体,于是哪台服务器都能接。挂一台换一台,加机器就能加容量 —— 这就是无状态让水平扩展成为可能的原因。
         </>
       ),
     },
@@ -649,8 +620,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            可缓存也是必需的:每个响应都要标明自己能不能被缓存,
-            这是 Web 快得起来的前提。
+            可缓存也是必需的:每个响应都要标明自己能不能被缓存,这是 Web 快得起来的前提。
           </>
         ),
       },
@@ -680,8 +650,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          按需代码(服务器下发代码给客户端执行,比如网页里的 JavaScript)
-          是 Fielding 唯一标注为「可选」的一条 —— 不用它,系统照样是 REST 的。
+          按需代码(服务器下发代码给客户端执行,比如网页里的 JavaScript)是 Fielding 唯一标注为「可选」的一条 —— 不用它,系统照样是 REST 的。
         </>
       ),
     },
@@ -734,8 +703,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            L1 的特征是「有资源但方法不分化」;它的方法和状态码都用对了,
-            早就过了这一关。
+            L1 的特征是「有资源但方法不分化」;它的方法和状态码都用对了,早就过了这一关。
           </>
         ),
       },
@@ -749,8 +717,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            差的正是 L3 的入场券:超媒体链接。响应里一个链接都没有,
-            就到不了 L3。
+            差的正是 L3 的入场券:超媒体链接。响应里一个链接都没有,就到不了 L3。
           </>
         ),
       },
@@ -803,8 +770,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            跟登录没关系 —— 它是统一接口的第 4 个子约束,
-            解决的是「客户端如何知道下一步能做什么」。
+            跟登录没关系 —— 它是统一接口的第 4 个子约束,解决的是「客户端如何知道下一步能做什么」。
           </>
         ),
       },
@@ -849,9 +815,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          Hypermedia As The Engine Of Application State,
-          超媒体作为应用状态的引擎。服务器在响应里给出可跟随的链接,
-          客户端不必再自己拼 URL。真正完整实现它的 API 很少。
+          Hypermedia As The Engine Of Application State,超媒体作为应用状态的引擎。服务器在响应里给出可跟随的链接,客户端不必再自己拼 URL。真正完整实现它的 API 很少。
         </>
       ),
     },
@@ -898,9 +862,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          <code>Accept: application/xml</code>。这套「按需选表述」的机制叫
-          内容协商(content negotiation)—— 一个资源,多种格式,
-          它就是「REST 不等于 JSON」的直接证据。
+          <code>Accept: application/xml</code>。这套「按需选表述」的机制叫内容协商(content negotiation)—— 一个资源,多种格式,它就是「REST 不等于 JSON」的直接证据。
         </>
       ),
     },

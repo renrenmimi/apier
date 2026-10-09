@@ -35,6 +35,9 @@ test("nothing is cut off at 360 px", async ({ browser }) => {
     const page = await context.newPage();
     for (const path of ["/http", "/rest", "/rest-design", "/operations", "/backstage"]) {
       await page.goto(path);
+      // The Chinese text replaces the English server HTML at hydration, and the
+      // tab title turns Chinese at the same moment: measure after that.
+      if (lang === "zh") await page.waitForFunction(() => /[\u4e00-\u9fff]/.test(document.title));
       expect(await clipped(page), `${lang} ${path}`).toEqual([]);
     }
     await context.close();
