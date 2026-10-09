@@ -36,6 +36,26 @@ browser tab ──fetch('/mock-api/...')──▶ Service Worker ──▶ Index
 Because the store is per browser, so is everything built on it: mutations,
 `Idempotency-Key` records, and the rate-limit window.
 
+The stored record carries the seed version (`SEED_VERSION` in
+`lib/mock/seed.ts`). A worker that finds a record from another version seeds a
+fresh one, so a deploy that changes the seed reaches every visitor, and data an
+older engine allowed (such as a post whose author does not exist) does not
+outlive the fix. Bump the version whenever the seed or the store's shape
+changes.
+
+## Language
+
+Human-readable text follows the request's `Accept-Language`: problem `detail`s,
+field messages, the endpoint index, GraphQL errors and hints. `zh` (and
+`zh-CN`, `zh-TW`, ...) gets Chinese; anything else, or no header, gets
+English. Those responses carry `Content-Language` and `Vary: Accept-Language`.
+The inspector sends the interface language and shows the header in its
+Request tab; the curl tab sends the same one.
+
+Stored data is not translated. Post titles, bodies and comments are English for
+every visitor, like the JSON examples in the chapters, and a problem's `title`
+stays English because clients match on it.
+
 ## Readiness
 
 A Service Worker does not control the page the instant it is registered. Until
@@ -89,22 +109,27 @@ Everything the chapters demonstrate is implemented for real:
 
 | Behaviour | Where |
 |---|---|
-| `201` + `Location` | `POST /mock-api/posts` |
-| `PUT` replaces, omitted fields disappear | `PUT /mock-api/posts/:id` |
+| `201` + `Location` | `POST /mock-api/posts`, `POST /mock-api/posts/:id/comments` |
+| `PUT` replaces the writable fields; omitted ones go back to their defaults (`body` `""`, `status` `DRAFT`) | `PUT /mock-api/posts/:id` |
 | `PATCH` merges only what was sent | `PATCH /mock-api/posts/:id` |
-| `204`, then `404` on a second delete | `DELETE /mock-api/posts/:id` |
-| RFC 9457 `problem+json`, incl. field-level `422` | any error |
-| `ETag` / `If-None-Match` → empty `304` | `GET /mock-api/posts/:id` |
-| `Idempotency-Key` replays the first response | `POST /mock-api/posts` |
-| `401` vs `403` | write endpoints, by token |
-| `429` + `Retry-After` + `X-RateLimit-*` | 60 requests per minute, per visitor |
-| GraphQL query, mutation, N+1 counter | `POST /mock-api/graphql` |
+| `id`, `createdAt` and `authorId` belong to the server; `PUT`/`PATCH` never change them | `PUT`/`PATCH /mock-api/posts/:id` |
+| `204`, then `404` on a second delete; comments go with the post | `DELETE /mock-api/posts/:id` |
+| RFC 9457 `problem+json`, incl. field-level `422` for wrong types and enum values | any error |
+| `HEAD` answers like `GET` without a body | every readable resource |
+| `OPTIONS` lists the resource's methods in `Allow`; an unsupported method gets `405` + `Allow`; an unknown method `501` | every resource |
+| `ETag` / `If-None-Match` → empty `304` (weak comparison, lists of tags, `*`); the `304` repeats `ETag` and `Cache-Control` | single resources and collections |
+| `Idempotency-Key` replays the first response, `Location` included; the same key with another body → `422` | `POST /mock-api/posts` |
+| `401` vs `403`: `WWW-Authenticate: Bearer realm="apier"`, plus `error="invalid_token"` only for a token that was sent and rejected; `403` carries `error="insufficient_scope"` | write endpoints, by token |
+| `429` + `Retry-After` + `X-RateLimit-*` on every counted response; reset is never rate limited | 60 requests per minute, per visitor |
+| `page`/`per_page` or `limit`/`offset`, `status`/`authorId` filters, `sort`, `fields`; an unknown parameter → `400` naming the accepted ones | `GET /mock-api/posts`, `GET /mock-api/users` |
+| GraphQL validation before execution (a request error has no `data`), `__schema`/`__type` introspection, non-null propagation, mutations need a write token, a mutation over `GET` → `405` | `POST /mock-api/graphql` |
 | Deterministic reset | `POST /mock-api/reset` |
 
-Teaching knobs: `?delay=800` slows the response so timings are visible,
-`?dataloader=1` batches GraphQL loads so `extensions.dbCalls` drops from 11 to 2.
-Tokens are `apier-demo-token` (may write) and `apier-readonly-token` (403 on
-write).
+Teaching knobs: `?delay=800` slows the response so timings are visible
+(`?delay=0` removes the default delay), `?dataloader=1` batches GraphQL loads
+so `extensions.dbCalls` drops from 11 to 2. Tokens are `apier-demo-token` (may
+write) and `apier-readonly-token` (403 on write). Cursor pagination is taught
+in chapter 05 but not implemented; its parameters get a `400` that says so.
 
 ## Working on it
 

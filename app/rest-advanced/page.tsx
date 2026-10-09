@@ -1068,7 +1068,7 @@ ETag: "abc"
               label: { en: "2 · Ask again, with the fingerprint", zh: "2 · 带着指纹再问一次" },
               method: "GET",
               path: "/mock-api/posts/42",
-              headers: { "If-None-Match": '"8ea1a986"' },
+              headers: { "If-None-Match": '"13a59e9a"' },
               note: {
                 en: (
                   <>

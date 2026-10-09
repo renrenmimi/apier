@@ -12,7 +12,7 @@
 // through untouched.
 
 import { handleMockRequest, MOCK_BASE } from "../lib/mock/engine";
-import { createSeedStore, type MockStore } from "../lib/mock/seed";
+import { createSeedStore, SEED_VERSION, type MockStore } from "../lib/mock/seed";
 import { loadStore, saveStore } from "../lib/mock/idb";
 
 declare const self: ServiceWorkerGlobalScope;
@@ -53,11 +53,14 @@ async function getStore(): Promise<MockStore> {
   if (cached) return cached;
   try {
     const stored = await loadStore();
-    if (stored) {
+    // A store written by an older seed is replaced, not migrated: its text,
+    // its shape, or data an older engine allowed (a post whose author does
+    // not exist) would otherwise outlive the deploy that fixed them.
+    if (stored && stored.version === SEED_VERSION) {
       cached = stored;
       return cached;
     }
-    // First visit for this browser: seed deterministically and persist.
+    // First visit for this browser, or a new seed version: seed and persist.
     const fresh = createSeedStore();
     cached = fresh;
     await saveStore(fresh);

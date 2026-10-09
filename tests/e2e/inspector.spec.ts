@@ -151,3 +151,27 @@ test("the deployed-host guard explains where the real mock lives", async ({ requ
   expect(body.name).toBe("APIer Mock API");
   expect(res.headers()["x-mock-scope"]).toBe("local-dev-server");
 });
+
+test("the mock answers in the interface language, and the Request tab shows why", async ({ page }) => {
+  await page.goto(CHAPTER);
+  await ready(page);
+
+  const inspector = page.locator(".insp").first();
+  const pane = inspector.locator(".insp-pane");
+  await inspector.getByRole("button", { name: /Ask for something gone/i }).click();
+  await inspector.locator(".insp-meta").waitFor({ state: "visible", timeout: 15_000 });
+  await expect(pane).toContainText("There is no post with id 9999");
+  await expect(pane).not.toContainText(/[一-鿿]/);
+
+  await inspector.getByRole("tab", { name: /^Request$/i }).click();
+  const sent = inspector.locator(".insp-hrow", { hasText: "Accept-Language" });
+  await expect(sent.locator(".insp-hv")).toHaveText("en");
+
+  // Same preset in the Chinese interface: the same request, worded in Chinese.
+  await page.evaluate(() => localStorage.setItem("apier-lang", "zh"));
+  await page.reload();
+  await ready(page);
+  await inspector.getByRole("button", { name: "要一个不存在的" }).click();
+  await inspector.locator(".insp-meta").waitFor({ state: "visible", timeout: 15_000 });
+  await expect(pane).toContainText("没有 id 为 9999 的文章");
+});

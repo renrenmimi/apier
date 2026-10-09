@@ -53,6 +53,7 @@ function disabledResponse(pathname: string) {
   return problem({
     status: 501,
     title: "Server Mock Disabled",
+    lang: "en",
     detail:
       "This endpoint only runs on a local clone. On the deployed site the mock API lives in your browser at /mock-api, so that one visitor can never mutate another visitor's data. Clone the repository and run `npm run dev` to use this from a terminal.",
     headers: { "X-Mock-Scope": "disabled-on-shared-host" },

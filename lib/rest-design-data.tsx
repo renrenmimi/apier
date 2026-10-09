@@ -653,15 +653,15 @@ export const QUIZ: QuizItem[] = [
         en: (
           <>
             PUT replaces the whole representation. Sending only title states
-            that the post now consists of a title and nothing else, so body and
-            createdAt are removed. This is the most common way beginners lose
-            data.
+            that the post now consists of a title and nothing else, so body
+            does not keep its old value; only the fields the server owns, such
+            as id and createdAt, stay. This is the most common way beginners
+            lose data.
           </>
         ),
         zh: (
           <>
-            PUT 替换整份表述。只发 title,等于声明这篇文章从此只有标题,
-            body、createdAt 都会被移除。这是新手丢数据最常见的原因。
+            {"PUT 替换整份表述。只发 title,等于声明这篇文章从此只有标题:body 不会保留原来的内容,只有 id、createdAt 这类由服务器保管的字段还在。这是新手丢数据最常见的原因。"}
           </>
         ),
       },
