@@ -250,10 +250,9 @@ const r2 = await fetch("https://api.github.com/users/octocat", {
 console.log(r2.status); // 304 — unchanged, so no body is sent`}
           />
           <p>
-            One more detail: a <b>304 does not count against your 60 requests</b>{" "}
-            on GitHub, so revalidation saves quota as well as bandwidth. The
-            browser also keeps its own HTTP cache, so if the first request
-            already returns 304, try again in a private window.
+            One more detail: for requests made with a token, GitHub does not
+            count a 304 against your quota. Anonymous requests like these still
+            count towards the 60, but the 304 saves the whole body.
           </p>
         </>
       ),
@@ -272,9 +271,7 @@ const r2 = await fetch("https://api.github.com/users/octocat", {
 console.log(r2.status); // 304 —— 没变,所以不发正文`}
           />
           <p>
-            补充一点:在 GitHub 上 <b>304 不计入那 60 次配额</b> ——
-            重新校验省的不只是流量。另外浏览器自己也有 HTTP 缓存,
-            如果第一次就看到 304,换个无痕窗口再试。
+            补充一点:对带 token 的请求,GitHub 不把 304 计入配额;像这里这样的匿名请求(就是那 60 次)照样计数,但 304 省掉了整份正文。
           </p>
         </>
       ),
@@ -692,13 +689,13 @@ export const QUIZ: QuizItem[] = [
       en: (
         <>
           One of your selections is safe: a client that does not know a JSON key
-          simply ignores it.
+          simply ignores it, provided it tolerates unknown fields (most do; some
+          strictly typed deserializers reject them unless configured not to).
         </>
       ),
       zh: (
         <>
-          你选中的有一项其实是安全的:
-          客户端遇到不认识的 JSON 键会直接忽略它。
+          {"你选中的有一项其实是安全的:客户端遇到不认识的 JSON 键会直接忽略它,前提是客户端能容忍未知字段(大多数可以;少数强类型的反序列化器默认会报错,需要另行配置)。"}
         </>
       ),
     },
@@ -1143,7 +1140,7 @@ export const QUIZ: QuizItem[] = [
           Writing the endpoint table in a format tools understand means
           documentation, client code, mock servers, and tests can all be
           generated from one file. Change the definition and every generated
-          generated file changes with it.
+          file changes with it.
         </>
       ),
       zh: (

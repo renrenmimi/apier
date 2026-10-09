@@ -310,14 +310,14 @@ function PgStage({ f }: { f: PgFrame }) {
               </span>
             )}
             <span className="ra-pgcell-pos">
-              {L({ en: `row ${i + 1}`, zh: `行${i + 1}` })}
+              {L({ en: `row ${i + 1}`, zh: `第 ${i + 1} 行` })}
             </span>
           </div>
         ))}
         <div className={`ra-pgcell ra-pgcell-tail${f.tailLit ? " lit" : ""}`}>
           …
           <span className="ra-pgcell-pos">
-            {L({ en: "+900k", zh: "99 万+" })}
+            {L({ en: "≈1M more", zh: "约 100 万行" })}
           </span>
         </div>
       </div>
