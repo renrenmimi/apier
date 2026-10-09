@@ -109,7 +109,7 @@ export default function ShowdownPage() {
                 <>
                   Through this course, the same blog data was served twice. REST
                   gave it endpoints such as <code>/posts</code> and{" "}
-                  <code>/users/42/orders</code>, and used the uniform interface
+                  <code>/users/42/posts</code>, and used the uniform interface
                   and HTTP caching. GraphQL described the same data in one
                   schema and let each client select the fields it wanted. The
                   table below puts the two side by side. Read it as a list of
@@ -120,7 +120,7 @@ export default function ShowdownPage() {
               zh={
                 <>
                   整门课里,同一份博客数据被端出了两次:REST 给了它{" "}
-                  <code>/posts</code>、<code>/users/42/orders</code>{" "}
+                  <code>/posts</code>、<code>/users/42/posts</code>{" "}
                   这样的端点,靠统一接口和 HTTP 缓存干活;GraphQL 用一张 schema
                   描述同一份数据,让每个客户端自己选字段。
                   下面这张表把两者并排放在一起。请把它当成一份取舍清单,
@@ -549,26 +549,19 @@ query {
                   <i>Why, after 6 years, I&apos;m over GraphQL</i>, and it was
                   widely discussed. His argument has four parts.{" "}
                   <b>Attack surface</b>: a client can compose queries you never
-                  planned for, and he measured a 128-byte query that cost about
-                  ten seconds of CPU on a public API. <b>Authorization</b>:
-                  because any field can be reached through many paths,
-                  permission has to be decided per field. <b>Performance</b>: a
-                  client can change its query and cause N+1 database queries on
-                  a server nobody touched. <b>Complexity</b>: every one of those
-                  mitigations is more code to write and to maintain.
+                  planned for (he measured a 128-byte query that cost about ten
+                  seconds of CPU on a public API), and because any field can be
+                  reached through many paths, permission has to be decided per
+                  field. <b>Performance</b>: a client can change its query and
+                  cause N+1 database queries on a server nobody touched.{" "}
+                  <b>Coupling</b>: business logic seeps into the GraphQL layer,
+                  and tests get harder to write. <b>Complexity</b>: every one of
+                  those mitigations is more code to write and to maintain.
                 </>
               }
               zh={
                 <>
-                  2024 年,Matt Bessey 写了{" "}
-                  <i>Why, after 6 years, I&apos;m over GraphQL</i>,
-                  引起了广泛讨论。他的论点有四部分。<b>攻击面</b>:
-                  客户端可以组合出你从未设想过的查询 —— 他实测过一个 128
-                  字节的查询,在某个公开 API 上吃掉了约 10 秒 CPU。<b>授权</b>:
-                  任何字段都可能通过多条路径被取到,所以权限必须做到字段级。
-                  <b>性能</b>:客户端改一次查询,
-                  就可能在后端一行没改的情况下引发 N+1 数据库查询。
-                  <b>复杂度</b>:上面每一条的防御措施,都是要写和要维护的代码。
+                  2024 年,Matt Bessey 写了 <i>Why, after 6 years, I&apos;m over GraphQL</i>,引起了广泛讨论。他的论点有四部分。<b>攻击面</b>:客户端可以组合出你从未设想过的查询 —— 他实测过一个 128 字节的查询,在某个公开 API 上吃掉了约 10 秒 CPU;而且任何字段都可能通过多条路径被取到,所以权限必须做到字段级。<b>性能</b>:客户端改一次查询,就可能在后端一行没改的情况下引发 N+1 数据库查询。<b>耦合</b>:业务逻辑渗进 GraphQL 这一层,测试更难写。<b>复杂度</b>:上面每一条的防御措施,都是要写和要维护的代码。
                 </>
               }
             />
@@ -577,9 +570,13 @@ query {
             <T
               en={
                 <>
-                  He does not claim GraphQL is bad. He says these costs are
-                  fixed, and his teams did not have enough clients to spread
-                  them over. Operational debugging belongs on the same list: a
+                  His conclusion is not that GraphQL is bad: he no longer
+                  recommends it to most teams, and suggests a JSON REST API
+                  described with OpenAPI when you control all the clients and
+                  there are only a few of them. Two further points are this
+                  course&apos;s own reading, not his. These costs are largely
+                  fixed, so they are easier to carry when many clients share
+                  them. And operational debugging belongs on the same list: a
                   URL in a log tells you what happened, while{" "}
                   <code>POST /graphql</code> with a <code>200</code> status does
                   not.
@@ -587,11 +584,7 @@ query {
               }
               zh={
                 <>
-                  他没有说 GraphQL 不好,他说的是:这些成本是固定的,
-                  而他的团队没有足够多的客户端来分摊它们。
-                  运维排查也属于同一份账单:日志里的一个 URL
-                  能告诉你刚才发生了什么,而恒定的 <code>POST /graphql</code>{" "}
-                  加 <code>200</code> 做不到。
+                  他的结论并不是「GraphQL 不好」,而是不再向多数团队推荐它:如果你掌控全部客户端、客户端也不多,用 OpenAPI 描述的 JSON REST API 更合适。下面两点是本课程自己的分析,不是他的原话:这些成本大体是固定的,客户端越多越容易摊薄;运维排查也属于同一份账单 —— 日志里的一个 URL 能告诉你刚才发生了什么,而恒定的 <code>POST /graphql</code> 加 <code>200</code> 做不到。
                 </>
               }
             />
@@ -662,7 +655,8 @@ query {
                   system is arranged. GraphQL is a <b>query language</b> and a
                   runtime that executes it. They are not points on the same
                   line, and neither one replaces the other. GitHub runs both.
-                  Shopify chose GraphQL. Bessey&apos;s teams went back to REST.
+                  Shopify chose GraphQL. Bessey recommends that most teams go
+                  back to REST.
                   All three decisions were reasonable, because the three
                   situations were different.
                 </>
@@ -672,8 +666,7 @@ query {
                   GraphQL 不是 REST 的新版本。REST 是<b>架构风格</b> ——
                   一组关于系统如何组织的约束;GraphQL 是一门<b>查询语言</b>,
                   外加执行它的运行时。两者不在同一条线上,谁也不是谁的替代品。
-                  GitHub 两套都跑,Shopify 选了 GraphQL,Bessey
-                  的团队退回了 REST —— 三个决定都合理,因为三边的场景不一样。
+                  GitHub 两套都跑,Shopify 选了 GraphQL,Bessey 建议多数团队回到 REST —— 三个决定都合理,因为三边的场景不一样。
                 </>
               }
             />
@@ -700,8 +693,11 @@ query {
                 and tooling every caller owns. Your own clients benefit from
                 selecting fields and from one request per screen. A company with
                 both situations does not have to pick one. It publishes a REST
-                API for outside callers and a GraphQL layer for its own clients,
-                over the same services. That is how GitHub operates.
+                API for outside callers and a GraphQL layer (a BFF) for its own
+                clients, over the same services. Netflix&apos;s federated graph
+                is that inner layer at a very large scale. GitHub, for its part,
+                publishes both REST and GraphQL to outside callers and lets
+                them choose.
               </>
             }
             zh={
@@ -709,9 +705,7 @@ query {
                 到这里,模式已经很清楚了。对外的那一层受益于 REST
                 已经具备的东西:可预期的 URL、HTTP 缓存、网关,
                 以及每个调用方手里都有的工具;自家的客户端则受益于按需选字段和
-                「一屏一次请求」。两种情况都有的公司不必二选一 ——
-                对外发布一套 REST API,对内提供一层 GraphQL,
-                两者建立在同一套服务之上。GitHub 就是这么运作的。
+                「一屏一次请求」。两种情况都有的公司不必二选一 —— 对外发布一套 REST API,对内提供一层 GraphQL(BFF),两者建立在同一套服务之上。Netflix 的联邦图就是对内这一层的大规模版本;GitHub 则把 REST 和 GraphQL 都对外公开,由调用方按场景挑选。
               </>
             }
           />
