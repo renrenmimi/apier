@@ -1,6 +1,7 @@
 // 课程注册表 —— 全站唯一的章节清单。
 // 侧栏、命令面板、章节页脚(上一章/下一章)、进度系统都从这里取数据。
-// 新增章节:在 CHAPTERS 里插入一条,并保证 app/<id>/page.tsx 存在,
+// 新增章节:在 CHAPTERS 里插入一条,并保证 app/<id>/page.tsx 与 app/<id>/layout.tsx
+//(导出 chapterMetadata(id),挂 <ChapterTitle id />)存在,
 // 且 globals.css 的 [data-ch=…] 色相注册表里有对应条目。
 //
 // 文案字段(title / en / essence / tags)是 Loc<…> 双语对;
@@ -280,12 +281,36 @@ export function searchText(c: Chapter): string {
     .toLowerCase();
 }
 
-export function chapterByPath(path: string): Chapter {
+/** 站点标题:序章的 <title>,也是各章标题模板「%s · APIer」里的品牌名。 */
+export const SITE_TITLE: { en: string; zh: string } = {
+  en: "APIer — HTTP, REST and GraphQL explained",
+  zh: "APIer —— 把 HTTP、REST 和 GraphQL 讲透",
+};
+
+/** 课程之外的路径(404)在面包屑里的显示;编号 ✦ 表示不显示编号。 */
+export const PAGE_NOT_FOUND: Pick<Chapter, "num" | "title"> = {
+  num: "✦",
+  title: { en: "Page not found", zh: "页面不存在" },
+};
+
+/** 路径所属的章节;课程之外的路径(404)返回 null,侧栏不高亮任何一章。 */
+export function chapterByPath(path: string): Chapter | null {
   if (path === "/") return CHAPTERS[0];
   const hit = CHAPTERS.find(
     (c) => c.href !== "/" && (path === c.href || path.startsWith(c.href + "/")),
   );
-  return hit ?? CHAPTERS[0];
+  return hit ?? null;
+}
+
+const inEnglish = (v: Loc<string>) => (typeof v === "string" ? v : v.en);
+
+/**
+ * app/<章节>/layout.tsx 导出的 metadata。服务端只能给一种语言,所以用英文标题
+ * (根布局的模板会补上「 · APIer」);中文读者的标签页标题由 app/page-title.tsx 在客户端改写。
+ */
+export function chapterMetadata(id: ChapterId) {
+  const c = CHAPTERS.find((x) => x.id === id)!;
+  return { title: inEnglish(c.title), description: inEnglish(c.essence) };
 }
 
 export function prevNext(id: ChapterId): { prev?: Chapter; next?: Chapter } {

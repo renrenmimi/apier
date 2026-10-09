@@ -3,13 +3,14 @@
 // 顶部工具条:侧栏开关 + 面包屑 + ⌘K + 语言切换 + 主题切换。
 
 import { usePathname } from "next/navigation";
-import { chapterByPath } from "@/lib/curriculum";
+import { chapterByPath, PAGE_NOT_FOUND } from "@/lib/curriculum";
 import { useL, useLang, T } from "@/lib/i18n";
 import { useShell, useTheme } from "./theme-provider";
 
 export default function Toolbar() {
   const path = usePathname();
-  const ch = chapterByPath(path);
+  // 课程之外的路径(404)没有所属章节,面包屑显示「页面不存在」。
+  const ch = chapterByPath(path) ?? PAGE_NOT_FOUND;
   const L = useL();
   const { lang, setLang } = useLang();
   const { theme, toggleTheme } = useTheme();

@@ -63,14 +63,27 @@ function load(): ProgressData {
 
 // localStorage 是唯一数据源。useSyncExternalStore 允许服务端快照与客户端
 // 快照不同,所以不必先渲染一次空数据、再在 effect 里补一次 setState。
-// 它要求快照的引用稳定,所以这里把读到的对象缓存住,只有写入时才换新的。
+// 它要求快照的引用稳定,所以这里把读到的对象缓存住,只有数据变了才换新的。
+//
+// 同一个浏览器可能同时开着好几个标签页。别的标签页写入时,这里会收到 storage 事件,
+// 于是丢掉缓存、重新读;自己写入时也先读最新值、只合并这一次的改动,
+// 不拿本标签页的旧快照整份覆盖 —— 否则两个标签页会互相抹掉对方勾选的任务。
 const progressListeners = new Set<() => void>();
 let cached: ProgressData | null = null;
 
+function onStorage(e: StorageEvent) {
+  // key 为 null 表示整个 localStorage 被清空
+  if (e.key !== KEY && e.key !== null) return;
+  cached = null;
+  progressListeners.forEach((notify) => notify());
+}
+
 function subscribeProgress(onChange: () => void) {
   progressListeners.add(onChange);
+  if (progressListeners.size === 1) window.addEventListener("storage", onStorage);
   return () => {
     progressListeners.delete(onChange);
+    if (progressListeners.size === 0) window.removeEventListener("storage", onStorage);
   };
 }
 
@@ -83,7 +96,17 @@ function progressOnServer(): ProgressData {
   return EMPTY;
 }
 
-function writeProgress(next: ProgressData) {
+/** 读最新的存储值,应用一次改动,再写回。返回 null 表示不需要改。 */
+function updateProgress(change: (latest: ProgressData) => ProgressData | null) {
+  let latest: ProgressData;
+  try {
+    // 写入失败过(私密模式等)时存储里没有数据,只能以内存态为准
+    latest = window.localStorage.getItem(KEY) === null && cached ? cached : load();
+  } catch {
+    latest = cached ?? EMPTY;
+  }
+  const next = change(latest);
+  if (next === null) return;
   cached = next;
   try {
     window.localStorage.setItem(KEY, JSON.stringify(next));
@@ -109,29 +132,25 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     readyOnServer,
   );
 
-  const persist = writeProgress;
-
   const isDone = useCallback((pid: string) => !!data.labs[pid], [data]);
 
-  const toggleLab = useCallback(
-    (pid: string) => {
-      const labs = { ...data.labs };
+  const toggleLab = useCallback((pid: string) => {
+    updateProgress((latest) => {
+      const labs = { ...latest.labs };
       if (labs[pid]) delete labs[pid];
       else labs[pid] = 1;
-      persist({ ...data, labs });
-    },
-    [data, persist],
-  );
+      return { ...latest, labs };
+    });
+  }, []);
 
-  const reportQuiz = useCallback(
-    (ch: ChapterId, right: number, total: number) => {
-      const prev = data.quiz[ch];
+  const reportQuiz = useCallback((ch: ChapterId, right: number, total: number) => {
+    updateProgress((latest) => {
+      const prev = latest.quiz[ch];
       // 只保留最好成绩
-      if (prev && prev.right / prev.total >= right / total) return;
-      persist({ ...data, quiz: { ...data.quiz, [ch]: { right, total } } });
-    },
-    [data, persist],
-  );
+      if (prev && prev.right / prev.total >= right / total) return null;
+      return { ...latest, quiz: { ...latest.quiz, [ch]: { right, total } } };
+    });
+  }, []);
 
   const chapterState = useCallback(
     (ch: ChapterId): "new" | "doing" | "done" => {
@@ -151,7 +170,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     [data],
   );
 
-  const reset = useCallback(() => persist(EMPTY), [persist]);
+  const reset = useCallback(() => updateProgress(() => EMPTY), []);
 
   return (
     <ProgressContext.Provider

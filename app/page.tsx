@@ -17,6 +17,7 @@ import { LabSet } from "@/lib/labs";
 import { Quiz } from "@/lib/quiz";
 import { T } from "@/lib/i18n";
 import { LABS, QUIZ } from "@/lib/home-data";
+import { PageTitle } from "./page-title";
 import {
   HeroLoop,
   JourneyFlow,
@@ -28,6 +29,7 @@ import {
 export default function HomePage() {
   return (
     <main className="page" data-ch="home">
+      <PageTitle page={null} />
       <Hero
         ch="home"
         title={{

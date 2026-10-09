@@ -10,6 +10,7 @@ import {
 import { ProgressProvider } from "@/lib/progress";
 import { MockApiProvider } from "@/lib/mock/client";
 import { LangProvider, langScript } from "@/lib/i18n";
+import { SITE_TITLE } from "@/lib/curriculum";
 import Sidebar from "@/app/sidebar";
 import Toolbar from "@/app/toolbar";
 import CommandPalette from "@/app/command-palette";
@@ -41,7 +42,7 @@ const jetbrains = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "APIer — HTTP, REST and GraphQL explained",
+    default: SITE_TITLE.en,
     template: "%s · APIer",
   },
   description:
@@ -49,6 +50,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  // 深色主题的地址栏颜色(与 theme-provider.tsx 的 THEME_COLOR.dark 一致);
+  // 浅色主题由 themeScript 与 ThemeProvider 改写成 THEME_COLOR.light。
   themeColor: "#07080f",
   width: "device-width",
   initialScale: 1,
@@ -65,11 +68,14 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${syne.variable} ${grotesk.variable} ${jetbrains.variable}`}
     >
-      <head>
+      <body>
+        {/* 这两段脚本在首次绘制之前运行。它们放在 <body> 的最前面,而不是 <head> 里:
+            React 还在逐个水合 <head> 里手写的节点时,webpack 运行时可能已经把加载完的
+            chunk <script> 从 <head> 里移除,冷加载时水合因此偶尔失败(React #418),整个根节点
+            改在客户端重新渲染,内联脚本写在 <html> 上的属性随之丢失。AlgoAlgo 与 DataData
+            的外壳和这里相同,把脚本移出 <head> 之后这个故障就消失了。 */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <script dangerouslySetInnerHTML={{ __html: langScript }} />
-      </head>
-      <body>
         <LangProvider>
           <ThemeProvider>
             <ShellProvider>
