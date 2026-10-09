@@ -186,14 +186,21 @@ body {
 }
 
 :root {
-  --font-display: var(--font-syne), var(--font-noto-sc), "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --font-ui: var(--font-grotesk), var(--font-noto-sc), -apple-system,
-    BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
-    sans-serif;
+  --font-display: var(--font-syne), "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", sans-serif;
+  --font-ui: var(--font-grotesk), -apple-system, BlinkMacSystemFont,
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --font-mono: var(--font-jb), ui-monospace, SFMono-Regular, "SF Mono", Menlo,
     Consolas, monospace;
   --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+/* 中文页面的标题加上 Noto Sans SC(app/fonts/noto-sans-sc.css),
+   给标题真正的 900 字重,系统 PingFang 最粗只到 600。正文仍用系统字体,
+   所以只下载标题用到的分片;英文页面根本不引用它,一个分片都不下载。 */
+html[data-lang="zh"] {
+  --font-display: var(--font-syne), "Noto Sans SC", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 }
 
 body {
