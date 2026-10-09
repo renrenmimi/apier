@@ -18,7 +18,7 @@ Sister sites: [DataData](https://data-data.vercel.app) (data structures) and
 
 ![The request inspector: a real round trip to the in-browser mock API, with status, timing, headers and body](docs/inspector.jpg)
 
-*The request inspector — the mock API runs in your own browser through a Service Worker, so the round trip is real: status, server and network timing, twelve response headers, the body, and the curl you would type instead.*
+*The request inspector — the mock API runs in your own browser through a Service Worker, so the round trip is real: status, the server and in-browser timing, twelve response headers, the body, and the curl you would type instead.*
 
 ## Chapters
 
@@ -68,13 +68,16 @@ npm run build
 Next.js 15 (App Router) + TypeScript + React 19, plain CSS. Every chapter prerenders to a
 static page.
 
-Each chapter is one folder under `app/` holding its page, its visualizations (`viz.tsx`) and
-its own stylesheet, paired with a data file under `lib/` for quizzes and exercises.
+Each chapter is one folder under `app/` holding its page, a small server layout that gives
+the page its title, its visualizations (`viz.tsx`) and its own stylesheet, paired with a
+data file under `lib/` for quizzes and exercises. The fonts are self-hosted from
+`app/fonts`, so a build needs no network.
 
 ## The mock API
 
 Chapters 01, 04, 05, 06 and 10 embed a request inspector that sends real HTTP requests and
-shows the status, headers, timing breakdown, body size and payload.
+shows the status, headers, timing breakdown, body size and payload. The mock's messages
+follow the interface language (it reads `Accept-Language`); its data is the same in both.
 
 Those requests go to `/mock-api`, which is served by a **Service Worker inside your own
 browser**, backed by IndexedDB. Your data is yours: nobody else can see or change it, it
@@ -86,7 +89,8 @@ clone the repository and run `npm run dev`, which exposes the server-side equiva
 `http://localhost:3300/api`. That endpoint is disabled on shared hosting so visitors never
 share mutable state.
 
-See [docs/mock-api.md](docs/mock-api.md) for the full picture.
+See [docs/mock-api.md](docs/mock-api.md) for the full picture, and
+[CHANGELOG.md](CHANGELOG.md) for the fixes that followed the October 2026 audit.
 
 ---
 
