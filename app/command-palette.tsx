@@ -2,6 +2,9 @@
 
 // ⌘K 命令面板:模糊搜索章节(标题 / 英文名 / 标签),回车跳转。
 // 全局键盘监听挂在这里;Esc 关闭,↑↓ 选择。
+// 它是一个模态对话框,用 combobox 模式:焦点始终留在搜索框里(Tab 离不开对话框),
+// 结果是 listbox,当前选项通过 aria-activedescendant 播报;背后的页面不滚动,
+// 关闭后焦点回到打开它之前的位置。
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -39,8 +42,17 @@ function Palette({ close }: { close: () => void }) {
   const router = useRouter();
 
   // 挂载即聚焦。此时 overlay 已经在 DOM 里了,不必再等一帧。
+  // 卸载(关闭)时把焦点还给打开面板之前的元素,并恢复页面滚动。
   useEffect(() => {
+    const opener = document.activeElement as HTMLElement | null;
+    const html = document.documentElement;
+    const previousOverflow = html.style.overflow;
+    html.style.overflow = "hidden";
     inputRef.current?.focus();
+    return () => {
+      html.style.overflow = previousOverflow;
+      opener?.focus?.();
+    };
   }, []);
 
   // 两种语言的标题/副标/标签一起进搜索池 —— 英文界面下输中文也能命中。
@@ -65,11 +77,25 @@ function Palette({ close }: { close: () => void }) {
       <div
         className="cmdk"
         role="dialog"
+        aria-modal="true"
         aria-label={L({ en: "Jump to a chapter", zh: "快速跳转" })}
+        onKeyDown={(e) => {
+          // 焦点只待在搜索框里;Tab 不能离开对话框
+          if (e.key === "Tab") {
+            e.preventDefault();
+            inputRef.current?.focus();
+          }
+        }}
       >
         <input
           ref={inputRef}
           className="cmdk-input"
+          role="combobox"
+          aria-expanded="true"
+          aria-controls="cmdk-list"
+          aria-autocomplete="list"
+          aria-activedescendant={hits[sel] ? `cmdk-opt-${hits[sel].id}` : undefined}
+          aria-label={L({ en: "Search chapters", zh: "搜索章节" })}
           placeholder={L({
             en: "Search chapters, concepts, tags…",
             zh: "搜索章节、概念、标签…",
@@ -91,7 +117,12 @@ function Palette({ close }: { close: () => void }) {
             }
           }}
         />
-        <div className="cmdk-list">
+        <div
+          className="cmdk-list"
+          id="cmdk-list"
+          role="listbox"
+          aria-label={L({ en: "Chapters", zh: "章节" })}
+        >
           {hits.length === 0 && (
             <div className="cmdk-empty">
               <T
@@ -103,7 +134,11 @@ function Palette({ close }: { close: () => void }) {
           {hits.map((c, i) => (
             <button
               key={c.id}
+              id={`cmdk-opt-${c.id}`}
               type="button"
+              role="option"
+              aria-selected={i === sel}
+              tabIndex={-1}
               className={`cmdk-item${i === sel ? " sel" : ""}`}
               style={{ "--ch-hue": c.hue } as React.CSSProperties}
               onMouseEnter={() => setSel(i)}

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { chapterByPath, PAGE_NOT_FOUND } from "@/lib/curriculum";
 import { useL, useLang, T } from "@/lib/i18n";
 import { useShell, useTheme } from "./theme-provider";
+import { useNarrowLayout } from "./sidebar";
 
 export default function Toolbar() {
   const path = usePathname();
@@ -14,14 +15,18 @@ export default function Toolbar() {
   const L = useL();
   const { lang, setLang } = useLang();
   const { theme, toggleTheme } = useTheme();
-  const { setSidebarOpen, toggleSidebarCollapsed, setCmdkOpen } = useShell();
+  const { sidebarOpen, setSidebarOpen, sidebarCollapsed, toggleSidebarCollapsed, setCmdkOpen } = useShell();
+  const narrow = useNarrowLayout();
 
   return (
     <header className="toolbar">
       <button
         type="button"
+        id="sidebar-toggle"
         className="tb-btn"
         aria-label={L({ en: "Toggle sidebar", zh: "切换侧栏" })}
+        aria-controls="sidebar"
+        aria-expanded={narrow ? sidebarOpen : !sidebarCollapsed}
         onClick={() => {
           if (window.innerWidth <= 960) setSidebarOpen((v) => !v);
           else toggleSidebarCollapsed();

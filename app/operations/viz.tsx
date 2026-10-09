@@ -12,6 +12,7 @@
 import { useState, type ReactNode } from "react";
 import { useStepper, StepControls } from "@/lib/stepper";
 import { T, useL, type Loc } from "@/lib/i18n";
+import { stageRegion } from "@/lib/scroll-region";
 
 /* ================= HeroOps ================= */
 
@@ -553,7 +554,7 @@ export function SubscriptionFlow() {
         />
       </div>
       <div className="viz-stage">
-        <div className="viz-scroll">
+        <div className="viz-scroll" ref={stageRegion}>
           <div className="op-sub">
             <div className="flow-node lit">
               <span className="ico">🖥️</span>
@@ -1050,7 +1051,7 @@ export function BubbleViz() {
         />
       </div>
       <div className="viz-stage">
-        <div className="viz-scroll">
+        <div className="viz-scroll" ref={stageRegion}>
           <div className="op-bub">
             <div className={`op-bub-box post ${f.post}`}>
               <div className="op-bub-name">
@@ -1231,7 +1232,7 @@ export function CursorPager() {
         />
       </div>
       <div className="viz-stage">
-        <div className="viz-scroll">
+        <div className="viz-scroll" ref={stageRegion}>
           <div className="op-pg">
             <div className="op-pg-req mono">{f.req}</div>
             <div className="op-pg-row">

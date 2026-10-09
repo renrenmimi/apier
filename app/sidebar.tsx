@@ -2,6 +2,12 @@
 
 // 左侧导航栏:品牌 + 全部章节(每章自己的主题色圆点编号)+ 学习进度。
 // 章节清单来自 lib/curriculum.ts;进度来自 lib/progress.tsx。
+//
+// 960px 以下侧栏是滑出的抽屉。只要它不在屏幕上(抽屉关着,或桌面上折叠了)就是 inert,
+// 里面的链接不再是 Tab 停靠点。抽屉打开时,背后的页面 inert 且不滚动,焦点移进抽屉;
+// Esc 或点遮罩关闭抽屉,焦点回到菜单按钮。
+
+import { useEffect, useRef, useState } from "react";
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -11,11 +17,27 @@ import { useL, T } from "@/lib/i18n";
 import { useShell } from "./theme-provider";
 import { BrandMark } from "./logo";
 
+/** 窄屏布局(侧栏是抽屉)时为 true。 */
+export function useNarrowLayout() {
+  const [narrow, setNarrow] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 960px)");
+    const sync = () => setNarrow(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+  return narrow;
+}
+
 export default function Sidebar() {
   const path = usePathname();
   const router = useRouter();
   const L = useL();
-  const { sidebarOpen, setSidebarOpen } = useShell();
+  const { sidebarOpen, setSidebarOpen, sidebarCollapsed } = useShell();
+  const narrow = useNarrowLayout();
+  const asideRef = useRef<HTMLElement>(null);
+  const restoreFocus = useRef(false);
   const { ready, chapterState, totalLabs, data } = useProgress();
 
   const current = chapterByPath(path);
@@ -25,11 +47,56 @@ export default function Sidebar() {
   const progress = Math.round((doneCh / CHAPTERS.length) * 100);
   const quizCount = ready ? Object.keys(data.quiz).length : 0;
 
+  const drawerOpen = narrow && sidebarOpen;
+  const offScreen = narrow ? !sidebarOpen : sidebarCollapsed;
+
+  // 点了链接:直接关
   const close = () => setSidebarOpen(false);
+  // Esc 或点遮罩:关掉,并把焦点还给菜单按钮
+  const dismiss = () => {
+    restoreFocus.current = true;
+    setSidebarOpen(false);
+  };
+
+  // 视口拉宽到断点以上就没有抽屉可开了
+  useEffect(() => {
+    if (!narrow) setSidebarOpen(false);
+  }, [narrow, setSidebarOpen]);
+
+  useEffect(() => {
+    if (!drawerOpen) {
+      if (restoreFocus.current) {
+        restoreFocus.current = false;
+        document.getElementById("sidebar-toggle")?.focus();
+      }
+      return;
+    }
+    const main = document.querySelector<HTMLElement>(".shell-main");
+    const html = document.documentElement;
+    const previousOverflow = html.style.overflow;
+    main?.setAttribute("inert", "");
+    html.style.overflow = "hidden";
+    asideRef.current?.querySelector<HTMLElement>("a")?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        restoreFocus.current = true;
+        setSidebarOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      main?.removeAttribute("inert");
+      html.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [drawerOpen, setSidebarOpen]);
 
   return (
     <>
       <aside
+        id="sidebar"
+        ref={asideRef}
+        inert={offScreen}
         className={`sidebar${sidebarOpen ? " open" : ""}`}
         aria-label={L({ en: "APIer chapter navigation", zh: "APIer 章节导航" })}
       >
@@ -126,7 +193,7 @@ export default function Sidebar() {
       <div
         className={`scrim${sidebarOpen ? " open" : ""}`}
         aria-hidden
-        onClick={close}
+        onClick={dismiss}
       />
     </>
   );

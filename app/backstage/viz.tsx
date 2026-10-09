@@ -11,6 +11,7 @@
 import { type ReactNode } from "react";
 import { useStepper, StepControls } from "@/lib/stepper";
 import { T, useL, type Loc } from "@/lib/i18n";
+import { stageRegion } from "@/lib/scroll-region";
 
 /* ================= HeroBackstage ================= */
 
@@ -270,7 +271,7 @@ export function ResolverTreeViz() {
         />
       </div>
       <div className="viz-stage">
-        <div className="viz-scroll">
+        <div className="viz-scroll" ref={stageRegion}>
           <div className="bs-tree">
             <TreeNode label="Query.post" state={f.post}>
               <TreeNode label="Post.title" state={f.title} isDefault />
@@ -644,7 +645,7 @@ export function SqlCounter({ loader = false }: { loader?: boolean }) {
             })}
       </div>
       <div className="viz-stage">
-        <div className="viz-scroll">
+        <div className="viz-scroll" ref={stageRegion}>
           <div className="bs-n1">
             <div className="bs-n1-q">
               {lines.map((l, i) => (
