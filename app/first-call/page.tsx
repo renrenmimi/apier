@@ -1,7 +1,7 @@
 "use client";
 
 // 第 02 章 · 第一次调用 API(双语,英文默认):
-// Promise 是什么 → 两次 await 分别等什么 → res.ok 大坑 + res.json() 也会失败 →
+// Promise 是什么 → 两次 await 分别等什么 → res.ok 陷阱 + res.json() 也会失败 →
 // 宝可梦查询器 → POST 三件套 → Network 面板 → CORS 第一面 → 动手 → 测验 → 要点。
 // 文案一律走 <T en zh /> 或 Loc<…>,不要在这里写 lang === "en" ? … : …。
 // 代码块只有注释双语,可执行行两种语言必须逐字节一致。
@@ -190,7 +190,7 @@ export default function FirstCallPage() {
           {
             id: "resok",
             n: "02",
-            label: { en: "The res.ok trap", zh: "最大的坑:res.ok" },
+            label: { en: "The res.ok trap", zh: "最常见的误区:res.ok" },
           },
           {
             id: "pokedex",
@@ -405,11 +405,11 @@ export default function FirstCallPage() {
         index="02"
         title={{
           en: "The main trap: fetch does not reject on 404",
-          zh: "最大的坑:fetch 对 404 不报错",
+          zh: "最常见的误区:fetch 对 404 不报错",
         }}
         desc={{
           en: "This is the mistake almost everyone makes on their first API call. It is easier to learn it now than to debug it later.",
-          zh: "第一次调 API 的人几乎都栽在这里。现在讲清楚,好过将来慢慢排查。",
+          zh: "第一次调用 API 的人几乎都会在这里出错。现在讲清楚,好过将来慢慢排查。",
         }}
       >
         <Callout
@@ -822,7 +822,7 @@ export default function FirstCallPage() {
         }}
         desc={{
           en: "You will meet it sooner or later. It helps to recognize it in advance.",
-          zh: "早晚会遇上它。提前认个脸,到时候不慌。",
+          zh: "迟早会遇到它。提前了解,遇到时就知道从哪里查起。",
         }}
       >
         <p className="sec-desc">
@@ -840,7 +840,7 @@ export default function FirstCallPage() {
               <>
                 某天你调一个新 API:<code>curl</code> 通,Postman 通,
                 偏偏浏览器里的 fetch 打出一大段红字,里面有 <b>CORS policy</b>{" "}
-                几个词。第一反应往往是「API 挂了?」——
+                几个词。第一反应往往是「API 出故障了?」——
                 并没有。API 回答了,是你自己的浏览器不让脚本读这份回答。
               </>
             }
@@ -872,7 +872,7 @@ export default function FirstCallPage() {
                   {"页面里运行的脚本,不能读取来自另一个源(源 = 协议 + 主机 + 端口)的响应,除非那份响应明确表示允许。表示允许的方式是一个响应头:"}
                   <code>Access-Control-Allow-Origin</code>。
                   围绕这个头的一整套规则,就叫{" "}
-                  <b>CORS(Cross-Origin Resource Sharing,跨域资源共享)</b>。
+                  <b>CORS(Cross-Origin Resource Sharing,跨源资源共享)</b>。
                 </>
               }
             />
@@ -947,7 +947,7 @@ export default function FirstCallPage() {
         title={{ en: "Quiz", zh: "通关测验" }}
         desc={{
           en: "Eight questions, all about the traps in this chapter.",
-          zh: "八道题,专考本章讲过的坑。",
+          zh: "八道题,专考本章讲过的易错点。",
         }}
       >
         <Quiz ch="first-call" items={QUIZ} />
@@ -1069,7 +1069,7 @@ export default function FirstCallPage() {
             ),
             zh: (
               <>
-                CORS 报错是浏览器在执行同源策略,不是 API 挂了,
+                CORS 报错是浏览器在执行同源策略,不是 API 出了故障,
                 也不是一个 HTTP 状态码。第 06 章会细讲。
               </>
             ),

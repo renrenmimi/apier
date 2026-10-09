@@ -684,7 +684,7 @@ export const QUIZ: QuizItem[] = [
     answers: ["fetch", "fetch()"],
     hint: {
       en: <>The word means to go and bring something back.</>,
-      zh: <>这个词的英文本义是「取回来」—— 狗狗接飞盘那个动作。</>,
+      zh: <>这个词的英文本义是「取回来」:去把东西拿回来。</>,
     },
     why: {
       en: (

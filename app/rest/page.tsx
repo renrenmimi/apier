@@ -301,7 +301,7 @@ export default function RestPage() {
             }
             zh={
               <>
-                给个行情:Postman 2025 年的 State of the API 报告显示,
+                先看一组数据:Postman 2025 年的 State of the API 报告显示,
                 <b>93% 的团队在用 REST API</b>,它是对外 API 的默认选择。
                 但按 Fielding 本人的标准,其中大多数并不算合格。
                 合格线画在哪,§04 见。
@@ -647,7 +647,7 @@ export default function RestPage() {
             zh={
               <>
                 HATEOAS 是 Hypermedia As The Engine Of Application State
-                的缩写,超媒体作为应用状态的引擎。名字唬人,做的事你天天在做:
+                的缩写,超媒体作为应用状态的引擎。名字听起来复杂,做的事你天天在做:
                 <b>逛网页</b>。你从不背 URL,页面给你链接,你点。
                 HATEOAS 就是让程序也这样工作:响应里带着链接,
                 客户端跟着链接走,而不是按自己代码里写死的规则拼 URL。
@@ -755,7 +755,7 @@ Content-Type: application/json
           tone="story"
           title={{
             en: "Fielding's 2008 blog post",
-            zh: "Fielding 的著名牢骚(2008)",
+            zh: "Fielding 2008 年的一篇博文",
           }}
         >
           <p>

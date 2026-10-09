@@ -941,7 +941,7 @@ const BUB_FRAMES: BubFrame[] = [
         zh={
           <>
             执行到一半,<code>author</code> 字段的 resolver 抛了错 ——
-            比如用户服务挂了。<code>title</code> 已经解析好了。
+            比如用户服务出了故障。<code>title</code> 已经解析好了。
             现在的问题是:<code>author</code> 这个位置该放什么。
           </>
         }

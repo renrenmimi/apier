@@ -383,7 +383,7 @@ function parse(src: string, lang: Lang): Doc {
       const d = directives();
       frags.push({ name: fn, on, directives: d, sel: selectionSet() });
     } else {
-      fail("expected an operation or a fragment", "期望一个操作或片段");
+      fail("expected an operation or a fragment", "期望一个操作或 fragment");
     }
   }
 
@@ -962,7 +962,7 @@ function validate(doc: Doc, lang: Lang): string[] {
     say(`There can be only one operation named "${n}".`, `操作名 "${n}" 重复了。`);
   }
   for (const n of dupes(doc.frags.map((f) => f.name))) {
-    say(`There can be only one fragment named "${n}".`, `片段名 "${n}" 重复了。`);
+    say(`There can be only one fragment named "${n}".`, `fragment 名 "${n}" 重复了。`);
   }
 
   function checkArgs(defs: InputValueDef[], given: Arg[], where: [en: string, zh: string]) {
@@ -1042,11 +1042,11 @@ function validate(doc: Doc, lang: Lang): string[] {
         checkDirectives(s.directives, "FRAGMENT_SPREAD");
         const fr = frags.get(s.name);
         if (!fr) {
-          say(`Unknown fragment "${s.name}".`, `没有定义过的片段 "${s.name}"。`);
+          say(`Unknown fragment "${s.name}".`, `没有定义过的 fragment "${s.name}"。`);
         } else if (TYPES.get(fr.on)?.kind === "OBJECT" && fr.on !== typeName) {
           say(
             `Fragment "${s.name}" cannot be spread here as objects of type "${typeName}" can never be of type "${fr.on}".`,
-            `片段 "${s.name}" 不能展开在这里:"${typeName}" 类型的对象不可能是 "${fr.on}" 类型。`,
+            `fragment "${s.name}" 不能展开在这里:"${typeName}" 类型的对象不可能是 "${fr.on}" 类型。`,
           );
         }
       }
@@ -1065,14 +1065,14 @@ function validate(doc: Doc, lang: Lang): string[] {
         fragment
           ? `Fragment "${fragment}" cannot condition on non composite type "${on}".`
           : `Fragment cannot condition on non composite type "${on}".`,
-        fragment ? `片段 "${fragment}" 的类型条件 "${on}" 不是对象类型。` : `内联片段的类型条件 "${on}" 不是对象类型。`,
+        fragment ? `fragment "${fragment}" 的类型条件 "${on}" 不是对象类型。` : `内联 fragment 的类型条件 "${on}" 不是对象类型。`,
       );
       return false;
     }
     if (parent !== null && on !== parent) {
       say(
         `Fragment cannot be spread here as objects of type "${parent}" can never be of type "${on}".`,
-        `内联片段不能用在这里:"${parent}" 类型的对象不可能是 "${on}" 类型。`,
+        `内联 fragment 不能用在这里:"${parent}" 类型的对象不可能是 "${on}" 类型。`,
       );
       return false;
     }
@@ -1093,7 +1093,7 @@ function validate(doc: Doc, lang: Lang): string[] {
     while (stack.length) {
       const next = stack.pop()!;
       if (next === fr.name) {
-        say(`Cannot spread fragment "${fr.name}" within itself.`, `片段 "${fr.name}" 不能展开它自己。`);
+        say(`Cannot spread fragment "${fr.name}" within itself.`, `fragment "${fr.name}" 不能展开它自己。`);
         break;
       }
       if (seen.has(next)) continue;
@@ -1175,7 +1175,7 @@ function validate(doc: Doc, lang: Lang): string[] {
   }
 
   for (const fr of doc.frags) {
-    if (!usedFragments.has(fr.name)) say(`Fragment "${fr.name}" is never used.`, `片段 "${fr.name}" 定义了却没有被使用。`);
+    if (!usedFragments.has(fr.name)) say(`Fragment "${fr.name}" is never used.`, `fragment "${fr.name}" 定义了却没有被使用。`);
   }
   return errs;
 }

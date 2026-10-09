@@ -1204,7 +1204,7 @@ export function HybridDiagram() {
         <small>
           <T
             en="Assembles data · one schema for every client"
-            zh="按需聚合 · 一张 schema 伺候所有端"
+            zh="按需聚合 · 一张 schema 服务所有客户端"
           />
         </small>
       </div>

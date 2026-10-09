@@ -887,7 +887,7 @@ export const QUIZ: QuizItem[] = [
       zh: (
         <>
           第 05 章里,REST 的响应可以靠 <code>ETag</code> 和{" "}
-          <code>Cache-Control</code> 被缓存。GraphQL 为什么通常吃不到?
+          <code>Cache-Control</code> 被缓存。GraphQL 为什么通常用不上?
         </>
       ),
     },

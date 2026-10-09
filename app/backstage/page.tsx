@@ -637,7 +637,7 @@ const resolvers = {
         title={{ en: "Caching", zh: "缓存这道坎" }}
         desc={{
           en: "Chapter 05 showed how a REST response can be cached by the browser, a CDN, or a proxy. GraphQL loses most of that. Here are three ways to get it back.",
-          zh: "第 05 章讲过,REST 的响应可以被浏览器、CDN、代理缓存。GraphQL 大部分吃不到,三条出路一条条看。",
+          zh: "第 05 章讲过,REST 的响应可以被浏览器、CDN、代理缓存。GraphQL 大多用不上,三条出路一条条看。",
         }}
       >
         <p className="sec-desc">
@@ -680,7 +680,7 @@ const resolvers = {
               <T en="Way 1" zh="出路 ①" />
             </span>
             <h3 className="bs-way-title">
-              <T en="A normalized cache in the client" zh="客户端规范化缓存" />
+              <T en="A normalized cache in the client" zh="客户端归一化缓存" />
             </h3>
           </div>
           <p>
@@ -1216,9 +1216,9 @@ Host: api.example.com`}
             zh: (
               <>
                 单端点 + POST + 每次都变的请求体,是 HTTP 缓存失效的原因。
-                三条出路:客户端规范化缓存(按 <code>__typename</code> 和{" "}
+                三条出路:客户端归一化缓存(按 <code>__typename</code> 和{" "}
                 <code>id</code> 建键)、persisted queries(发哈希、改用 GET、
-                重新吃到 CDN),以及仍在草案中的 GraphQL over HTTP 规范。
+                重新用上 CDN),以及仍在草案中的 GraphQL over HTTP 规范。
               </>
             ),
           },
