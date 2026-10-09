@@ -464,11 +464,11 @@ html[data-sidebar="collapsed"] .sidebar {
   background: oklch(var(--acc-l) var(--acc-c) var(--hue) / 0.12);
 }
 
+/* 标题与副标题都允许换行:截断之后完整文字在哪里都看不到。 */
 .side-title {
   flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .side-en {
@@ -478,9 +478,8 @@ html[data-sidebar="collapsed"] .sidebar {
   letter-spacing: 0.04em;
   display: block;
   margin-top: -3px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .side-state {
@@ -2017,6 +2016,15 @@ li code {
   opacity: 1;
   transform: none;
   filter: none;
+}
+
+/* 没有脚本时滚动淡入永远不会触发,内容必须直接可见。 */
+@media (scripting: none) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
 }
 
 @keyframes fade-in {

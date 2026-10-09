@@ -12,6 +12,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useSyncExternalStore,
   isValidElement,
@@ -31,7 +32,7 @@ export const langScript = `(function(){var d=document.documentElement;var l="en"
 type Ctx = { lang: Lang; setLang: (l: Lang) => void };
 const LangContext = createContext<Ctx>({ lang: "en", setLang: () => {} });
 
-// <html data-lang> 是唯一数据源:首屏由上面那段阻塞脚本写好,React 读回来。
+// <html data-lang> 是数据源(缺失时回退到 localStorage):首屏由上面那段阻塞脚本写好,React 读回来。
 // useSyncExternalStore 允许服务端快照与客户端快照不同,所以不用在 effect
 // 里补一次 setState 才追上真实值 —— 那会让首屏白白多渲染一轮。
 const langListeners = new Set<() => void>();
@@ -44,7 +45,21 @@ function subscribeLang(onChange: () => void) {
 }
 
 function readLang(): Lang {
-  return document.documentElement.dataset.lang === "zh" ? "zh" : "en";
+  const v = document.documentElement.dataset.lang;
+  if (v === "zh" || v === "en") return v;
+  // 属性不在了:React 放弃水合、在客户端重建根节点时会丢掉 langScript 写的属性,回到存储里读。
+  try {
+    return window.localStorage.getItem(KEY) === "zh" ? "zh" : "en";
+  } catch {
+    return "en";
+  }
+}
+
+/** 把语言写到 <html> 上,与 langScript 在首帧前做的事相同。 */
+function applyLang(l: Lang) {
+  const d = document.documentElement;
+  d.dataset.lang = l;
+  d.lang = l === "zh" ? "zh-CN" : "en";
 }
 
 function langOnServer(): Lang {
@@ -54,10 +69,15 @@ function langOnServer(): Lang {
 export function LangProvider({ children }: { children: ReactNode }) {
   const lang = useSyncExternalStore(subscribeLang, readLang, langOnServer);
 
+  // 挂载后把语言写回 <html>:根节点在客户端重建之后,属性和 lang 靠这里恢复。
+  // 写入的是 readLang() 而不是 lang:水合那一轮 lang 还是服务端快照("en"),
+  // 拿它写回会盖掉 langScript 已经写好的真实语言。
+  useEffect(() => {
+    applyLang(readLang());
+  }, [lang]);
+
   const setLang = useCallback((l: Lang) => {
-    const d = document.documentElement;
-    d.dataset.lang = l;
-    d.lang = l === "zh" ? "zh-CN" : "en";
+    applyLang(l);
     try {
       window.localStorage.setItem(KEY, l);
     } catch {

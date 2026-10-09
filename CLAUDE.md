@@ -81,6 +81,11 @@ sw/mock-sw.ts                                          Service Worker 源码
 scripts/build-sw.mjs                                   打包成 public/mock-sw.js
 app/api/[[...path]]/route.ts                           仅本地开发的服务端 Mock
 app/<ch>/page.tsx      章节主页面("use client",数据+组合)
+app/<ch>/layout.tsx    本章的服务端布局:export metadata = chapterMetadata("<章节id>"),
+                       并渲染 <ChapterTitle id="<章节id>" />(标签页标题跟随界面语言)
+app/page-title.tsx     PageTitle / ChapterTitle:把 document.title 改成当前语言
+app/not-found.tsx      课程之外的路径显示的双语 404 页
+app/fonts/             自托管字体,构建时不再下载字体(见 app/fonts/README.md)
 app/<ch>/viz.tsx       本章专属可视化组件
 app/<ch>/chapter.css   本章专属样式(page.tsx 里【必须】import "./chapter.css",
                        漏了会导致整章样式静默失效 —— DataData 踩过的坑;

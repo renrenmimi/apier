@@ -37,7 +37,6 @@ export default function Sidebar() {
           href="/"
           className="brand"
           onClick={close}
-          aria-label="APIer"
           prefetch={false}
           onMouseEnter={() => router.prefetch("/")}
           onFocus={() => router.prefetch("/")}
@@ -55,7 +54,7 @@ export default function Sidebar() {
 
         <nav className="side-nav" aria-label={L({ en: "Chapters", zh: "章节" })}>
           {CHAPTERS.map((c) => {
-            const active = c.id === current.id;
+            const active = c.id === current?.id;
             const state = ready ? chapterState(c.id) : "new";
             return (
               <Link
@@ -98,14 +97,15 @@ export default function Sidebar() {
             <T
               en={
                 <>
-                  <b>{totalLabs}</b> labs done · <b>{quizCount}</b> quizzes ·{" "}
+                  <b>{totalLabs}</b> {totalLabs === 1 ? "lab" : "labs"} done ·{" "}
+                  <b>{quizCount}</b> {quizCount === 1 ? "quiz" : "quizzes"} ·{" "}
                   <b>{doneCh}</b>/{CHAPTERS.length} chapters complete
                 </>
               }
               zh={
                 <>
-                  完成 <b>{totalLabs}</b> 个动手任务 · <b>{quizCount}</b> 个测验
-                  · 通关 <b>{doneCh}</b>/{CHAPTERS.length} 章
+                  完成 <b>{totalLabs}</b> 个动手任务 · <b>{quizCount}</b> 个测验 · 通关{" "}
+                  <b>{doneCh}</b>/{CHAPTERS.length} 章
                 </>
               }
             />
