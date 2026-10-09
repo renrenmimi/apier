@@ -15,6 +15,10 @@
 .rs-city .rs-back {
   position: absolute;
   left: 50%;
+  /* 不播放动画时(减少动态效果)也居中,不从中线向右伸出屏幕 */
+  transform: translateX(-50%);
+  /* 信使左右各走多远;窄屏收短,免得回程的标签走出屏幕 */
+  --travel: 64px;
 }
 .rs-city .rs-go {
   top: 8px;
@@ -25,18 +29,18 @@
   animation: rs-back 4.6s ease-in-out infinite;
 }
 @keyframes rs-go {
-  0%   { transform: translateX(calc(-50% - 64px)); opacity: 0; }
+  0%   { transform: translateX(calc(-50% - var(--travel))); opacity: 0; }
   8%   { opacity: 1; }
-  38%  { transform: translateX(calc(-50% + 64px)); opacity: 1; }
+  38%  { transform: translateX(calc(-50% + var(--travel))); opacity: 1; }
   46%  { opacity: 0; }
-  100% { transform: translateX(calc(-50% + 64px)); opacity: 0; }
+  100% { transform: translateX(calc(-50% + var(--travel))); opacity: 0; }
 }
 @keyframes rs-back {
-  0%, 50% { transform: translateX(calc(-50% + 64px)); opacity: 0; }
+  0%, 50% { transform: translateX(calc(-50% + var(--travel))); opacity: 0; }
   58%  { opacity: 1; }
-  88%  { transform: translateX(calc(-50% - 64px)); opacity: 1; }
+  88%  { transform: translateX(calc(-50% - var(--travel))); opacity: 1; }
   96%  { opacity: 0; }
-  100% { transform: translateX(calc(-50% - 64px)); opacity: 0; }
+  100% { transform: translateX(calc(-50% - var(--travel))); opacity: 0; }
 }
 .rs-blocks {
   display: flex;
@@ -76,6 +80,8 @@
 }
 @media (max-width: 640px) {
   .rs-city { flex-direction: column; align-items: stretch; }
+  .rs-city .rs-go,
+  .rs-city .rs-back { --travel: 16px; }
   .rs-blocks { justify-content: center; }
 }
 

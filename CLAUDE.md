@@ -96,6 +96,12 @@ lib/<ch>-data.tsx      本章动手任务 LABS + 测验 QUIZ 数据
 每章配色由 `<main className="page" data-ch="<章节id>">` 自动生效
 (色相注册在 globals.css 的 `[data-ch=…]` 段,已全部就位,勿动)。
 
+始终深色的面板(背景用 `--code-bg`,两种主题下都是深色)要登记在 globals.css 的
+深色面板选择器列表里(文件开头的令牌段与「章节主题色」段各一处,共三处),
+这样浅色主题下面板里的强调色和弱化文字才按深色底取值;否则对比度只有 2:1 左右。
+窄屏网格的列用 `minmax(0, 1fr)`,不要用裸 `1fr`:页面是 `overflow-x: clip`,
+撑出屏幕的内容会被直接裁掉,既看不见也滚不到。
+
 ## 数据文件约定
 
 - `lib/<ch>-data.tsx` 直接导出常量:`export const LABS: Lab[] = […]`、

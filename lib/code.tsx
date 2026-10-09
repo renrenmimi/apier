@@ -36,7 +36,7 @@ export function CodeLines({
     <div className="codewin-body" ref={codeRegion}>
       {lines.map((toks, i) => (
         <div key={i} className={`cl${hlSet.has(i + 1) ? " hl" : ""}`}>
-          <span className="cl-n">{i + 1}</span>
+          <span className="cl-n" aria-hidden />
           <span className="cl-c">
             {toks.map((tok, j) =>
               tok.t ? (
