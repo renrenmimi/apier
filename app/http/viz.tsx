@@ -24,7 +24,7 @@ export function HeroLetter() {
         </span>
       </div>
       <div className="ht-letter-row">
-        <span className="ht-letter-code">Host: api.shop.com</span>
+        <span className="ht-letter-code">Host: api.shop.example</span>
         <span className="ht-letter-tag">
           <T en="Which server" zh="收件人" />
         </span>
@@ -98,7 +98,7 @@ const URL_SEGS: UrlSeg[] = [
   },
   {
     k: "host",
-    s: "api.shop.com",
+    s: "api.shop.example",
     name: { en: "Host (domain name)", zh: "域名(host)" },
     info: {
       en: (
@@ -106,14 +106,15 @@ const URL_SEGS: UrlSeg[] = [
           The host says <b>which server</b> receives the request. DNS translates
           this name into an IP address. The <code>api.</code> prefix is a common
           convention: the web pages live on <code>www.</code>, and the API gets
-          its own subdomain.
+          its own subdomain. (<code>.example</code> is a name reserved for
+          examples, so this one never reaches a real site.)
         </>
       ),
       zh: (
         <>
           host 说明这条报文<b>送到哪台服务器</b>。DNS 负责把这串人类能记住的名字
           翻译成 IP 地址。开头的 <code>api.</code> 是行业惯例:网页放在{" "}
-          <code>www.</code>,API 单独用一个子域名。
+          <code>www.</code>,API 单独用一个子域名。(<code>.example</code> 是专门留给示例用的域名,不会指向任何真实网站。)
         </>
       ),
     },
@@ -185,47 +186,45 @@ const URL_SEGS: UrlSeg[] = [
   },
   {
     k: "q1",
-    s: "?sort=price",
+    s: "?fields=name,price",
     name: { en: "Query string", zh: "查询字符串(query string)" },
     info: {
       en: (
         <>
           The <code>?</code> marks the start of the query string.{" "}
-          <code>sort=price</code> asks for the results sorted by price. The
-          query string is <b>part of the URL</b>, so two different query strings
-          are two different URLs and are cached separately. In most APIs it
-          carries options for the same collection: sorting, filtering, and
-          paging.
+          <code>fields=name,price</code> asks for only those two fields of
+          product 42. The query string is <b>part of the URL</b>, so two
+          different query strings are two different URLs and are cached
+          separately. The path says which resource you want; the query string
+          says how you want it: which fields, and on a collection such as{" "}
+          <code>/products</code>, sorting, filtering, and paging.
         </>
       ),
       zh: (
         <>
-          <code>?</code> 之后是查询字符串。<code>sort=price</code>{" "}
-          表示按价格排序。查询字符串<b>属于 URL 的一部分</b>
-          ,所以两组不同的参数就是两条不同的 URL,缓存也分开算。在大多数 API 里,
-          它承载的是同一个集合上的附加选项:排序、筛选、分页。
+          <code>?</code> 之后是查询字符串。<code>fields=name,price</code> 表示 42 号商品只要这两个字段。查询字符串<b>属于 URL 的一部分</b>,所以两组不同的参数就是两条不同的 URL,缓存也分开算。路径说明要哪个资源,查询字符串说明怎么要:要哪些字段;如果是 <code>/products</code> 这样的集合,还有排序、筛选、分页。
         </>
       ),
     },
   },
   {
     k: "q2",
-    s: "&limit=10",
+    s: "&currency=EUR",
     name: { en: "A second parameter", zh: "第二个查询参数" },
     info: {
       en: (
         <>
           Parameters after the first are joined with <code>&amp;</code>.{" "}
-          <code>limit=10</code> asks for ten items instead of the whole
-          collection. Each parameter is one <code>key=value</code> pair, and the
-          server reads them by name, so their order does not matter.
+          <code>currency=EUR</code> asks for the price in euros. Each parameter
+          is one <code>key=value</code> pair, and the server reads them by name,
+          so their order does not matter to the server. To a cache it does:{" "}
+          <code>?a=1&amp;b=2</code> and <code>?b=2&amp;a=1</code> are two
+          different URLs.
         </>
       ),
       zh: (
         <>
-          第二个及以后的参数用 <code>&amp;</code> 串起来。<code>limit=10</code>{" "}
-          表示只要 10 条,别把整个集合都搬来。每个参数就是一组{" "}
-          <code>键=值</code>,服务器按名字取,顺序无所谓。
+          第二个及以后的参数用 <code>&amp;</code> 串起来。<code>currency=EUR</code> 表示价格用欧元显示。每个参数就是一组 <code>键=值</code>,服务器按名字取,所以对服务器来说顺序无所谓;对缓存来说却有区别:<code>?a=1&amp;b=2</code> 和 <code>?b=2&amp;a=1</code> 是两条不同的 URL。
         </>
       ),
     },
@@ -784,14 +783,15 @@ const STATUSES: StatusInfo[] = [
     scene: {
       en: (
         <>
-          A missing quote in the JSON, a parameter of the wrong type, a required
-          field that is absent. When you see 400, check what you sent.
+          A missing quote in the JSON, or a body that is not JSON at all: the
+          server cannot even read the request. A missing or invalid field is a
+          validation failure, which this course answers with 422 (see the 422
+          card). When you see 400, check what you sent.
         </>
       ),
       zh: (
         <>
-          JSON 少个引号、参数类型不对、该有的字段没有 —— 都是它。
-          看到 400,先检查自己发出去的东西。
+          JSON 少个引号、请求体根本不是 JSON —— 服务器连读都读不懂,就回 400。字段缺失、取值不合法这类校验失败,本课用 422(见 422 那一格)。看到 400,先检查自己发出去的东西。
         </>
       ),
     },
@@ -968,14 +968,14 @@ const STATUSES: StatusInfo[] = [
     scene: {
       en: (
         <>
-          The server code raised an error. Changing your request will not help.
-          You can retry, report it, or fix the server.
+          The server code raised an error. The problem is on the server&apos;s
+          side, not in how you wrote the request: retry later, report it, or fix
+          the server.
         </>
       ),
       zh: (
         <>
-          服务器代码自己抛错了。作为调用方,你改请求没用 ——
-          能做的是重试、上报,或者去修服务端。
+          服务器代码自己抛错了。问题在服务器这边,不是你的请求写错了:能做的是稍后重试、上报,或者去修服务端。
         </>
       ),
     },

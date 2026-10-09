@@ -301,8 +301,8 @@ export default function HomePage() {
             </div>
             <p>
               <T
-                en="A site you have never used does not know who you are, so it asks Google to confirm your identity. Your Google password never leaves Google. That mechanism is OAuth 2.0, covered in chapter 06."
-                zh="陌生网站不知道你是谁,它调微信的 API 替你验明正身 —— 你的密码从头到尾没离开过微信。这套机制叫 OAuth 2.0,第 06 章见。"
+                en="A site you have never used does not know who you are, so it asks Google to confirm who you are. Your Google password never leaves Google. This kind of sign-in is built on OAuth 2.0, which on its own only grants access; confirming who you are takes a layer on top of it, OpenID Connect. Chapter 06 covers both."
+                zh="陌生网站不知道你是谁,于是请微信替你确认身份 —— 你的密码从头到尾没离开过微信。这类「第三方登录」建立在 OAuth 2.0 之上;OAuth 2.0 本身只负责授权,确认身份要靠在它上面再加的一层(标准做法叫 OpenID Connect),第 06 章细讲。"
               />
             </p>
           </div>
@@ -327,17 +327,17 @@ export default function HomePage() {
               <>
                 <p>
                   Does this feature need <b>data or a service that belongs to
-                  someone else</b>? If yes, there is an API behind it. If the
-                  device can do the whole job on its own, for example a
-                  calculator adding two numbers, there is no API call.
+                  someone else</b>? If yes, there is a network API call behind
+                  it. If the device can do the whole job on its own, for
+                  example a calculator adding two numbers, no network API is
+                  involved.
                 </p>
               </>
             }
             zh={
               <>
                 <p>
-                  这个功能需要<b>别人家的数据或服务</b>吗?需要,背后就有 API。
-                  自家设备本地就能办的(比如计算器算加法),才不用。
+                  这个功能需要<b>别人家的数据或服务</b>吗?需要,背后就有一次网络 API 调用;设备自己就能完成的(比如计算器算加法),用不到网络 API。
                 </p>
               </>
             }
@@ -351,8 +351,8 @@ export default function HomePage() {
         index="04"
         title={{ en: "What the data looks like: JSON", zh: "数据长什么样:JSON" }}
         desc={{
-          en: "More than nine out of ten API responses use this format. Click each line to see what it is.",
-          zh: "服务员端上来的「菜」,九成以上是这种格式。点每一行,看它是什么。",
+          en: "Most public web APIs serve their responses in this format. Click each line to see what it is.",
+          zh: "服务员端上来的「菜」,在绝大多数公开的 Web API 里都是这种格式。点每一行,看它是什么。",
         }}
       >
         <JsonAnatomy />
@@ -532,15 +532,15 @@ export default function HomePage() {
           {
             en: (
               <>
-                Only text travels over the network. JSON is the common format
-                for that text, and <code>response.json()</code> turns it back
-                into an object you can use.
+                What travels over the network is bytes. JSON is a text format,
+                so a JSON response reaches your code as text, and{" "}
+                <code>response.json()</code> turns it into an object you can
+                use.
               </>
             ),
             zh: (
               <>
-                网线上跑的永远是文本。JSON 是那段文本的通用格式,
-                <code>response.json()</code> 负责把它复活成对象。
+                网络上传输的是字节。JSON 是用文本表示数据的格式,所以 JSON 响应到了你的代码里是一段文本,<code>response.json()</code> 负责把它解析成对象。
               </>
             ),
           },

@@ -26,7 +26,7 @@ import { HeroLetter, UrlAnatomy, MethodPicker, StatusExplorer } from "./viz";
  * 报文正文两种语言完全一致 —— 线上传的是同一份字节。 */
 
 const REQ_MSG = `POST /v1/products HTTP/1.1
-Host: api.shop.com
+Host: api.shop.example
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
 
@@ -41,7 +41,7 @@ Location: /v1/products/43
 /* ---------- §06 完整对话 ---------- */
 
 const CONV_REQ = `GET /v1/products/42 HTTP/1.1
-Host: api.shop.com
+Host: api.shop.example
 Accept: application/json`;
 
 const CONV_RES = `HTTP/1.1 200 OK
@@ -59,17 +59,17 @@ ETag: "v7"
 /* 只有注释双语,命令逐字节相同。 */
 const CONV_CURL = {
   en: `# -i prints the response headers together with the body
-curl -i "https://api.shop.com/v1/products/42"
+curl -i "https://api.shop.example/v1/products/42"
 
 # A POST: -X sets the method, -H adds a header, -d sends the body
-curl -X POST "https://api.shop.com/v1/products" \\
+curl -X POST "https://api.shop.example/v1/products" \\
   -H "Content-Type: application/json" \\
   -d '{ "name": "Mechanical keyboard", "price": 399 }'`,
   zh: `# -i:把响应头连同正文一起打印出来
-curl -i "https://api.shop.com/v1/products/42"
+curl -i "https://api.shop.example/v1/products/42"
 
 # 发一个 POST:-X 换方法,-H 加请求头,-d 带正文
-curl -X POST "https://api.shop.com/v1/products" \\
+curl -X POST "https://api.shop.example/v1/products" \\
   -H "Content-Type: application/json" \\
   -d '{ "name": "Mechanical keyboard", "price": 399 }'`,
 };
@@ -811,8 +811,8 @@ export default function HttpPage() {
             </div>
             <p>
               <T
-                en="The server is the problem. Changing your request will not help."
-                zh="「问题在服务器这边。」你改请求没用,等修。"
+                en="The problem is on the server's side, not in how you wrote the request; retry later or report it."
+                zh="问题在服务器这边,不是你的请求写错了;能做的是稍后重试或上报。"
               />
             </p>
           </div>
@@ -1208,17 +1208,15 @@ export default function HttpPage() {
               <>
                 <b>The tool changes; the message does not.</b> A browser, fetch,
                 curl, and Postman all produce the same HTTP message. Learn to
-                read the message and you can read any of them. (api.shop.com is
-                an example domain used in this course. The practice tasks below
-                use a real public API.)
+                read the message and you can read any of them. (api.shop.example
+                is an example domain. The inspector below talks to this
+                site&apos;s mock API, which runs in your browser; the practice
+                tasks in §07 use real public APIs.)
               </>
             ),
             zh: (
               <>
-                <b>工具千变,报文不变。</b>浏览器、fetch、curl、Postman
-                生成的是同一份 HTTP 报文 —— 学会读报文,你就看懂了所有工具。
-                (api.shop.com 是本课程虚构的示例域名;下面的检查器打的是本站
-                自带的 Mock API,真实可跑。)
+                <b>工具千变,报文不变。</b>浏览器、fetch、curl、Postman 生成的是同一份 HTTP 报文 —— 学会读报文,你就看懂了所有工具。(api.shop.example 是示例域名。下面的检查器打的是本站在你浏览器里运行的 Mock API;§07 的动手任务调用真实的公开 API。)
               </>
             ),
           }}
@@ -1397,14 +1395,13 @@ export default function HttpPage() {
                 Safe = the request should not change server state. Idempotent =
                 repeating it leaves the same state, which is what makes it{" "}
                 <b>safe to retry after a timeout</b>. GET, HEAD, PUT, DELETE,
-                and OPTIONS are idempotent; POST and PATCH are not.
+                and OPTIONS are idempotent; POST is not, and PATCH is not
+                guaranteed to be.
               </>
             ),
             zh: (
               <>
-                安全 = 这个请求不该改服务器状态;幂等 = 重复发送,最终状态相同 ——
-                所以<b>超时之后敢重试</b>。GET、HEAD、PUT、DELETE、OPTIONS
-                幂等,POST 和 PATCH 不幂等。
+                安全 = 这个请求不该改服务器状态;幂等 = 重复发送,最终状态相同 —— 所以<b>超时之后敢重试</b>。GET、HEAD、PUT、DELETE、OPTIONS 幂等,POST 不幂等,PATCH 不保证幂等。
               </>
             ),
           },
