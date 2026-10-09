@@ -1236,6 +1236,7 @@ export default function HttpPage() {
               label: { en: "A normal GET", zh: "一次普通的 GET" },
               method: "GET",
               path: "/mock-api/posts/42",
+              expect: 200,
               note: {
                 en: (
                   <>
@@ -1259,6 +1260,7 @@ export default function HttpPage() {
               label: { en: "Ask for something gone", zh: "要一个不存在的" },
               method: "GET",
               path: "/mock-api/posts/9999",
+              expect: 404,
               note: {
                 en: (
                   <>
@@ -1281,6 +1283,7 @@ export default function HttpPage() {
               label: { en: "Write without a token", zh: "不带凭证去写" },
               method: "POST",
               path: "/mock-api/posts",
+              expect: 401,
               body: '{"title":"My first post","body":"Hello, API world!"}',
               note: {
                 en: (
@@ -1305,6 +1308,7 @@ export default function HttpPage() {
               label: { en: "OPTIONS: what may I do?", zh: "OPTIONS:我能干什么?" },
               method: "OPTIONS",
               path: "/mock-api/posts",
+              expect: 204,
               note: {
                 en: (
                   <>

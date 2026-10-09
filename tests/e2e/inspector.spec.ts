@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { execFileSync } from "node:child_process";
 
 // Covers what the inspector shows the learner, and the two ways it must stay
 // honest: never pretending a server answered for the browser, and never
@@ -174,4 +175,106 @@ test("the mock answers in the interface language, and the Request tab shows why"
   await inspector.getByRole("button", { name: "要一个不存在的" }).click();
   await inspector.locator(".insp-meta").waitFor({ state: "visible", timeout: 15_000 });
   await expect(pane).toContainText("没有 id 为 9999 的文章");
+});
+
+test("the note follows the interface language, the timing says where time went, and the tabs work by keyboard", async ({ page }) => {
+  await page.goto(CHAPTER);
+  await ready(page);
+  const inspector = page.locator(".insp").first();
+  await inspector.getByRole("button", { name: /A normal GET/i }).click();
+  await inspector.locator(".insp-meta").waitFor({ state: "visible", timeout: 15_000 });
+  await expect(inspector.locator(".insp-note")).toContainText("and a body");
+  await expect(inspector.locator(".insp-meta")).toContainText("in the browser");
+
+  // Keyboard: the selected tab is the only tab stop; arrows and End move the selection.
+  const bodyTab = inspector.getByRole("tab", { name: "Response body" });
+  await bodyTab.focus();
+  await page.keyboard.press("ArrowRight");
+  const headersTab = inspector.getByRole("tab", { name: /Response headers/ });
+  await expect(headersTab).toHaveAttribute("aria-selected", "true");
+  await expect(headersTab).toBeFocused();
+  await expect(inspector.getByRole("tabpanel")).toHaveAttribute("aria-labelledby", (await headersTab.getAttribute("id"))!);
+  await page.keyboard.press("End");
+  await expect(inspector.getByRole("tab", { name: "curl" })).toHaveAttribute("aria-selected", "true");
+
+  // The note was stored as both languages, so switching after the request translates it.
+  await page.getByRole("button", { name: "中文", exact: true }).click();
+  await expect(inspector.locator(".insp-note")).toContainText("带回了正文");
+});
+
+test("the curl command quotes every argument and stays valid shell", async ({ page }) => {
+  await page.goto("/backstage");
+  await ready(page);
+  const inspector = page.locator(".insp", { has: page.getByRole("button", { name: /Same query, loader on/ }) });
+  await inspector.getByRole("button", { name: /Same query, loader on/ }).click();
+  await inspector.locator(".insp-meta").waitFor({ state: "visible", timeout: 15_000 });
+  await inspector.getByRole("tab", { name: "curl" }).click();
+  const pane = inspector.locator(".insp-pane");
+  // An unquoted ? is a glob in zsh, and an unquoted & ends the command in any shell.
+  await expect(pane).toContainText("'http://localhost:3300/api/graphql?dataloader=1'");
+
+  await inspector.locator(".insp-body-in").fill(`{"query":"{ post(id: 1) { title } }","note":"It's"}`);
+  await inspector.getByRole("button", { name: /^Send$/ }).click();
+  await expect(inspector.locator(".insp-meta")).toBeVisible();
+  await inspector.getByRole("tab", { name: "curl" }).click();
+  await expect(pane).toContainText(`It'\\''s`);
+  // bash -n parses the command without running it.
+  const command = (await pane.locator(".cl-c").allTextContents()).join("\n");
+  expect(command.startsWith("curl -i -X POST")).toBe(true);
+  execFileSync("bash", ["-n", "-c", command]);
+
+  // HEAD is offered, answers without a body, and becomes curl -I.
+  await inspector.locator(".insp-method").selectOption("HEAD");
+  await inspector.locator(".insp-path").fill("/mock-api/posts/42");
+  await inspector.getByRole("button", { name: /^Send$/ }).click();
+  await expect(inspector.locator(".insp-meta .status")).toContainText("200");
+  await expect(pane).toContainText("No response body");
+  await inspector.getByRole("tab", { name: "curl" }).click();
+  await expect(pane).toContainText("curl -I 'http://localhost:3300/api/posts/42'");
+});
+
+test("only /mock-api paths are sent, and only once while a request is in flight", async ({ page }) => {
+  await page.goto("/auth");
+  await ready(page);
+  const inspector = page.locator(".insp").first();
+  const path = inspector.locator(".insp-path");
+  const sent: string[] = [];
+  page.on("request", (r) => {
+    if (r.method() === "POST" || r.url().includes("/api/posts/42")) sent.push(`${r.method()} ${new URL(r.url()).pathname}${new URL(r.url()).search}`);
+  });
+
+  await path.fill("/api/posts/42");
+  await expect(inspector.getByRole("button", { name: /^Send$/ })).toBeDisabled();
+  await expect(inspector.locator(".insp-err")).toContainText("must start with /mock-api");
+  await path.press("Enter");
+
+  // A slow write: three quick Enters must create one post, not three.
+  await inspector.getByRole("button", { name: /A token that may write/ }).click();
+  await inspector.locator(".insp-meta").waitFor({ state: "visible", timeout: 15_000 });
+  sent.length = 0;
+  await path.fill("/mock-api/posts?delay=800");
+  await path.press("Enter");
+  await path.press("Enter");
+  await path.press("Enter");
+  await expect(inspector.locator(".insp-meta .status")).toContainText("201", { timeout: 10_000 });
+  expect(sent).toEqual(["POST /mock-api/posts?delay=800"]);
+});
+
+test("a preset whose answer differs from its story says so", async ({ page }) => {
+  await page.goto("/rest-design");
+  await ready(page);
+  // Spend the visitor's rate-limit window.
+  await page.evaluate(async () => {
+    for (let i = 0; i < 61; i++) await fetch("/mock-api/posts/1?delay=0");
+  });
+  const inspector = page.locator(".insp", { has: page.getByRole("button", { name: /1 · Look at post 7/ }) });
+  await inspector.getByRole("button", { name: /1 · Look at post 7/ }).click();
+  const note = inspector.locator(".insp-note");
+  await expect(note).toContainText("This time the answer was 429 Too Many Requests");
+  await expect(note).not.toContainText("Note every field");
+
+  // Reset is never rate limited, so its own note applies again.
+  await inspector.getByRole("button", { name: /3 · Undo it/ }).click();
+  await expect(inspector.locator(".insp-meta .status")).toContainText("200");
+  await expect(note).toContainText("Back to the original data");
 });
