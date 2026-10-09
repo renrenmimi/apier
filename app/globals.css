@@ -18,8 +18,17 @@
 
 /* ---------- 1. 设计 token ---------- */
 
+/* 始终深色的面板(代码窗、检查器、各章自带的深色舞台)在浅色主题下也用深色主题的令牌:
+   为白底设计的深色强调色、弱化文字落在深色底上,对比度只有 2:1 左右。
+   新增始终深色的面板时,把它的选择器加进这里和下面「章节主题色」的派生规则。 */
 :root,
-[data-theme="dark"] {
+[data-theme="dark"],
+[data-theme="light"] :is(
+    .codewin, .insp-pane, .insp-body-in, .hm-json-win, .hm-live-body, .au-b64-out,
+    .au-jwt-token, .au-jwt-pre, .bs-n1-q, .bs-n1-sql, .bs-norm-json, .fc-lab-body,
+    .fc-poke-sprite, .gq-of-win, .gq-giql, .gq-giql-pane, .ht-url-bar, .ht-hdr-ex,
+    .op-qa-win, .op-bub-schema, .op-bub-result, .ra-url-win, .sc-hero-doc
+  ) {
   color-scheme: dark;
 
   --bg: #05060c;
@@ -57,14 +66,14 @@
   --code-bg: #0a0d16;
   --code-bar: #0e1220;
   --code-text: #dde3f2;
-  --code-ln: rgba(220, 226, 244, 0.22);
+  --code-ln: #6b7590;
   --code-hl: rgba(255, 255, 255, 0.05);
 
   /* 语法高亮 */
   --tk-kw: #c792ea;
   --tk-str: #a8d98a;
   --tk-num: #f2a76f;
-  --tk-com: #5a6478;
+  --tk-com: #8590a6;
   --tk-fn: #82aaff;
   --tk-type: #6fd6d0;
   --tk-op: #90a0be;
@@ -110,13 +119,13 @@
   --code-bg: #10131d;
   --code-bar: #161a28;
   --code-text: #dde3f2;
-  --code-ln: rgba(220, 226, 244, 0.22);
+  --code-ln: #6b7590;
   --code-hl: rgba(255, 255, 255, 0.05);
 
   --tk-kw: #c792ea;
   --tk-str: #a8d98a;
   --tk-num: #f2a76f;
-  --tk-com: #5a6478;
+  --tk-com: #8590a6;
   --tk-fn: #82aaff;
   --tk-type: #6fd6d0;
   --tk-op: #90a0be;
@@ -136,7 +145,13 @@
 }
 
 :root,
-[data-ch] {
+[data-ch],
+[data-theme="light"] :is(
+    .codewin, .insp-pane, .insp-body-in, .hm-json-win, .hm-live-body, .au-b64-out,
+    .au-jwt-token, .au-jwt-pre, .bs-n1-q, .bs-n1-sql, .bs-norm-json, .fc-lab-body,
+    .fc-poke-sprite, .gq-of-win, .gq-giql, .gq-giql-pane, .ht-url-bar, .ht-hdr-ex,
+    .op-qa-win, .op-bub-schema, .op-bub-result, .ra-url-win, .sc-hero-doc
+  ) {
   --acc: oklch(var(--acc-l) var(--acc-c) var(--hue));
   --acc-strong: oklch(var(--acc-strong-l) var(--acc-strong-c) var(--hue));
   --acc-2: oklch(var(--acc-l) var(--acc-c) var(--hue2));
@@ -150,6 +165,16 @@
 [data-theme="light"] [data-ch],
 [data-theme="light"]:root {
   --acc-ink: oklch(from var(--acc) calc(l - 0.06) c h);
+}
+
+/* 深色面板里的弱化文字(两种主题都在深色底上):提亮到 4.5:1 以上 */
+[data-theme] :is(
+    .codewin, .insp-pane, .insp-body-in, .hm-json-win, .hm-live-body, .au-b64-out,
+    .au-jwt-token, .au-jwt-pre, .bs-n1-q, .bs-n1-sql, .bs-norm-json, .fc-lab-body,
+    .fc-poke-sprite, .gq-of-win, .gq-giql, .gq-giql-pane, .ht-url-bar, .ht-hdr-ex,
+    .op-qa-win, .op-bub-schema, .op-bub-result, .ra-url-win, .sc-hero-doc
+  ) {
+  --text-3: #8590a6;
 }
 
 /* 章节色相注册表(与 lib/curriculum.ts 的 hue 一致)
@@ -728,9 +753,11 @@ html[data-sidebar="collapsed"] .sidebar {
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: clamp(40px, 6.2vw, 64px);
+  /* 下限 30px:Syne 900 下「subscriptions」这样的长词在 40px 时比 360px 的屏幕还宽 */
+  font-size: clamp(30px, 6.2vw, 64px);
   font-weight: 900;
   text-wrap: balance;
+  overflow-wrap: anywhere;
   letter-spacing: 0.005em;
   line-height: 1.08;
   margin: 0 0 6px;
@@ -980,7 +1007,8 @@ li code {
 
 .callout {
   display: grid;
-  grid-template-columns: auto 1fr;
+  /* minmax(0, …):里面的宽代码块自己横向滚动,不把整个提示框撑出屏幕 */
+  grid-template-columns: auto minmax(0, 1fr);
   gap: 13px;
   border-radius: 16px;
   border: 1px solid var(--border);
@@ -1329,12 +1357,25 @@ li code {
   white-space: pre;
 }
 
+/* 行号用 CSS 计数器生成:读屏不念、复制代码时不带上,也不算正文 */
+.codewin-body {
+  counter-reset: cl;
+}
+
+.cl {
+  counter-increment: cl;
+}
+
 .cl-n {
   flex: 0 0 34px;
   text-align: right;
   padding-right: 16px;
   color: var(--code-ln);
   user-select: none;
+}
+
+.cl-n::before {
+  content: counter(cl);
 }
 
 .cl-c {
@@ -1410,6 +1451,13 @@ li code {
   color: var(--text);
   margin: 0 0 14px;
   line-height: 1.6;
+}
+
+/* 题干、选项和解析里的长 URL 没有断行点,窄屏下允许在任意处换行 */
+.q-text,
+.q-opt,
+.q-feedback {
+  overflow-wrap: anywhere;
 }
 
 .q-opts {

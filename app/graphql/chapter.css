@@ -75,22 +75,23 @@
   color: var(--code-text);
   font-family: var(--font-jb), monospace;
   font-size: 12.5px;
-  line-height: 1.85;
+  /* 24px:点击目标的最小高度(WCAG 2.5.8) */
+  line-height: 24px;
   padding: 0 14px;
   cursor: pointer;
   border-left: 3px solid transparent;
-  opacity: 0.34;
-  transition: opacity 0.15s, background 0.15s, border-color 0.15s;
+  /* 没被请求的字段用弱化色而不是透明度:透明度把对比度压到 2.6:1,读不清 */
+  color: var(--tk-com);
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .gq-of-line:hover {
   background: var(--code-hl);
-  opacity: 0.7;
 }
 .gq-of-line.on {
-  opacity: 1;
+  color: var(--code-text);
   background: var(--code-hl);
   border-left-color: var(--acc);
 }

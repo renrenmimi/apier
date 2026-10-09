@@ -342,8 +342,14 @@
 }
 .ht-st-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
+}
+/* 窄屏两列:四列时「422 Unprocessable Content」这样的格子比屏幕还宽 */
+@media (max-width: 560px) {
+  .ht-st-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 .ht-st-cell {
   border: 1px solid var(--border-strong);
@@ -420,7 +426,7 @@
 /* — §05 Header 常客卡片 — */
 .ht-hdr-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
   margin: 14px 0;
 }
@@ -444,6 +450,7 @@
 }
 @media (max-width: 720px) {
   .ht-hdr-grid {
-    grid-template-columns: 1fr;
+    /* minmax(0, …):示例行在卡片里横向滚动,不撑宽卡片 */
+    grid-template-columns: minmax(0, 1fr);
   }
 }

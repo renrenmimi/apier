@@ -186,15 +186,6 @@
 .au-jwt-seg[data-k="s"] {
   color: #6fc7f2;
 }
-[data-theme="light"] .au-jwt-seg[data-k="h"] {
-  color: #c22f44;
-}
-[data-theme="light"] .au-jwt-seg[data-k="p"] {
-  color: #6f42c1;
-}
-[data-theme="light"] .au-jwt-seg[data-k="s"] {
-  color: #0969ab;
-}
 .au-jwt-seg:hover {
   background: var(--code-hl);
 }
