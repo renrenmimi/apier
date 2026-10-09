@@ -165,6 +165,7 @@ type User {
   id: ID!
   name: String!
   email: String!
+  avatarUrl: String
   posts: [Post!]!
 }
 
@@ -422,8 +423,8 @@ type Comment {
                 </td>
                 <td>
                   <T
-                    en="Text, as a sequence of UTF-8 characters"
-                    zh="文本,一串 UTF-8 字符"
+                    en="Text, as a sequence of Unicode characters (sent as UTF-8 in JSON)"
+                    zh="文本,一串 Unicode 字符(在 JSON 里以 UTF-8 传输)"
                   />
                 </td>
                 <td>
