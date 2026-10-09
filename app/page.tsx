@@ -449,7 +449,7 @@ export default function HomePage() {
         <p className="sec-desc" style={{ marginTop: 18 }}>
           <T
             en="These two styles cover most APIs in use today, and they are the main line of this course. The full map is below. Start at the top left and work down. The small dots in the sidebar record your progress."
-            zh="这两种就是当今最主流的两套 API 风格,也是这门课的全部主线。下面是完整路线图 —— 从左上角出发,一章一章往下走,侧栏的小绿灯会记录你的战绩。"
+            zh="这两种就是当今最主流的两套 API 风格,也是这门课的全部主线。下面是完整路线图 —— 从左上角出发,一章一章往下走,侧栏的绿点会记录你的进度。"
           />
         </p>
         <CourseMap />

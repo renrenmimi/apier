@@ -261,7 +261,7 @@
   color: var(--text-3);
 }
 
-/* — 规范化缓存示意 — */
+/* — 归一化缓存示意 — */
 .bs-norm {
   display: flex;
   align-items: stretch;

@@ -316,7 +316,7 @@ const JWT_INFOS: JwtSegInfo[] = [
                 <code>alg</code> 改成 <code>none</code> 直接去掉签名;
                 或者对一台预期 RS256 的服务器,改用 HS256 签名、
                 拿服务器的 RSA 公钥当 HMAC 密钥。这两种攻击都很老,
-                但至今仍能打中人。
+                但至今仍然有效。
               </>
             }
           />
@@ -951,7 +951,7 @@ const CORS_FRAMES: CorsFrameDef[] = [
       ),
       zh: (
         <>
-          三条要记住:CORS 报错不等于 API 挂了,
+          三条要记住:CORS 报错不等于 API 出了故障,
           只是服务器没说你的来源可以;curl
           和任何跑在服务器上的代码都不是浏览器,这条规则管不到它们;
           CORS 也不是保护 API 的手段 —— 它决定的是<b>页面脚本</b>

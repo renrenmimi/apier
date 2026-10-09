@@ -320,7 +320,9 @@ export default function HttpPage() {
                     also sends <code>Content-Length</code> (or uses chunked
                     transfer encoding) so the receiver knows how many bytes the
                     body has. A GET request normally has no body, because it
-                    only asks to read something.
+                    only asks to read something. A request&apos;s body is also
+                    called the request body, and a response&apos;s the response
+                    body; the inspector&apos;s tabs use those names.
                   </>
                 }
                 zh={
@@ -329,6 +331,7 @@ export default function HttpPage() {
                     <code>Content-Length</code>(或者用分块传输编码),
                     好让接收方知道正文有多少字节。GET 这类只读请求通常不带正文 ——
                     只是读一样东西,不需要附材料。
+                    {"正文(body)在请求里也叫请求体,在响应里也叫响应体;检查器的标签用的是后一种叫法。"}
                   </>
                 }
               />
@@ -870,7 +873,7 @@ export default function HttpPage() {
                   <b>403 说的是「认识你,但你不许。」</b>
                   身份很明确,就是权限不够,重新登录也没用。401 这个名字
                   (Unauthorized,未授权)其实容易误导:它管的是认证,不是授权。
-                  历史遗留,认了吧。
+                  这是历史遗留的命名。
                 </>
               }
             />
@@ -1063,7 +1066,7 @@ export default function HttpPage() {
           tone="idea"
           title={{
             en: "Two details worth knowing",
-            zh: "两条细节,省你以后犯嘀咕",
+            zh: "两条细节,免得以后疑惑",
           }}
         >
           <p>
@@ -1106,7 +1109,7 @@ export default function HttpPage() {
                   非标准的自定义 header 过去习惯加 <code>X-</code> 前缀,比如{" "}
                   <code>X-API-Key</code>。RFC 6648 已经不建议这么做 ——
                   这类 header 后来常常被标准化,前缀反而成了错名字。
-                  不过现实里还是会经常见到 <code>X-</code>,见到别慌。
+                  不过现实里还是会经常见到 <code>X-</code>,见到也不必奇怪。
                 </>
               }
             />

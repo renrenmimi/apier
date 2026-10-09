@@ -52,7 +52,7 @@ export const CHAPTERS: Chapter[] = [
     en: { en: "Client, server, JSON", zh: "What Is an API" },
     essence: {
       en: "Your web page cannot read another company's database directly. It asks an API, and the API answers.",
-      zh: "你写的每一个网页,背后都有一场「点菜与上菜」。",
+      zh: "网页不能直接读取别家公司的数据库:它向 API 发出请求,由 API 作答。",
     },
     hue: 210,
     camp: "core",
@@ -160,7 +160,7 @@ export const CHAPTERS: Chapter[] = [
     en: { en: "API keys, JWT, OAuth 2.0, CORS", zh: "API Keys, JWT & OAuth" },
     essence: {
       en: "Two separate questions: who are you, and what are you allowed to do?",
-      zh: "服务器凭什么相信「你是你」?从 API Key 到 OAuth 的信任阶梯。",
+      zh: "服务器要分开回答两个问题:你是谁,你能做什么。",
     },
     hue: 350,
     camp: "rest",
@@ -178,7 +178,7 @@ export const CHAPTERS: Chapter[] = [
     en: { en: "One endpoint, one query language", zh: "Why GraphQL Exists" },
     essence: {
       en: "The client states exactly which fields it needs, and the server returns those fields and nothing more.",
-      zh: "要什么、给什么、不多不少 —— 一种向服务器「点菜」的新语法。",
+      zh: "客户端写明自己需要哪些字段,服务器就只返回这些字段,不多也不少。",
     },
     hue: 330,
     camp: "graphql",
@@ -196,7 +196,7 @@ export const CHAPTERS: Chapter[] = [
     en: { en: "SDL, scalars, interfaces, unions", zh: "SDL & Types" },
     essence: {
       en: "The schema is a written contract: what data the server has, and what shape that data comes in.",
-      zh: "一纸契约写清楚:服务器有什么数据,长什么样,谁也别猜。",
+      zh: "schema 是一份成文的契约:服务器有哪些数据,这些数据是什么形状。",
     },
     hue: 300,
     camp: "graphql",
@@ -232,7 +232,7 @@ export const CHAPTERS: Chapter[] = [
     en: { en: "Resolvers, N+1, DataLoader", zh: "Resolvers, N+1 & Caching" },
     essence: {
       en: "Every field in a query is produced by a function on the server. Written carelessly, those functions cause the N+1 problem.",
-      zh: "拉开幕布:每个字段背后都有一个函数在跑,跑不好就是 N+1。",
+      zh: "查询里的每个字段都由服务器上的一个函数产出;这些函数写得不当,就会造成 N+1 问题。",
     },
     hue: 22,
     camp: "graphql",

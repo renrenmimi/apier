@@ -33,7 +33,7 @@ const UTILS: { ico: string; label: Loc<string>; sub: Loc<string> }[] = [
   {
     ico: "🏷️",
     label: { en: "Versioning", zh: "版本化" },
-    sub: { en: "Change without breaking clients", zh: "改接口不砸老客户端" },
+    sub: { en: "Change without breaking clients", zh: "改接口而不破坏老客户端" },
   },
   {
     ico: "🚦",

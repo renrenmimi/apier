@@ -953,7 +953,7 @@ export const QUIZ: QuizItem[] = [
         zh: (
           <>
             差别不在性能,两者都只是类型系统里的抽象工具。查 <code>union</code>{" "}
-            时必须用内联片段才能选字段;查 <code>interface</code>{" "}
+            时必须用内联 fragment 才能选字段;查 <code>interface</code>{" "}
             时共有字段可以直接选。
           </>
         ),

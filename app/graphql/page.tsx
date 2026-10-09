@@ -468,7 +468,7 @@ GET /posts/1/comments HTTP/1.1`}
         }}
         desc={{
           en: "After the REST chapters you think in URLs. A GraphQL API usually exposes a single path.",
-          zh: "学完 REST,你满脑子都是 URL。而一个 GraphQL API 通常只暴露一条路径。",
+          zh: "学完 REST,你已经习惯用 URL 来思考。而一个 GraphQL API 通常只暴露一条路径。",
         }}
       >
         <div className="grid-2">
@@ -767,7 +767,7 @@ Content-Type: application/json
             zh={
               <>
                 但有一件事确实变了,而且刚从 HTTP 和 REST
-                两章过来的人最容易在这里翻车。看一个「出了问题」的响应的状态行。
+                两章过来的人最容易在这里出错。看一个「出了问题」的响应的状态行。
               </>
             }
           />

@@ -219,7 +219,7 @@ export default function AuthPage() {
                   <>
                     调用方身份没问题、但这件事不许它做时,回 403。
                     重新登录一百次也没用,得由人去授予权限。
-                    普通用户去删别人的帖子,吃到的是 403,不是 401。
+                    普通用户去删别人的帖子,得到的是 403,不是 401。
                   </>
                 }
               />
@@ -480,7 +480,7 @@ Authorization: Basic c3R1ZGVudDpzZWNyZXQxMjM=
             ),
             zh: (
               <>
-                那串字符看起来挺唬人。用下面的加工台亲手试试,
+                那串字符看起来很复杂。用下面的加工台亲手试试,
                 它到底能不能保住秘密。
               </>
             ),
@@ -1077,7 +1077,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
             <div className="card-title">
               <T
                 en="A CORS error is not a broken API"
-                zh="CORS 报错不等于 API 挂了"
+                zh="CORS 报错不等于 API 出了故障"
               />
             </div>
             <p>

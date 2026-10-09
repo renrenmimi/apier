@@ -60,7 +60,7 @@ export default function RestAdvancedPage() {
           zh: (
             <>
               第 04 章把博客 API 的端点定了下来,能跑了。这一章补上真实上线所需的部分:
-              长列表怎么分批给、同一份正文怎么不发第二遍、接口怎么改才不砸老客户端、
+              长列表怎么分批给、同一份正文怎么不发第二遍、接口怎么改才不破坏老客户端、
               超时的付款还敢不敢重试。
             </>
           ),
@@ -82,7 +82,7 @@ export default function RestAdvancedPage() {
           {
             id: "ratelimit",
             n: "06",
-            label: { en: "Rate limits", zh: "速率限制" },
+            label: { en: "Rate limits", zh: "限流" },
           },
           { id: "openapi", n: "07", label: { en: "OpenAPI", zh: "OpenAPI" } },
           { id: "labs", n: "08", label: { en: "Practice", zh: "动手" } },
@@ -102,7 +102,7 @@ export default function RestAdvancedPage() {
         }}
         desc={{
           en: "Your blog did well and the posts table now holds a million rows. GET /posts cannot return all of them.",
-          zh: "你的博客火了,文章表涨到一百万行。GET /posts 不可能原样全返回。",
+          zh: "你的博客访问量大增,文章表涨到一百万行。GET /posts 不可能原样全返回。",
         }}
       >
         <Callout
@@ -1232,13 +1232,13 @@ Idempotency-Key: 8e03978e-40d5-43e8-bc93-6894a57f9324
         </Callout>
       </Section>
 
-      {/* ================= §06 速率限制 ================= */}
+      {/* ================= §06 限流 ================= */}
       <Section
         id="ratelimit"
         index="06"
         title={{
           en: "Rate limiting: refusing work on purpose",
-          zh: "速率限制:有意识地拒绝请求",
+          zh: "限流:有意识地拒绝请求",
         }}
         desc={{
           en: "A public API has to survive clients that ask too often, whether on purpose or by accident.",
@@ -1258,7 +1258,7 @@ Idempotency-Key: 8e03978e-40d5-43e8-bc93-6894a57f9324
             }
             zh={
               <>
-                <b>速率限制(rate limiting)</b>
+                <b>限流(rate limiting,也叫速率限制)</b>
                 给单个客户端在一段时间内能发的请求数设一个上限。
                 超过上限,服务器不再干活,而是回一个{" "}
                 <Status code={429} text="Too Many Requests" />
@@ -1503,7 +1503,7 @@ paths:
                 zh={
                   <>
                     Swagger UI 读这份文件,渲染出带「Try it out」按钮的文档页 ——
-                    大厂的开发者站点大多是这么来的。
+                    大型公司的开发者站点大多是这么来的。
                   </>
                 }
               />
