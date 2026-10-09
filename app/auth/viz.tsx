@@ -13,6 +13,7 @@
 import { Fragment, useState, type ReactNode } from "react";
 import { FlowStepper, type FlowFrame } from "@/lib/stepper";
 import { T, useL, type Loc } from "@/lib/i18n";
+import { stageRegion } from "@/lib/scroll-region";
 
 /* ================= TrustLadder ================= */
 
@@ -88,7 +89,7 @@ export function ProxyFlow() {
         />
       </div>
       <div className="viz-stage">
-        <div className="viz-scroll">
+        <div className="viz-scroll" ref={stageRegion}>
           <div className="flow au-proxy">
             <div className="flow-node">
               <span className="ico">🖥️</span>

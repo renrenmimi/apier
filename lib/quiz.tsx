@@ -6,8 +6,11 @@
 //  - multi:多选,勾选后「检查」;漏选/错选分别提示。
 //  - fill:填空,回车或按钮判定;可反复尝试,答对为止(计分按最终是否答对)。
 // 全部答完 → 结算面板,成绩写入进度系统(取历史最好成绩,决定章节「通关」状态)。
+//
+// 无障碍:每道题有一个常驻的 live region,判定结果出现时会被读屏播报;作答后不用 disabled
+// 而用 aria-disabled,焦点因此留在学习者刚操作的控件上,不会掉到 <body>。
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { useProgress } from "@/lib/progress";
 import { useL, type Loc } from "@/lib/i18n";
 import type { ChapterId } from "@/lib/curriculum";
@@ -61,6 +64,7 @@ export function Quiz({ ch, items }: { ch: ChapterId; items: QuizItem[] }) {
   const [multiPicks, setMultiPicks] = useState<Record<number, number[]>>({});
   const [fillText, setFillText] = useState<Record<number, string>>({});
   const reported = useRef(false);
+  const uid = useId();
 
   const answered = states.filter((s) => s.phase !== "idle").length;
   const firstRight = states.filter(
@@ -105,7 +109,9 @@ export function Quiz({ ch, items }: { ch: ChapterId; items: QuizItem[] }) {
             <div className="q-num">
               QUESTION {String(i + 1).padStart(2, "0")} / {items.length}
             </div>
-            <p className="q-text">{L(item.q)}</p>
+            <p className="q-text" id={`${uid}-q${i}`}>
+              {L(item.q)}
+            </p>
 
             {item.type === "choice" && (
               <ChoiceBody
@@ -153,6 +159,7 @@ export function Quiz({ ch, items }: { ch: ChapterId; items: QuizItem[] }) {
             {item.type === "fill" && (
               <FillBody
                 item={item}
+                labelId={`${uid}-q${i}`}
                 st={st}
                 text={fillText[i] ?? ""}
                 setText={(v) => setFillText((p) => ({ ...p, [i]: v }))}
@@ -179,6 +186,8 @@ export function Quiz({ ch, items }: { ch: ChapterId; items: QuizItem[] }) {
         );
       })}
 
+      {/* 常驻的 live region:成绩出现时被播报 */}
+      <div aria-live="polite">
       {allDone && (
         <div className="quiz-score">
           <span className="big">
@@ -225,6 +234,7 @@ export function Quiz({ ch, items }: { ch: ChapterId; items: QuizItem[] }) {
           </button>
         </div>
       )}
+      </div>
     </div>
   );
 }
@@ -254,7 +264,7 @@ function ChoiceBody({
               key={k}
               type="button"
               className={cls}
-              disabled={locked}
+              aria-disabled={locked || undefined}
               onClick={() => onPick(k)}
             >
               <span className="key">{KEYS[k]}</span>
@@ -263,23 +273,25 @@ function ChoiceBody({
           );
         })}
       </div>
-      {st.phase === "right" && (
-        <div className="q-feedback ok">✓ {L(item.why)}</div>
-      )}
-      {st.phase === "wrong" && st.picked !== null && (
-        <div className="q-feedback no">
-          ✕ {L(item.wrong?.[st.picked] ?? item.why)}
-          <p style={{ marginTop: 6, marginBottom: 0 }}>
-            <b>
-              {L({
-                en: `The correct answer is ${KEYS[item.correct]}: `,
-                zh: `正确答案是 ${KEYS[item.correct]}:`,
-              })}
-            </b>
-            {L(item.why)}
-          </p>
-        </div>
-      )}
+      <div aria-live="polite">
+        {st.phase === "right" && (
+          <div className="q-feedback ok">✓ {L(item.why)}</div>
+        )}
+        {st.phase === "wrong" && st.picked !== null && (
+          <div className="q-feedback no">
+            ✕ {L(item.wrong?.[st.picked] ?? item.why)}
+            <p style={{ marginTop: 6, marginBottom: 0 }}>
+              <b>
+                {L({
+                  en: `The correct answer is ${KEYS[item.correct]}: `,
+                  zh: `正确答案是 ${KEYS[item.correct]}:`,
+                })}
+              </b>
+              {L(item.why)}
+            </p>
+          </div>
+        )}
+      </div>
     </>
   );
 }
@@ -316,7 +328,8 @@ function MultiBody({
               key={k}
               type="button"
               className={cls}
-              disabled={locked}
+              aria-pressed={picks.includes(k)}
+              aria-disabled={locked || undefined}
               onClick={() => onToggle(k)}
             >
               <span className="key">{picks.includes(k) ? "✓" : KEYS[k]}</span>
@@ -325,42 +338,48 @@ function MultiBody({
           );
         })}
       </div>
-      {!locked && (
-        <div style={{ marginTop: 12 }}>
-          <button
-            type="button"
-            className="btn btn-sm"
-            disabled={picks.length === 0}
-            onClick={onCheck}
-          >
-            {L({ en: "Check (select all that apply)", zh: "检查(多选)" })}
-          </button>
-        </div>
-      )}
-      {st.phase === "right" && (
-        <div className="q-feedback ok">✓ {L(item.why)}</div>
-      )}
-      {st.phase === "wrong" && (
-        <div className="q-feedback no">
-          ✕ {L(extra ? item.extraHint : missed ? item.missHint : item.why)}
-          <p style={{ marginTop: 6, marginBottom: 0 }}>
-            <b>{L({ en: "Correct set: ", zh: "正确组合:" })}</b>
-            {item.correct.map((c) => KEYS[c]).join(" + ")} — {L(item.why)}
-          </p>
-        </div>
-      )}
+      <div style={{ marginTop: 12 }}>
+        {/* 检查之后按钮仍然留着:卸掉带焦点的按钮,焦点会掉到 <body> */}
+        <button
+          type="button"
+          className="btn btn-sm"
+          aria-disabled={locked || picks.length === 0 || undefined}
+          onClick={() => {
+            if (!locked && picks.length > 0) onCheck();
+          }}
+        >
+          {L({ en: "Check (select all that apply)", zh: "检查(多选)" })}
+        </button>
+      </div>
+      <div aria-live="polite">
+        {st.phase === "right" && (
+          <div className="q-feedback ok">✓ {L(item.why)}</div>
+        )}
+        {st.phase === "wrong" && (
+          <div className="q-feedback no">
+            ✕ {L(extra ? item.extraHint : missed ? item.missHint : item.why)}
+            <p style={{ marginTop: 6, marginBottom: 0 }}>
+              <b>{L({ en: "Correct set: ", zh: "正确组合:" })}</b>
+              {item.correct.map((c) => KEYS[c]).join(" + ")} — {L(item.why)}
+            </p>
+          </div>
+        )}
+      </div>
     </>
   );
 }
 
 function FillBody({
   item,
+  labelId,
   st,
   text,
   setText,
   onSubmit,
 }: {
   item: Extract<QuizItem, { type: "fill" }>;
+  /** 题干的 id:输入框的可访问名称就是题目本身 */
+  labelId: string;
   st: ItemState;
   text: string;
   setText: (v: string) => void;
@@ -377,7 +396,9 @@ function FillBody({
             item.placeholder ?? { en: "Type your answer…", zh: "输入答案…" },
           )}
           value={text}
-          disabled={solved}
+          aria-labelledby={labelId}
+          readOnly={solved}
+          aria-disabled={solved || undefined}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") onSubmit();
@@ -386,25 +407,27 @@ function FillBody({
         <button
           type="button"
           className="btn btn-sm"
-          disabled={solved || !text.trim()}
+          aria-disabled={solved || !text.trim() || undefined}
           onClick={onSubmit}
         >
           {L({ en: "Check", zh: "确认" })}
         </button>
       </div>
-      {solved && <div className="q-feedback ok">✓ {L(item.why)}</div>}
-      {st.phase === "wrong" && (
-        <div className="q-feedback no">
-          {L({ en: "✕ Not yet — ", zh: "✕ 还不对 —— " })}
-          {L(item.hint)}
-          {st.tries >= 3 && (
-            <p style={{ marginTop: 6, marginBottom: 0 }}>
-              <b>{L({ en: "Answer: ", zh: "参考答案:" })}</b>
-              <code>{item.answers[0]}</code>
-            </p>
-          )}
-        </div>
-      )}
+      <div aria-live="polite">
+        {solved && <div className="q-feedback ok">✓ {L(item.why)}</div>}
+        {st.phase === "wrong" && (
+          <div className="q-feedback no">
+            {L({ en: "✕ Not yet — ", zh: "✕ 还不对 —— " })}
+            {L(item.hint)}
+            {st.tries >= 3 && (
+              <p style={{ marginTop: 6, marginBottom: 0 }}>
+                <b>{L({ en: "Answer: ", zh: "参考答案:" })}</b>
+                <code>{item.answers[0]}</code>
+              </p>
+            )}
+          </div>
+        )}
+      </div>
     </>
   );
 }

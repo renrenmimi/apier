@@ -7,6 +7,7 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import { useL, type Loc } from "@/lib/i18n";
+import { stageRegion } from "@/lib/scroll-region";
 
 export function useStepper(total: number, intervalMs = 1400) {
   const [step, setStep] = useState(0);
@@ -133,7 +134,9 @@ export function FlowStepper({
     <div className="viz">
       <div className="viz-title">{L(title)}</div>
       <div className="viz-stage">
-        <div className="viz-scroll">{L(f.stage)}</div>
+        <div className="viz-scroll" ref={stageRegion}>
+          {L(f.stage)}
+        </div>
       </div>
       <div className="viz-msg" aria-live="polite">
         {L(f.msg)}

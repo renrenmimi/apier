@@ -1156,7 +1156,8 @@ li code {
   transform: translateY(0) scale(0.98);
 }
 
-.btn:disabled {
+.btn:disabled,
+.btn[aria-disabled="true"] {
   opacity: 0.45;
   cursor: not-allowed;
   transform: none;
@@ -1433,7 +1434,7 @@ li code {
   transition: all 0.18s;
 }
 
-.q-opt:hover:not(:disabled) {
+.q-opt:hover:not(:disabled):not([aria-disabled="true"]) {
   border-color: var(--acc-border);
   background: var(--acc-soft);
   color: var(--text);
@@ -1489,7 +1490,8 @@ li code {
   color: #fff;
 }
 
-.q-opt:disabled {
+.q-opt:disabled,
+.q-opt[aria-disabled="true"] {
   cursor: default;
 }
 
@@ -1591,20 +1593,42 @@ li code {
   border-color: color-mix(in oklab, var(--ok) 32%, transparent);
 }
 
+/* 行里是两个并列的按钮:勾选框和 .prob-toggle。上下内边距放在 toggle 上,
+   所以勾选框以外的整行仍然一点就展开。 */
 .prob-head {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
-  cursor: pointer;
-  user-select: none;
+  padding-left: 16px;
 }
 
 .prob-head:hover {
   background: var(--panel-2);
 }
 
+.prob-toggle {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px 12px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* .prob 会裁掉溢出,焦点环画在行内 */
+.prob-toggle:focus-visible {
+  outline-offset: -2px;
+}
+
 .prob-check {
+  position: relative;
   flex: 0 0 20px;
   width: 20px;
   height: 20px;
@@ -1620,6 +1644,14 @@ li code {
   font-size: 12px;
 }
 
+/* 方框仍是 20px,点击区域扩到 34px(WCAG 2.5.8 要求至少 24px);
+   多出的 7px 落在行的内边距和间距里 */
+.prob-check::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+}
+
 .prob.done .prob-check {
   background: var(--ok);
   border-color: var(--ok);
@@ -1633,15 +1665,24 @@ li code {
   flex: 0 0 auto;
 }
 
+/* 列表里最多两行;展开后显示完整标题 */
 .prob-title {
   font-size: 14px;
   font-weight: 600;
   color: var(--text);
   flex: 1;
   min-width: 0;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+}
+
+.prob.open .prob-title {
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
 }
 
 .prob.done .prob-title {

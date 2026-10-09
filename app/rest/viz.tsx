@@ -12,6 +12,7 @@ import { useState, type ReactNode } from "react";
 import { CodeBlock } from "@/lib/code";
 import { useStepper, StepControls } from "@/lib/stepper";
 import { T, useL, type Loc } from "@/lib/i18n";
+import { stageRegion } from "@/lib/scroll-region";
 
 /* ================= HeroCity ================= */
 
@@ -713,7 +714,7 @@ export function StatelessTheater() {
         </span>
       </div>
       <div className="viz-stage">
-        <div className="viz-scroll">
+        <div className="viz-scroll" ref={stageRegion}>
           <div className="rs-sf">
             <div className="flow-node lit">
               <span className="ico">🧑‍💻</span>

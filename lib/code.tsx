@@ -8,6 +8,7 @@
 import { useMemo, type ReactNode } from "react";
 import { highlight, type CodeLangId } from "@/lib/highlight";
 import { useL, type Loc } from "@/lib/i18n";
+import { codeRegion } from "@/lib/scroll-region";
 
 const LANG_LABEL: Record<CodeLangId, string> = {
   js: "JavaScript",
@@ -32,7 +33,7 @@ export function CodeLines({
   const lines = useMemo(() => highlight(src.trimEnd(), lang), [src, lang]);
   const hlSet = useMemo(() => new Set(hl ?? []), [hl]);
   return (
-    <div className="codewin-body">
+    <div className="codewin-body" ref={codeRegion}>
       {lines.map((toks, i) => (
         <div key={i} className={`cl${hlSet.has(i + 1) ? " hl" : ""}`}>
           <span className="cl-n">{i + 1}</span>
