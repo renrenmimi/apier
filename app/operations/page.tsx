@@ -397,12 +397,14 @@ export default function OperationsPage() {
 const q = \`{ post(id: "\${input}") { title } }\`;
 
 // Someone enters this, and the query is rewritten:
-// 1") { title } author { email } # `,
+// 1") { title author { email } } } #
+// It was meant to read a title; now it reads the author's email too`,
                   zh: `// 用户输入直接进入了查询文本
 const q = \`{ post(id: "\${input}") { title } }\`;
 
 // 有人输入下面这一串,查询就被改写了:
-// 1") { title } author { email } # `,
+// 1") { title author { email } } } #
+// 本来只想取标题,现在连作者的邮箱也被读走了`,
                 }}
               />
             }
@@ -561,9 +563,9 @@ fetch("/graphql", {
               <T
                 en={
                   <>
-                    <code>@include</code> and <code>@skip</code> are the two
-                    executable directives that the specification requires every
-                    server to support. You can rely on them anywhere.{" "}
+                    The specification says every implementation should provide{" "}
+                    <code>@include</code> and <code>@skip</code>, and the
+                    mainstream servers all do, so you can rely on them.{" "}
                     <code>@deprecated</code> is different: it is a{" "}
                     <b>schema directive</b>. It marks a field as outdated inside
                     the schema definition, and you cannot write it in a query. A
@@ -573,8 +575,7 @@ fetch("/graphql", {
                 }
                 zh={
                   <>
-                    <code>@include</code> 和 <code>@skip</code>{" "}
-                    是规范要求每个服务器都必须支持的两个执行期指令,任何地方都能放心用。
+                    {"规范建议所有实现都提供 "}<code>@include</code>{" 和 "}<code>@skip</code>{",主流服务器都支持,可以放心使用。"}
                     <code>@deprecated</code> 不一样,它是<b>schema 指令</b>:
                     在 schema 定义里标记某个字段已过时,不能写进查询。
                     服务器也可以自定义指令,但那些只在该服务器上有效 ——
@@ -1311,7 +1312,7 @@ render(body.data); // data 里可能仍有可用的字段`,
                 The toolbox: the schema may declare arguments on a field at any
                 depth; an alias renames a response key so the same field can be
                 requested twice; a fragment names a selection set so it is
-                written once; an inline fragment (<code>... on Dog</code>)
+                written once; an inline fragment (<code>... on Post</code>)
                 reaches the fields of one type behind an interface or union.
               </>
             ),
@@ -1320,7 +1321,7 @@ render(body.data); // data 里可能仍有可用的字段`,
                 工具箱:schema 可以给任意层级的字段声明参数;
                 别名给响应的键改名,让同一个字段能取两份;
                 fragment 给一个选择集起名字,从而只写一遍;
-                内联 fragment(<code>... on Dog</code>)
+                内联 fragment(<code>... on Post</code>)
                 用来取接口或联合背后某一个具体类型的字段。
               </>
             ),
@@ -1332,9 +1333,9 @@ render(body.data); // data 里可能仍有可用的字段`,
                 JSON object. The query text stays constant, which prevents
                 injection through string building, lets the server check types
                 before execution, and makes cached parsed documents and
-                persisted queries possible. <code>@include(if:)</code> and{" "}
-                <code>@skip(if:)</code> are the two executable directives every
-                server must support.
+                persisted queries possible. The specification says every
+                implementation should provide <code>@include(if:)</code> and{" "}
+                <code>@skip(if:)</code>, and the mainstream servers all do.
               </>
             ),
             zh: (
@@ -1342,8 +1343,7 @@ render(body.data); // data 里可能仍有可用的字段`,
                 变量声明在操作上,值作为另一份 JSON 发送。
                 查询文本因此保持恒定 —— 拼接注入无从谈起,
                 服务器能在执行前检查类型,解析结果可以缓存,
-                持久化查询也才可行。<code>@include(if:)</code> 和{" "}
-                <code>@skip(if:)</code> 是每个服务器都必须支持的两个执行期指令。
+                持久化查询也才可行。规范建议所有实现都提供 <code>@include(if:)</code> 和 <code>@skip(if:)</code>,主流服务器都支持。
               </>
             ),
           },
@@ -1367,8 +1367,11 @@ render(body.data); // data 里可能仍有可用的字段`,
           {
             en: (
               <>
-                The response is always <code>{`{ data, errors }`}</code>, and
-                both may appear together — a partial result. A failing non-null
+                The response is made of <code>data</code> and{" "}
+                <code>errors</code>, and both may appear together — a partial
+                result. A fully successful response has no <code>errors</code>;
+                a request that cannot run at all has no <code>data</code>. A
+                failing non-null
                 field cannot hold <code>null</code>, so the <code>null</code>{" "}
                 moves up to the nearest parent that allows it. Read{" "}
                 <code>!</code> as applying to the thing on its left.
@@ -1376,8 +1379,7 @@ render(body.data); // data 里可能仍有可用的字段`,
             ),
             zh: (
               <>
-                响应恒为 <code>{`{ data, errors }`}</code>,二者可以并存 ——
-                这就是部分结果。失败的非空字段放不下 <code>null</code>,
+                响应由 <code>data</code> 与 <code>errors</code> 组成,二者可以并存 —— 这就是部分结果;全部成功时没有 <code>errors</code>,请求本身无法执行时没有 <code>data</code>。失败的非空字段放不下 <code>null</code>,
                 于是 <code>null</code> 向上移到最近的允许为空的父字段。
                 <code>!</code> 作用于它左边的那个东西。
               </>

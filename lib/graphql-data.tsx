@@ -260,8 +260,9 @@ console.log(json.data.character.name); // "Rick Sanchez"`}
           <p>
             This experiment proves the main point of the chapter yourself:{" "}
             <b>GraphQL is not a new protocol. It is an ordinary HTTP POST.</b>{" "}
-            Everything from the first six chapters still works. Note the second
-            line as well: check <code>json.errors</code> before you trust{" "}
+            Everything from the first six chapters still works. Note the
+            second-to-last line as well: check <code>json.errors</code> before
+            you trust{" "}
             <code>json.data</code>, because a failed field still arrives with
             status 200.
           </p>

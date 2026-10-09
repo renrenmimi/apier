@@ -211,6 +211,9 @@ interface WfReq {
   badge: ReactNode;
 }
 
+/** 时间轴总长(ms):文章与评论并发,作者串行在后,共两趟 */
+const WF_TOTAL = 600;
+
 const WF_REQS: WfReq[] = [
   {
     path: "GET /posts/1",
@@ -224,7 +227,8 @@ const WF_REQS: WfReq[] = [
   },
   {
     path: "GET /posts/1/comments",
-    start: 600,
+    // 评论只依赖一开始就知道的文章 id,可以和第 1 程同时发出
+    start: 0,
     badge: <T en="12 comments" zh="评论 12 条" />,
   },
 ];
@@ -338,15 +342,16 @@ const WF_FRAMES: WfFrame[] = [
       <T
         en={
           <>
-            Request 3: <b>GET /posts/1/comments</b>. Three requests, one after
-            another, each waiting for the one before it. This pattern has a
-            name: a <b>request waterfall</b>.
+            Request 3: <b>GET /posts/1/comments</b>. It needs only the post
+            id, which the page knew from the start, so it can go out together
+            with request 1. The author request cannot: its URL comes from the
+            first response. Requests that have to wait for one another form a{" "}
+            <b>request waterfall</b>.
           </>
         }
         zh={
           <>
-            第 3 程:<b>GET /posts/1/comments</b>。三程只能排队,
-            一个等一个 —— 这个队形有个名字:<b>请求瀑布(waterfall)</b>。
+            第 3 程:<b>GET /posts/1/comments</b>。它只需要文章 id,而这个 id 页面一开始就知道,所以可以和第 1 程同时发出;作者那一程不行,它的 URL 来自第 1 程的响应。必须一个等一个的请求排成的队形,叫<b>请求瀑布(waterfall)</b>。
           </>
         }
       />
@@ -360,14 +365,15 @@ const WF_FRAMES: WfFrame[] = [
       <T
         en={
           <>
-            <b>900ms</b> before the page can start rendering. The same data in
-            GraphQL is one query on one round trip: <b>300ms</b>.
+            Even with the comments in parallel, the author has to wait for the
+            post: two round trips in sequence, <b>600ms</b> before the page can
+            start rendering. The same data in GraphQL is one query on one round
+            trip: <b>300ms</b>.
           </>
         }
         zh={
           <>
-            合计 <b>900ms</b>,页面才能开始渲染。同样的数据,GraphQL
-            写成一次查询、一趟往返:<b>300ms</b>。
+            即使评论与文章并发,作者也得等文章回来:两趟串行,合计 <b>600ms</b> 页面才能开始渲染。同样的数据,GraphQL 写成一次查询、一趟往返:<b>300ms</b>。
           </>
         }
       />
@@ -383,14 +389,14 @@ export function UnderfetchWaterfall() {
     <div className="viz">
       <div className="viz-title">
         <T
-          en="Under-fetching: three requests in sequence for one post page (step through it)"
-          zh="under-fetching 现场:一篇帖子页的三连瀑布(逐帧慢放)"
+          en="Under-fetching: three requests for one post page, two of them in sequence (step through it)"
+          zh="under-fetching 现场:一篇帖子页的三次请求,其中两次必须串行(逐帧慢放)"
         />
       </div>
       <div className="gq-wf">
         <div className="gq-wf-axis" aria-hidden>
-          {[0, 300, 600, 900].map((t) => (
-            <span key={t} style={{ left: `${(t / 900) * 100}%` }}>
+          {[0, 300, 600].map((t) => (
+            <span key={t} style={{ left: `${(t / WF_TOTAL) * 100}%` }}>
               {t}ms
             </span>
           ))}
@@ -406,8 +412,8 @@ export function UnderfetchWaterfall() {
                   <span
                     className={`gq-wf-bar${inFlight ? " lit" : ""}`}
                     style={{
-                      left: `${(r.start / 900) * 100}%`,
-                      width: `${(300 / 900) * 100}%`,
+                      left: `${(r.start / WF_TOTAL) * 100}%`,
+                      width: `${(300 / WF_TOTAL) * 100}%`,
                     }}
                   >
                     300ms
@@ -416,7 +422,7 @@ export function UnderfetchWaterfall() {
                 {visible && !inFlight && (
                   <span
                     className="gq-wf-badge"
-                    style={{ left: `${((r.start + 300) / 900) * 100}%` }}
+                    style={{ left: `${((r.start + 300) / WF_TOTAL) * 100}%` }}
                   >
                     {r.badge}
                   </span>
@@ -431,7 +437,7 @@ export function UnderfetchWaterfall() {
             <div className="gq-wf-track">
               <span
                 className="gq-wf-bar gq"
-                style={{ left: 0, width: `${(300 / 900) * 100}%` }}
+                style={{ left: 0, width: `${(300 / WF_TOTAL) * 100}%` }}
               >
                 <T en="300ms · one query" zh="300ms · 一次查询" />
               </span>

@@ -454,14 +454,13 @@ const SUB_FRAMES: SubFrame[] = [
         en={
           <>
             The connection is open (solid line). Note what happens while there
-            is no event: <b>nothing</b>. Neither side sends anything, and the
-            client is not polling.
+            is no event: apart from keep-alive heartbeats, neither side sends
+            data, and the client is not polling.
           </>
         }
         zh={
           <>
-            连接已建立(实线)。注意没有事件时会发生什么:<b>什么都不发生</b>。
-            双方都不发消息,客户端也没有在轮询。
+            连接已建立(实线)。注意没有事件时会发生什么:除了维持连接的心跳,双方都不发送数据消息,客户端也没有在轮询。
           </>
         }
       />
@@ -651,18 +650,18 @@ const EA_LINES: EaLine[] = [
       <T
         en={
           <>
-            The post itself was returned. A field inside it failed, but the
-            schema declares <code>comments: [Comment!]</code> — the list itself
-            has no trailing <code>!</code>, so <code>null</code> is allowed
-            there. The failure stops at that field and does not move up.
+            The post itself was returned. A field inside it failed, but this
+            example assumes the schema declares{" "}
+            <code>comments: [Comment!]</code> — the list itself has no trailing{" "}
+            <code>!</code>, so <code>null</code> is allowed there. The failure
+            stops at that field and does not move up. (With chapter 08&apos;s{" "}
+            <code>[Comment!]!</code>, the <code>null</code> would move up to{" "}
+            <code>post</code>.)
           </>
         }
         zh={
           <>
-            post 本身返回了。它内部有个字段失败,但 schema 里声明的是{" "}
-            <code>comments: [Comment!]</code> —— 列表本身后面没有{" "}
-            <code>!</code>,所以那个位置允许 <code>null</code>。
-            失败止步于该字段,不会继续向上。
+            post 本身返回了。它内部有个字段失败,但这个例子假设 schema 里声明的是 <code>comments: [Comment!]</code> —— 列表本身后面没有 <code>!</code>,所以那个位置允许 <code>null</code>。失败止步于该字段,不会继续向上。(如果按第 08 章的 <code>[Comment!]!</code>,这个 <code>null</code> 会冒泡到 <code>post</code>。)
           </>
         }
       />

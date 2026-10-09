@@ -273,15 +273,16 @@ GET /posts/1/comments HTTP/1.1`}
               note={{
                 en: (
                   <>
-                    Three round trips, and they cannot run in parallel: the URL
-                    of the second request depends on the first response. Each
-                    response also carries fields this page does not use.
+                    Three requests. The comments need only the post id, so they
+                    can go out together with the post, but the URL of the author
+                    request comes from the first response: at least two round
+                    trips in sequence. Each response also carries fields this
+                    page does not use.
                   </>
                 ),
                 zh: (
                   <>
-                    三趟往返,而且没法并发:第二趟的 URL
-                    依赖第一趟的响应。每趟响应还都带着这个页面用不上的字段。
+                    三次请求。评论只需要文章 id,可以和文章并发去取;但作者那一趟的 URL 来自第一趟的响应 —— 至少两趟串行。每趟响应还都带着这个页面用不上的字段。
                   </>
                 ),
               }}
@@ -856,9 +857,11 @@ Content-Type: application/json
                   the query. If that field was declared non-null in the schema,{" "}
                   <code>null</code> is not allowed there, so the{" "}
                   <code>null</code> moves up to the nearest parent field that
-                  does allow it. That is why a single broken field can empty a
-                  whole branch of the response, but not the whole response.
-                  Chapters 09 and 10 go further.
+                  does allow it. That is why a single broken field usually
+                  empties one branch of the response; only when every field on
+                  the way up to the root is non-null does <code>data</code>{" "}
+                  itself become <code>null</code>. Chapters 09 and 10 go
+                  further.
                 </>
               }
               zh={
@@ -867,7 +870,7 @@ Content-Type: application/json
                   服务器继续执行查询的其余部分。如果这个字段在 schema
                   里被声明为非空(non-null),那里放不下 <code>null</code>,
                   于是这个 <code>null</code> 会向上冒泡到最近的、允许为空的父字段。
-                  所以一个字段出错,可能让响应的一整枝变空,但不会让整个响应失败。
+                  {"所以一个字段出错,通常只会清空响应的一整枝;只有当这条链一路到根都是非空字段时,整个 data 才会变成 null。"}
                   第 09、10 章还会细说。
                 </>
               }
@@ -885,7 +888,7 @@ Content-Type: application/json
           zh: "GraphiQL:浏览器里的 GraphQL 操作台",
         }}
         desc={{
-          en: "The extra i stands for graphical. GraphiQL is the standard in-browser editor for GraphQL, and it is where you will practise.",
+          en: "GraphiQL is pronounced \"graphical\". It is the standard in-browser editor for GraphQL, and it is where you will practise.",
           zh: "多出来的那个 i 读作 graphical。它是 GraphQL 官方的浏览器编辑器,也是你练手的主场。",
         }}
       >
