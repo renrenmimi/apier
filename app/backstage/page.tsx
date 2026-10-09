@@ -1055,25 +1055,21 @@ Host: api.example.com`}
                   <i>Why, after 6 years, I&apos;m over GraphQL</i>, written
                   after six years of using it. He reports an unauthenticated
                   introspection query of about 128 bytes that used roughly ten
-                  seconds of CPU on a public API. His four complaints are the
-                  four subjects of this chapter: the attack surface, the cost of
-                  field-level authorization (REST checks once at the endpoint,
-                  GraphQL has to check every field), N+1, and observability —
-                  hundreds of different queries arrive at one endpoint, so
-                  monitoring and debugging need different tools.
+                  seconds of CPU on a public API. His criticism has four parts:{" "}
+                  <b>attack surface</b> (field-level authorization and rate
+                  limiting by query cost are both hard to get right),{" "}
+                  <b>performance</b> (N+1, which even authorization checks can
+                  trigger), <b>coupling</b> (business logic seeps into the
+                  transport layer, and tests get harder to write), and{" "}
+                  <b>complexity</b> (every one of those defences is more code).
+                  His conclusion: most teams do not need GraphQL; if you control
+                  all the clients and there are only a few of them, a JSON REST
+                  API described with OpenAPI is often the better fit.
                 </>
               }
               zh={
                 <>
-                  2024 年,Matt Bessey 写了一篇{" "}
-                  <i>Why, after 6 years, I&apos;m over GraphQL</i>,
-                  那是他用了六年之后的总结。文中提到:一条约 128
-                  字节、不需要认证的 introspection
-                  查询,在一个公开 API 上消耗了约十秒 CPU。
-                  他抱怨的四件事,正好是这一章的四个主题:攻击面、
-                  字段级授权的成本(REST 在端点门口检查一次就行,
-                  GraphQL 得每个字段都检查)、N+1,以及可观测性 ——
-                  几百种不同的查询打到同一个端点,监控和排障都得换工具。
+                  2024 年,Matt Bessey 写了一篇 <i>Why, after 6 years, I&apos;m over GraphQL</i>,那是他用了六年之后的总结。文中提到:一条约 128 字节、不需要认证的 introspection 查询,在一个公开 API 上消耗了约十秒 CPU。他的批评分四部分:<b>攻击面</b>(字段级授权、按复杂度限流都很难做对)、<b>性能</b>(N+1,连授权检查也会引发 N+1)、<b>耦合</b>(业务逻辑渗进传输层,测试更难写)、<b>复杂度</b>(上面每一条的防御都是额外的代码)。他的结论是:多数团队不需要 GraphQL;如果你掌控全部客户端、客户端也不多,一份用 OpenAPI 描述的 JSON REST API 往往更合适。
                 </>
               }
             />
@@ -1082,6 +1078,9 @@ Host: api.example.com`}
             <T
               en={
                 <>
+                  This chapter adds one cost of its own to his list:
+                  observability. Hundreds of different queries arrive at one
+                  endpoint, so monitoring and debugging need different tools.
                   These costs are real. Large teams absorb them with federation,
                   cost analysis, and a full set of tools, and get the
                   flexibility in return. A small team that cannot maintain that
@@ -1092,6 +1091,7 @@ Host: api.example.com`}
               }
               zh={
                 <>
+                  {"本章还要在他的清单之外补一项:可观测性 —— 几百种不同的查询打到同一个端点,监控和排障都得换工具。"}
                   这些代价是真的。大团队用 federation、成本分析和一整套工具把它们扛下来,
                   换到那份灵活。小团队维护不了这套工具链,用 REST 反而更合适。
                   <b>两者不是替代关系,而是各有取舍</b> —— 终章会把这个决定讲完。

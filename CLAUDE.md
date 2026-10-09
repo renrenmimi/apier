@@ -230,8 +230,11 @@ Full architecture: `docs/mock-api.md`. The rules that matter when writing chapte
   OpenAPI 3.2(2025-09);OAuth 2.1 仍是草案但「授权码 + PKCE」已是当代默认。
 - 终章案例:GitHub REST 与 GraphQL 并行双轨(GraphQL 要认证);Shopify GraphQL-first
   (2024-10 REST Admin API 转 legacy,2025-04 起新公共 App 仅 GraphQL);
-  也要讲「退潮论」的另一面(Bessey 2024《Why I'm over GraphQL》:安全面、
-  字段级授权、N+1、可观测性)。结论:没有替代关系,只有取舍。
+  也要讲「退潮论」的另一面(Bessey 2024《Why, after 6 years, I'm over GraphQL》,
+  原文四节:攻击面(含字段级授权、按复杂度限流)、性能(N+1)、耦合、复杂度;
+  结论是多数团队不需要 GraphQL,客户端少且都由自己掌控时推荐用 OpenAPI 描述的
+  JSON REST API。原文没有谈可观测性,也没说他的团队已改回 REST —— 这两点若要讲,
+  作为课程自己的分析单独陈述)。结论:没有替代关系,只有取舍。
 
 ## 调研报告
 

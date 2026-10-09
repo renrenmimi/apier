@@ -255,8 +255,8 @@ batchUsers([9, 12, 99, 9]).then(console.log);`,
                 <code>new DataLoader(batchUsers)</code>. The rule &quot;same
                 order, same length&quot; matters because DataLoader splits the
                 batch result and returns one row to each resolver that called{" "}
-                <code>load(id)</code>. If the order slips, post 9 gets the
-                author of post 12.
+                <code>load(id)</code>. If the order slips, a post written by
+                user 9 is shown with user 12 as its author.
               </>
             }
             zh={
@@ -265,7 +265,7 @@ batchUsers([9, 12, 99, 9]).then(console.log);`,
                 <code>new DataLoader(batchUsers)</code> 就能用。
                 「同序、等长」这条规则之所以重要,是因为 DataLoader
                 要把批量结果拆开,一一还给当初调用 <code>load(id)</code>{" "}
-                的那些 resolver —— 顺序错位,9 号的文章就挂上 12 号的作者了。
+                {"的那些 resolver —— 顺序一错位,本该挂 9 号作者的文章,就会挂上 12 号用户。"}
               </>
             }
           />
