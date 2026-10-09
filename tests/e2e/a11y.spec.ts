@@ -2,9 +2,15 @@ import { test, expect } from "@playwright/test";
 
 // Keyboard and screen-reader paths through the shared components: labs, the
 // sidebar drawer, the command palette, the quiz and scrollable panes.
+//
+// Each test waits for the inspector's ready badge first: it appears only after
+// hydration, and a key press sent before hydration would simply be lost.
+
+const READY = '.insp-badge[data-phase="ready"]';
 
 test("a lab can be marked done from the keyboard, and its row expands separately", async ({ page }) => {
   await page.goto("/http");
+  await page.locator(READY).first().waitFor({ timeout: 30_000 });
   const check = page.locator(".prob-check").first();
   await check.focus();
   await page.keyboard.press("Enter");
@@ -33,8 +39,10 @@ test("the closed drawer is out of the tab order; open, it takes focus and Esc gi
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
   await page.goto("/http");
+  await page.locator(READY).first().waitFor({ timeout: 30_000 });
   const toggle = page.locator("#sidebar-toggle");
   await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator("#sidebar")).toHaveAttribute("inert", "");
   await page.keyboard.press("Tab");
   await expect(toggle).toBeFocused();
 
@@ -49,6 +57,7 @@ test("the closed drawer is out of the tab order; open, it takes focus and Esc gi
 
 test("the command palette keeps focus inside and returns it on close", async ({ page }) => {
   await page.goto("/http");
+  await page.locator(READY).first().waitFor({ timeout: 30_000 });
   const opener = page.getByRole("button", { name: /Open the command palette/ });
   await opener.click();
   const dialog = page.getByRole("dialog", { name: /Jump to a chapter/ });
@@ -66,6 +75,7 @@ test("the command palette keeps focus inside and returns it on close", async ({ 
 
 test("answering keeps focus, the verdict is in a live region, and fill-in fields are named", async ({ page }) => {
   await page.goto("/http");
+  await page.locator(READY).first().waitFor({ timeout: 30_000 });
   const first = page.locator(".q-item").first();
   const option = first.locator(".q-opt").first();
   await option.focus();
@@ -87,6 +97,9 @@ test("a code pane that overflows can be focused and scrolled by keyboard", async
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
   await page.goto("/http");
+  // The regions are marked from a ref callback after hydration; wait for that
+  // instead of reading the DOM right after the load event.
+  await page.locator('.codewin-body[role="region"]').first().waitFor();
   const panes = await page.locator(".codewin-body").evaluateAll((els) =>
     els.map((el) => ({
       overflows: el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1,

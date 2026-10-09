@@ -8,8 +8,24 @@ import { CHAPTERS, SITE_TITLE } from "../../lib/curriculum";
 const en = (v: string | { en: string; zh: string }) => (typeof v === "string" ? v : v.en);
 const zh = (v: string | { en: string; zh: string }) => (typeof v === "string" ? v : v.zh);
 
+/** Switches to Chinese; retried, because a click before hydration does nothing. */
 async function useChinese(page: Page) {
-  await page.getByRole("button", { name: "中文", exact: true }).click();
+  await expect(async () => {
+    await page.getByRole("button", { name: "中文", exact: true }).click();
+    await expect(page.getByRole("button", { name: "中文", exact: true })).toHaveAttribute("aria-pressed", "true", {
+      timeout: 1_000,
+    });
+  }).toPass();
+}
+
+/** Clicks a lab checkbox until the click registers (it is lost before hydration). */
+async function markLab(page: Page, index: number) {
+  const check = page.locator(".prob-check").nth(index);
+  const before = await check.getAttribute("aria-checked");
+  await expect(async () => {
+    if ((await check.getAttribute("aria-checked")) === before) await check.click();
+    await expect(check).not.toHaveAttribute("aria-checked", before ?? "", { timeout: 1_000 });
+  }).toPass();
 }
 
 test("every page has its own title, in the reader's language", async ({ page }) => {
@@ -89,12 +105,12 @@ test("two tabs never overwrite each other's progress", async ({ context }) => {
   await a.goto("/http");
   await b.goto("/rest");
 
-  await a.locator(".prob-check").nth(0).click();
+  await markLab(a, 0);
   await expect(a.locator(".side-status")).toContainText("1 lab done");
-  await b.locator(".prob-check").nth(0).click();
+  await markLab(b, 0);
   // Tab A hears about tab B's change without a reload.
   await expect(a.locator('.side-link[href="/rest"] .side-state')).toHaveAttribute("aria-label", "In progress");
-  await a.locator(".prob-check").nth(1).click();
+  await markLab(a, 1);
 
   const stored = await a.evaluate(() => JSON.parse(localStorage.getItem("apier-progress-v1") ?? "{}"));
   const labs = Object.keys(stored.labs ?? {});
