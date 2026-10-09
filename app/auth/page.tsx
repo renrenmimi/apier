@@ -1043,8 +1043,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
           <T
             en={
               <>
-                Browsers apply the <b>same-origin policy</b>: script loaded from
-                one origin may not read a response from a different origin. An{" "}
+                Browsers apply the <b>same-origin policy</b>: script running in
+                a page may not read a response from a different origin. An{" "}
                 <b>origin</b> is the scheme, the host, and the port together — if
                 any of the three differs, it is a different origin. The rule
                 protects you as a user. Without it, a page you visit could use{" "}
@@ -1058,7 +1058,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
             zh={
               <>
                 浏览器执行一条<b>同源策略(same-origin policy)</b>:
-                从一个源加载的脚本,不能读取另一个源的响应。
+                {"页面里运行的脚本,不能读取来自另一个源的响应。"}
                 这里的<b>源(origin)</b>是协议、主机、端口三者的组合 ——
                 只要有一个不同,就是不同的源。这条规则保护的是你这个用户:
                 没有它,你打开的某个页面就能利用
@@ -1178,9 +1178,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
                   Anything else is preflighted: an Authorization header,{" "}
                   <code>Content-Type: application/json</code>, a custom header
                   such as <code>X-API-Key</code>, or a method like{" "}
-                  <Method m="PUT" /> or <Method m="DELETE" />. So most JSON
-                  requests you write are preflighted with an{" "}
-                  <Method m="OPTIONS" /> request first.
+                  <Method m="PUT" /> or <Method m="DELETE" />. So most
+                  cross-origin JSON requests you write are preflighted with an{" "}
+                  <Method m="OPTIONS" /> request first; same-origin requests
+                  never are.
                 </>
               }
               zh={
@@ -1193,8 +1194,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
                   <code>Content-Type: application/json</code>、
                   <code>X-API-Key</code> 这样的自定义头,
                   或者用了 <Method m="PUT" />、<Method m="DELETE" /> 之类的方法。
-                  也就是说,你日常写的 JSON 请求,大多要先走一条{" "}
-                  <Method m="OPTIONS" /> 预检。
+                  也就是说,你日常写的跨源 JSON 请求,大多要先走一条 <Method m="OPTIONS" /> 预检;同源请求不需要。
                 </>
               }
             />

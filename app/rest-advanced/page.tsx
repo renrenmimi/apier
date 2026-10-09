@@ -641,15 +641,16 @@ export default function RestAdvancedPage() {
                   <>
                     Adding an optional response field, adding an endpoint, or
                     adding an optional query parameter. A client that does not
-                    know a JSON key simply ignores it. This is why an API lasts
-                    longer when it only adds.
+                    know a JSON key simply ignores it, provided it tolerates
+                    unknown fields (most do; some strictly typed deserializers
+                    reject them unless configured not to). This is why an API
+                    lasts longer when it only adds.
                   </>
                 }
                 zh={
                   <>
                     加可选的响应字段、加新端点、加可选的查询参数。
-                    客户端遇到不认识的 JSON 键会直接忽略 ——
-                    所以「只加,不改不删」的 API 活得最久。
+                    {"客户端遇到不认识的 JSON 键会直接忽略,前提是客户端能容忍未知字段(大多数可以;少数强类型的反序列化器默认会报错,需要另行配置)。所以「只加,不改不删」的 API 活得最久。"}
                   </>
                 }
               />
@@ -919,8 +920,9 @@ ETag: "abc"
                     The older pair, based on a timestamp. It is simpler, but its
                     resolution is one second, so two changes within the same
                     second look identical. Prefer <code>ETag</code> when the
-                    server can compute one; send both if you like, and the
-                    client will use <code>If-None-Match</code> first.
+                    server can compute one. Clients may send both; a server
+                    then evaluates <code>If-None-Match</code> and ignores{" "}
+                    <code>If-Modified-Since</code>.
                   </>
                 }
                 zh={
@@ -928,8 +930,7 @@ ETag: "abc"
                     更早的一对,基于时间戳。它更简单,但精度只到秒,
                     同一秒内的两次修改看起来完全一样。
                     服务器能算出 <code>ETag</code> 时优先用 ETag;
-                    两个一起发也可以,客户端会优先使用{" "}
-                    <code>If-None-Match</code>。
+                    两个都发也可以;服务器会优先按 <code>If-None-Match</code> 判断,有它时忽略 <code>If-Modified-Since</code>。
                   </>
                 }
               />
@@ -1251,8 +1252,8 @@ Idempotency-Key: 8e03978e-40d5-43e8-bc93-6894a57f9324
                 <b>Rate limiting</b> caps how many requests one client may send
                 in a period of time. Over the cap, the server answers{" "}
                 <Status code={429} text="Too Many Requests" /> instead of doing
-                the work, and states the rules in response headers. GitHub looks
-                like this:
+                the work, and states the rules in response headers. A typical
+                response looks like this:
               </>
             }
             zh={
@@ -1261,7 +1262,7 @@ Idempotency-Key: 8e03978e-40d5-43e8-bc93-6894a57f9324
                 给单个客户端在一段时间内能发的请求数设一个上限。
                 超过上限,服务器不再干活,而是回一个{" "}
                 <Status code={429} text="Too Many Requests" />
-                ,并在响应头里把规则说清楚。GitHub 长这样:
+                {",并在响应头里把规则说清楚。一个典型的限流响应长这样:"}
               </>
             }
           />
@@ -1270,8 +1271,8 @@ Idempotency-Key: 8e03978e-40d5-43e8-bc93-6894a57f9324
         <CodeBlock
           lang="http"
           title={{
-            en: "The response when you hit the limit",
-            zh: "撞上限流时的响应",
+            en: "A typical rate-limited response",
+            zh: "一个典型的限流响应",
           }}
           hl={[2, 4]}
           code={`HTTP/1.1 429 Too Many Requests
@@ -1287,9 +1288,14 @@ x-ratelimit-reset: 1794816042
                 <code>Retry-After</code> is the standard field: wait at least 42
                 seconds. It may also carry an HTTP date instead of a number of
                 seconds, so parse both. The <code>x-ratelimit-*</code> fields
-                are GitHub&apos;s own convention — the quota, how much is left,
-                and when it resets as a Unix time in seconds. GitHub allows 60
-                requests per hour without a token. A standard{" "}
+                are a common convention, GitHub&apos;s among others: the quota,
+                how much is left, and when it resets as a Unix time in seconds.
+                Conventions differ, though. When you exceed GitHub&apos;s
+                primary limit (60 requests per hour without a token), it may
+                answer 403 rather than 429 and tells you when to retry in{" "}
+                <code>x-ratelimit-reset</code>; it uses{" "}
+                <code>Retry-After</code> for its secondary limits. Read each
+                API&apos;s documentation. A standard{" "}
                 <code>RateLimit-*</code> set is being written at the IETF, but
                 it is still a draft and not ratified, so do not rely on it.
               </>
@@ -1298,9 +1304,7 @@ x-ratelimit-reset: 1794816042
               <>
                 <code>Retry-After</code> 是标准字段:至少等 42 秒再来。
                 它也可以写成 HTTP 日期而不是秒数,两种都要能解析。
-                <code>x-ratelimit-*</code> 三个是 GitHub 自己的约定:
-                总配额、还剩多少、什么时候重置(Unix 秒)。
-                GitHub 不带 token 时是每小时 60 次。IETF 正在制定统一的{" "}
+                <code>x-ratelimit-*</code> 是一种常见约定(GitHub 等都在用):总配额、还剩多少、什么时候重置(Unix 秒)。但各家的约定并不统一:GitHub 超出主限额(不带 token 时每小时 60 次)时可能回 403 而不是 429,何时重试看 <code>x-ratelimit-reset</code>;<code>Retry-After</code> 用在它的次级限额上。以各家文档为准。IETF 正在制定统一的{" "}
                 <code>RateLimit-*</code> 字段,但它仍处于草案阶段、尚未定案,
                 不要依赖它。
               </>
@@ -1336,7 +1340,7 @@ x-ratelimit-reset: 1794816042
             en: "A fetch wrapper with backoff",
             zh: "带退避的 fetch 封装",
           }}
-          hl={[11, 12]}
+          hl={[12, 13, 14]}
           code={{
             en: `async function fetchWithRetry(url, tries = 5) {
   for (let i = 0; i < tries; i++) {
