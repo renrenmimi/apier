@@ -106,8 +106,7 @@ const TREE_FRAMES: TreeFrame[] = [
         }
         zh={
           <>
-            <code>Query.post</code> 的 resolver 执行,
-            从数据库读回一个 post 对象。<b>记住这个返回值</b> ——
+            <code>Query.post</code> 的 resolver 执行,从数据库读回一个 post 对象。<b>记住这个返回值</b> ——
             它马上要作为 <code>parent</code> 传给下一层。
           </>
         }
@@ -138,8 +137,7 @@ const TREE_FRAMES: TreeFrame[] = [
         zh={
           <>
             进入 <code>post</code> 的选择集。<code>title</code>{" "}
-            没人给它写 resolver,于是走<b>默认 resolver</b>:
-            从 <code>parent</code> 上取同名属性。<code>title</code> 和{" "}
+            没人给它写 resolver,于是走<b>默认 resolver</b>:从 <code>parent</code> 上取同名属性。<code>title</code> 和{" "}
             <code>author</code> 互不依赖,服务器可以同时解析它们。
           </>
         }
@@ -169,8 +167,7 @@ const TREE_FRAMES: TreeFrame[] = [
         zh={
           <>
             <code>author</code> 收到的 <code>parent</code>{" "}
-            还是那个 post 对象。它从里面取出 <code>authorId</code>,
-            换回一个 user 对象。父字段传给子字段的,永远是父字段的返回值。
+            还是那个 post 对象。它从里面取出 <code>authorId</code>,换回一个 user 对象。父字段传给子字段的,永远是父字段的返回值。
           </>
         }
       />
@@ -220,8 +217,7 @@ const TREE_FRAMES: TreeFrame[] = [
         }
         zh={
           <>
-            走到叶子,整棵树跑完。结果按 query 的形状拼成 JSON。
-            响应长得像查询,正是这种执行方式的结果。
+            走到叶子,整棵树跑完。结果按 query 的形状拼成 JSON。响应长得像查询,正是这种执行方式的结果。
           </>
         }
       />
@@ -358,8 +354,7 @@ const N1_FRAMES: SqlFrame[] = [
         }
         zh={
           <>
-            客户端发来一条很普通的查询:文章列表,每篇带作者。
-            盯住右边的<b>查询计数器</b>。
+            客户端发来一条很普通的查询:文章列表,每篇带作者。盯住右边的<b>查询计数器</b>。
           </>
         }
       />
@@ -379,8 +374,7 @@ const N1_FRAMES: SqlFrame[] = [
         }
         zh={
           <>
-            <code>Query.posts</code> 跑了一条查询,拿回 3 篇文章,
-            作者分别是 9、12、9 号。到这里一切正常。
+            <code>Query.posts</code> 跑了一条查询,拿回 3 篇文章,作者分别是 9、12、9 号。到这里一切正常。
           </>
         }
       />
@@ -400,8 +394,7 @@ const N1_FRAMES: SqlFrame[] = [
         }
         zh={
           <>
-            第 1 篇文章的 <code>author</code> resolver 执行。
-            它只认识自己的 <code>parent</code>,于是单独查了一次 9 号用户。
+            第 1 篇文章的 <code>author</code> resolver 执行。它只认识自己的 <code>parent</code>,于是单独查了一次 9 号用户。
           </>
         }
       />
@@ -459,8 +452,7 @@ const N1_FRAMES: SqlFrame[] = [
         }
         zh={
           <>
-            第 3 篇的作者还是 9 号,于是又取了一遍。
-            这种写法里没有任何东西会注意到重复。
+            第 3 篇的作者还是 9 号,于是又取了一遍。这种写法里没有任何东西会注意到重复。
           </>
         }
       />
@@ -495,10 +487,7 @@ const N1_FRAMES: SqlFrame[] = [
         }
         zh={
           <>
-            结算:1 次查列表加 N 次查作者 = <b>1 + N</b>。
-            3 篇文章是 4 次,<b>100 篇文章就是 101 次</b>。
-            要记住的是:服务器代码一行没改,
-            只是客户端在查询里多加了一个嵌套字段。
+            结算:1 次查列表加 N 次查作者 = <b>1 + N</b>。3 篇文章是 4 次,<b>100 篇文章就是 101 次</b>。要记住的是:服务器代码一行没改,只是客户端在查询里多加了一个嵌套字段。
           </>
         }
       />
@@ -556,8 +545,7 @@ const DL_FRAMES: SqlFrame[] = [
         }
         zh={
           <>
-            三个 <code>author</code> resolver 都执行了,
-            但<b>一条查询也没发出去</b>。<code>load(id)</code>{" "}
+            三个 <code>author</code> resolver 都执行了,但<b>一条查询也没发出去</b>。<code>load(id)</code>{" "}
             只是把 id 记下来,立刻返回一个 Promise。
           </>
         }
@@ -588,8 +576,7 @@ const DL_FRAMES: SqlFrame[] = [
         zh={
           <>
             本轮事件循环(同一个 tick)结束,DataLoader 出手:
-            <b>去掉重复的</b>,剩下 [9, 12],用一条查询把两个都取回,
-            再把各自的那条分发给对应的 resolver。重复的 9 号由缓存回答。
+            <b>去掉重复的</b>,剩下 [9, 12],用一条查询把两个都取回,再把各自的那条分发给对应的 resolver。重复的 9 号由缓存回答。
           </>
         }
       />
@@ -743,9 +730,7 @@ export function NormalizeViz() {
             }
             zh={
               <>
-                嵌套没有了,每个对象只存一份,对象之间用<b>引用</b>相连。
-                之后的查询再需要 <code>User:9</code>,本地就能回答;
-                一次 mutation 改了 Ada 的名字,所有读到她的界面同时更新 ——
+                嵌套没有了,每个对象只存一份,对象之间用<b>引用</b>相连。之后的查询再需要 <code>User:9</code>,本地就能回答;一次 mutation 改了 Ada 的名字,所有读到她的界面同时更新 ——
                 只存一份,值也只有一个。
               </>
             }

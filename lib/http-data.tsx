@@ -101,8 +101,7 @@ export const LABS: Lab[] = [
       zh: (
         <p>
           在 Console 里向 <code>https://jsonplaceholder.typicode.com/posts</code>{" "}
-          发一个 <b>POST</b>,请求体是一篇「新文章」的 JSON(随便编个 title)。
-          观察两件事:状态码是不是 <b>201</b>?响应里是不是多了一个服务器分配的{" "}
+          发一个 <b>POST</b>,请求体是一篇「新文章」的 JSON(随便编个 title)。观察两件事:状态码是不是 <b>201</b>?响应里是不是多了一个服务器分配的{" "}
           <code>id</code>?
         </p>
       ),
@@ -163,9 +162,7 @@ console.log(created.id); // 101`}
           />
           <p>
             201 Created 表示新资源已创建,响应体里带着服务器分配的 id。说明:
-            JSONPlaceholder 是「假写入」—— 它认真地回你 201 和 id 101,
-            但数据并不会真的存下来(所以谁来 POST,id 都是 101)。
-            报文一来一回是真的,练手足够了。
+            JSONPlaceholder 是「假写入」—— 它认真地回你 201 和 id 101,但数据并不会真的存下来(所以谁来 POST,id 都是 101)。报文一来一回是真的,练手足够了。
           </p>
         </>
       ),
@@ -192,10 +189,7 @@ console.log(created.id); // 101`}
       zh: (
         <p>
           在 Console 里 fetch 一个根本不存在的路径:
-          <code>https://jsonplaceholder.typicode.com/nothing-here</code>,
-          然后打印 <code>res.status</code> 和 <code>res.ok</code>。
-          再回答一个问题:代码能顺利走到 <code>console.log</code> 这一行,
-          说明 fetch 认为这次调用出错了吗?
+          <code>https://jsonplaceholder.typicode.com/nothing-here</code>,然后打印 <code>res.status</code> 和 <code>res.ok</code>。再回答一个问题:代码能顺利走到 <code>console.log</code> 这一行,说明 fetch 认为这次调用出错了吗?
         </p>
       ),
     },
@@ -240,10 +234,7 @@ console.log(res.status, res.ok); // 404 false`}
 console.log(res.status, res.ok); // 404 false`}
           />
           <p>
-            打印出 <code>404 false</code> —— 而且 fetch <b>没有抛错</b>。
-            在它看来,请求送到了、服务器也回话了,只是回的内容是「查无此物」,
-            这就算一次成功的通信。这个反直觉的行为是初学者最常见的误区,
-            第 02 章会专门教你怎么接住它。
+            打印出 <code>404 false</code> —— 而且 fetch <b>没有抛错</b>。在它看来,请求送到了、服务器也回话了,只是回的内容是「查无此物」,这就算一次成功的通信。这个反直觉的行为是初学者最常见的误区,第 02 章会专门教你怎么接住它。
           </p>
         </>
       ),
@@ -271,8 +262,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            GET 是安全(只读)方法,不该在服务器上产生任何新东西;
-            而且把评论内容塞进 GET 的 URL,还会原样进服务器日志。
+            GET 是安全(只读)方法,不该在服务器上产生任何新东西;而且把评论内容塞进 GET 的 URL,还会原样进服务器日志。
           </>
         ),
       },
@@ -307,8 +297,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          创建交给 POST:把数据发给集合(如 <code>/comments</code>),
-          服务器处理并分配新 id,成功通常回 201 Created。
+          创建交给 POST:把数据发给集合(如 <code>/comments</code>),服务器处理并分配新 id,成功通常回 201 Created。
         </>
       ),
     },
@@ -342,8 +331,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          还漏了一个 —— 找那个「重复执行,资源都是同一个下场」的方法。
-          别被第二次返回 404 骗了,幂等看的是服务器状态,不是响应码。
+          还漏了一个 —— 找那个「重复执行,资源都是同一个下场」的方法。别被第二次返回 404 骗了,幂等看的是服务器状态,不是响应码。
         </>
       ),
     },
@@ -357,8 +345,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          勾多了 —— 你选的方法里,有一个每重复一次就可能多出一条数据,
-          或者规范压根不承诺重复执行结果一致。
+          勾多了 —— 你选的方法里,有一个每重复一次就可能多出一条数据,或者规范压根不承诺重复执行结果一致。
         </>
       ),
     },
@@ -393,8 +380,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          你的 token 有效,服务器清楚你是谁。你尝试删除<b>别人</b>的文章,
-          规范的服务器应该回什么?
+          你的 token 有效,服务器清楚你是谁。你尝试删除<b>别人</b>的文章,规范的服务器应该回什么?
         </>
       ),
     },
@@ -410,8 +396,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            400 是「请求本身有毛病(格式、语法)」—— 你这请求格式没问题,
-            问题出在权限。
+            400 是「请求本身有毛病(格式、语法)」—— 你这请求格式没问题,问题出在权限。
           </>
         ),
       },
@@ -426,8 +411,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            401 问的是「你是谁?」,用在凭证缺失或无效的时候。
-            这里凭证是好的,服务器清清楚楚知道你是谁 —— 它只是不许你干这事。
+            401 问的是「你是谁?」,用在凭证缺失或无效的时候。这里凭证是好的,服务器清清楚楚知道你是谁 —— 它只是不许你干这事。
           </>
         ),
       },
@@ -451,8 +435,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          403 Forbidden = 「认识你,但你不许」。401 问「你是谁」,
-          重新登录有救;403 说「你不许」,换谁登录都没用。
+          403 Forbidden = 「认识你,但你不许」。401 问「你是谁」,重新登录有救;403 说「你不许」,换谁登录都没用。
         </>
       ),
     },
@@ -493,8 +476,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            格式错是 4xx(通常是 400)的事。状态码以 5 开头,
-            就是服务器在说「问题在我这边」。
+            格式错是 4xx(通常是 400)的事。状态码以 5 开头,就是服务器在说「问题在我这边」。
           </>
         ),
       },
@@ -547,8 +529,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          请求头里写 <code>Content-Type: application/json</code>,
-          是在告诉服务器什么?
+          请求头里写 <code>Content-Type: application/json</code>,是在告诉服务器什么?
         </>
       ),
     },
@@ -690,8 +671,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          host 回答「这条报文送到哪台服务器」,由 DNS 翻译成 IP 地址。
-          前面挂个 <code>api.</code> 子域名是行业惯例:网页住 <code>www.</code>,
+          host 回答「这条报文送到哪台服务器」,由 DNS 翻译成 IP 地址。前面挂个 <code>api.</code> 子域名是行业惯例:网页住 <code>www.</code>,
           API 住 <code>api.</code>
         </>
       ),
@@ -738,8 +718,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            「只改这几个字段」是 PATCH 的行为。PUT 的语义写得很清楚:
-            用我给的这份,<b>整体换掉</b>原来那份。
+            「只改这几个字段」是 PATCH 的行为。PUT 的语义写得很清楚:用我给的这份,<b>整体换掉</b>原来那份。
           </>
         ),
       },
@@ -779,8 +758,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          PUT = 整体替换且幂等;PATCH = 部分修改、不承诺幂等。
-          用 PUT 传半个对象,是新手弄丢字段最常见的原因 ——
+          PUT = 整体替换且幂等;PATCH = 部分修改、不承诺幂等。用 PUT 传半个对象,是新手弄丢字段最常见的原因 ——
           在 JSONPlaceholder 上可以安全地亲手复现一次。
         </>
       ),
@@ -799,8 +777,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          客户端带着缓存校验信息(<code>If-None-Match</code> + ETag)发起请求,
-          服务器发现资源没变,只回状态码、不重发正文 ——
+          客户端带着缓存校验信息(<code>If-None-Match</code> + ETag)发起请求,服务器发现资源没变,只回状态码、不重发正文 ——
           这个状态码是____(三位数字)。
         </>
       ),
@@ -826,8 +803,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          304 Not Modified:「你手上那份还新鲜,我就不重发了。」
-          正文全省,一来一回只剩头部 —— 第 05 章会把条件请求和缓存讲透。
+          304 Not Modified:「你手上那份还新鲜,我就不重发了。」正文全省,一来一回只剩头部 —— 第 05 章会把条件请求和缓存讲透。
         </>
       ),
     },

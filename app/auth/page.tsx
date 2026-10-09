@@ -60,9 +60,7 @@ export default function AuthPage() {
           ),
           zh: (
             <>
-              对每个请求,服务器要分开回答两个问题:是谁发来的,
-              以及这个调用方能做什么。这一章走过回答它们的四种机制,
-              最后把第 01、02 章欠下的 CORS 讲完。
+              对每个请求,服务器要分开回答两个问题:是谁发来的,以及这个调用方能做什么。这一章走过回答它们的四种机制,最后把第 01、02 章欠下的 CORS 讲完。
             </>
           ),
         }}
@@ -121,8 +119,7 @@ export default function AuthPage() {
               }
               zh={
                 <>
-                  第一个问题是<b>「你是谁」</b>。你出示工牌,门卫核对它是不是你的。
-                  这是<b>认证(authentication,常写作 authn)</b>:证明身份。
+                  第一个问题是<b>「你是谁」</b>。你出示工牌,门卫核对它是不是你的。这是<b>认证(authentication,常写作 authn)</b>:证明身份。
                 </>
               }
             />
@@ -140,10 +137,7 @@ export default function AuthPage() {
               }
               zh={
                 <>
-                  第二个问题是<b>「你能做什么」</b>。你说要去机房,
-                  门卫查了名单:工牌是真的,但这扇门它开不了。
-                  这是<b>授权(authorization,常写作 authz)</b>:
-                  决定一个身份被允许做什么。
+                  第二个问题是<b>「你能做什么」</b>。你说要去机房,门卫查了名单:工牌是真的,但这扇门它开不了。这是<b>授权(authorization,常写作 authz)</b>:决定一个身份被允许做什么。
                 </>
               }
             />
@@ -159,8 +153,7 @@ export default function AuthPage() {
               }
               zh={
                 <>
-                  顺序永远不变:<b>先认证,后授权</b>。
-                  服务器不知道是谁在调用,也就无从查它的权限。
+                  顺序永远不变:<b>先认证,后授权</b>。服务器不知道是谁在调用,也就无从查它的权限。
                 </>
               }
             />
@@ -189,11 +182,9 @@ export default function AuthPage() {
                 }
                 zh={
                   <>
-                    凭证缺失、格式不对、过期或错误时,回 401。
-                    HTTP 规定 401 响应必须带一个 <code>WWW-Authenticate</code>{" "}
+                    凭证缺失、格式不对、过期或错误时,回 401。HTTP 规定 401 响应必须带一个 <code>WWW-Authenticate</code>{" "}
                     头,说明客户端该用哪种认证方式,例如{" "}
-                    <code>WWW-Authenticate: Bearer</code>。
-                    这个状态码的名字叫 Unauthorized,是历史遗留的口误 ——
+                    <code>WWW-Authenticate: Bearer</code>。这个状态码的名字叫 Unauthorized,是历史遗留的口误 ——
                     它表达的其实是「未认证」。就当它在说「我不知道你是谁」。
                   </>
                 }
@@ -217,9 +208,7 @@ export default function AuthPage() {
                 }
                 zh={
                   <>
-                    调用方身份没问题、但这件事不许它做时,回 403。
-                    重新登录一百次也没用,得由人去授予权限。
-                    普通用户去删别人的帖子,得到的是 403,不是 401。
+                    调用方身份没问题、但这件事不许它做时,回 403。重新登录一百次也没用,得由人去授予权限。普通用户去删别人的帖子,得到的是 403,不是 401。
                   </>
                 }
               />
@@ -252,8 +241,7 @@ export default function AuthPage() {
                 ),
                 zh: (
                   <>
-                    <b>401 Unauthorized。</b>服务器根本不知道你是谁。
-                    去响应头里找 <code>WWW-Authenticate</code> ——
+                    <b>401 Unauthorized。</b>服务器根本不知道你是谁。去响应头里找 <code>WWW-Authenticate</code> ——
                     规范要求 401 必须告诉你「该怎么证明身份」。
                   </>
                 ),
@@ -303,8 +291,7 @@ export default function AuthPage() {
                 ),
                 zh: (
                   <>
-                    <b>201 Created</b>,还带了 <code>Location</code> 头指向新资源。
-                    同一个请求、同一台服务器 —— 变的只有一个请求头。
+                    <b>201 Created</b>,还带了 <code>Location</code> 头指向新资源。同一个请求、同一台服务器 —— 变的只有一个请求头。
                   </>
                 ),
               },
@@ -342,12 +329,9 @@ export default function AuthPage() {
             }
             zh={
               <>
-                <b>API Key</b> 是服务商发给你的一串随机字符。
-                每个请求都带上它,服务商就知道是哪个账号在调用 ——
+                <b>API Key</b> 是服务商发给你的一串随机字符。每个请求都带上它,服务商就知道是哪个账号在调用 ——
                 足够用来计量、限流和封禁。注意它标识的是什么:
-                key 标识的是<b>一个项目或一个客户端程序</b>,不是一个人。
-                key 背后是你团队的十个人还是一个脚本,服务商分不出来。
-                需要知道「是哪个用户在操作」时,key 就是错的工具。
+                key 标识的是<b>一个项目或一个客户端程序</b>,不是一个人。key 背后是你团队的十个人还是一个脚本,服务商分不出来。需要知道「是哪个用户在操作」时,key 就是错的工具。
               </>
             }
           />
@@ -374,8 +358,7 @@ X-API-Key: wk_live_9f8a7b6c5d4e
             zh: (
               <>
                 别把它放进 query(<code>?key=…</code>)。URL
-                会进服务器日志、浏览器历史和 <code>Referer</code> 头,
-                转发一个链接就等于把 key 一起送出去。Header 不会这样流传。
+                会进服务器日志、浏览器历史和 <code>Referer</code> 头,转发一个链接就等于把 key 一起送出去。Header 不会这样流传。
               </>
             ),
           }}
@@ -403,11 +386,7 @@ X-API-Key: wk_live_9f8a7b6c5d4e
               }
               zh={
                 <>
-                  把 key 写进浏览器代码,等于把它公开发布。
-                  用户可以看源码、在 Network 面板里看请求、在打包产物里搜字符串。
-                  压缩和混淆都没用,因为请求发出去时 key 就是明文。
-                  HTTPS 也没用:它防的是网络上的第三方,
-                  防不了操作浏览器的这个人本身。
+                  把 key 写进浏览器代码,等于把它公开发布。用户可以看源码、在 Network 面板里看请求、在打包产物里搜字符串。压缩和混淆都没用,因为请求发出去时 key 就是明文。HTTPS 也没用:它防的是网络上的第三方,防不了操作浏览器的这个人本身。
                 </>
               }
             />
@@ -480,8 +459,7 @@ Authorization: Basic c3R1ZGVudDpzZWNyZXQxMjM=
             ),
             zh: (
               <>
-                那串字符看起来很复杂。用下面的加工台亲手试试,
-                它到底能不能保住秘密。
+                那串字符看起来很复杂。用下面的加工台亲手试试,它到底能不能保住秘密。
               </>
             ),
           }}
@@ -512,12 +490,9 @@ Authorization: Basic c3R1ZGVudDpzZWNyZXQxMjM=
               }
               zh={
                 <>
-                  <b>编码(encoding)</b>是一套公开、可逆的改写规则,
-                  目的是让数据能安全地在管道里运输;谁都能还原它,不需要密钥。
-                  <b>加密(encryption)</b>则需要密钥才能还原,
-                  目的是不让别人读到内容。base64 属于前者。所以 Basic
-                  认证<b>自身不提供任何保密性</b>,完全依赖 HTTPS;
-                  跑在明文 HTTP 上,等于把密码交给线路上的任何人。
+                  <b>编码(encoding)</b>是一套公开、可逆的改写规则,目的是让数据能安全地在管道里运输;谁都能还原它,不需要密钥。
+                  <b>加密(encryption)</b>则需要密钥才能还原,目的是不让别人读到内容。base64 属于前者。所以 Basic
+                  认证<b>自身不提供任何保密性</b>,完全依赖 HTTPS;跑在明文 HTTP 上,等于把密码交给线路上的任何人。
                 </>
               }
             />
@@ -563,10 +538,8 @@ WWW-Authenticate: Basic realm="Staff area"
             ),
             zh: (
               <>
-                这就是 §01 说的那个 401,配上它该带的头。
-                这个头说明客户端该用哪种认证方式;
-                <code>realm</code> 是受保护区域的名字,
-                浏览器会把它显示在弹出的密码框里。
+                这就是 §01 说的那个 401,配上它该带的头。这个头说明客户端该用哪种认证方式;
+                <code>realm</code> 是受保护区域的名字,浏览器会把它显示在弹出的密码框里。
               </>
             ),
           }}
@@ -597,14 +570,10 @@ WWW-Authenticate: Basic realm="Staff area"
               }
               zh={
                 <>
-                  不管密码是怎么传过来的,服务器都不能把它按原文存下来,
-                  也不该加密存储 —— 加密的东西,拿到密钥的人就能解回来。
-                  要存<b>哈希</b>:由密码算出、无法反推回密码的单向值。
-                  而且要用专为密码设计的算法 ——
+                  不管密码是怎么传过来的,服务器都不能把它按原文存下来,也不该加密存储 —— 加密的东西,拿到密钥的人就能解回来。要存<b>哈希</b>:由密码算出、无法反推回密码的单向值。而且要用专为密码设计的算法 ——
                   它们故意很慢,并且给每个密码加一段随机盐:<b>bcrypt</b>、
                   <b>scrypt</b> 或 <b>Argon2</b>。单纯的 SHA-256
-                  在这里是错的选择,因为它很快,
-                  而「快」正是那个要暴力猜上十亿次的攻击者想要的。
+                  在这里是错的选择,因为它很快,而「快」正是那个要暴力猜上十亿次的攻击者想要的。
                 </>
               }
             />
@@ -640,14 +609,8 @@ WWW-Authenticate: Basic realm="Staff area"
             }
             zh={
               <>
-                登录成功之后,服务器靠什么在下一个请求里认出你?
-                传统答案是<b>会话(session)</b>:服务器把登录状态存下来,
-                发给你一个指向它的 id。<b>JWT(JSON Web Token)</b>
-                反过来做:把关于你的声明直接写进令牌,由服务器签名,
-                服务器自己什么都不存。每次请求验一下签名、读一下声明就行。
-                这样就不再需要一个共享的会话存储,
-                多台服务器共同服务同一个用户时很方便。
-                它也放弃了一些东西,下面的提示框会讲清楚是什么。
+                登录成功之后,服务器靠什么在下一个请求里认出你?传统答案是<b>会话(session)</b>:服务器把登录状态存下来,发给你一个指向它的 id。<b>JWT(JSON Web Token)</b>
+                反过来做:把关于你的声明直接写进令牌,由服务器签名,服务器自己什么都不存。每次请求验一下签名、读一下声明就行。这样就不再需要一个共享的会话存储,多台服务器共同服务同一个用户时很方便。它也放弃了一些东西,下面的提示框会讲清楚是什么。
               </>
             }
           />
@@ -674,10 +637,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
             ),
             zh: (
               <>
-                <b>Bearer</b> 的意思是「持有者」:谁出示这枚令牌,
-                谁就被当成那个用户,不需要再证明别的。
-                这既是它方便的原因,也是它必须走 HTTPS、
-                必须小心存放的原因。
+                <b>Bearer</b> 的意思是「持有者」:谁出示这枚令牌,谁就被当成那个用户,不需要再证明别的。这既是它方便的原因,也是它必须走 HTTPS、必须小心存放的原因。
               </>
             ),
           }}
@@ -706,12 +666,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
               }
               zh={
                 <>
-                  会话存在服务器上,所以服务器可以删掉它:
-                  下一个带着这个会话 id 的请求立刻就失败。
-                  而签名的 JWT 是靠重算一遍签名来验证的,不查任何表,
-                  也就没有可删的东西。
-                  在 <code>exp</code> 到点之前,
-                  每一台持有密钥的服务器都会接受它 ——
+                  会话存在服务器上,所以服务器可以删掉它:下一个带着这个会话 id 的请求立刻就失败。而签名的 JWT 是靠重算一遍签名来验证的,不查任何表,也就没有可删的东西。在 <code>exp</code> 到点之前,每一台持有密钥的服务器都会接受它 ——
                   哪怕用户已经登出、改了密码,或者令牌已经被人偷走。
                 </>
               }
@@ -731,12 +686,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
               }
               zh={
                 <>
-                  所以 JWT 并不是简单地「比 session 更好」,
-                  它是用「可撤销」换来了「不用存状态」。
-                  想把撤销能力买回来一部分,通常的做法是发两枚令牌:
-                  一枚短命的 access token,加一枚服务器存着、
-                  可以随时作废的 refresh token。
-                  有些系统还会维护一份被禁令牌 id 的名单 ——
+                  所以 JWT 并不是简单地「比 session 更好」,它是用「可撤销」换来了「不用存状态」。想把撤销能力买回来一部分,通常的做法是发两枚令牌:一枚短命的 access token,加一枚服务器存着、可以随时作废的 refresh token。有些系统还会维护一份被禁令牌 id 的名单 ——
                   那又是服务端状态了,这恰恰说明了问题所在。
                 </>
               }
@@ -773,17 +723,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
               zh={
                 <>
                   没有哪种存法是「安全」的,只有取舍。放在{" "}
-                  <code>localStorage</code> 里,页面上任何脚本都能读到它,
-                  所以只要出现一个 XSS(跨站脚本)漏洞 ——
+                  <code>localStorage</code> 里,页面上任何脚本都能读到它,所以只要出现一个 XSS(跨站脚本)漏洞 ——
                   你自己的代码里的,或者某个依赖里的 ——
-                  攻击者就能读走并发送它。
-                  放在带 <code>HttpOnly</code> 标记的 Cookie 里,
-                  脚本读不到,这条路就堵上了;
-                  但浏览器会自动把这个 Cookie 附在请求上,
-                  包括由别的站点发起的请求,
-                  所以你必须防 CSRF(跨站请求伪造):用{" "}
-                  <code>SameSite=Lax</code> 或 <code>Strict</code>,
-                  或者另发一个防 CSRF 的令牌。
+                  攻击者就能读走并发送它。放在带 <code>HttpOnly</code> 标记的 Cookie 里,脚本读不到,这条路就堵上了;但浏览器会自动把这个 Cookie 附在请求上,包括由别的站点发起的请求,所以你必须防 CSRF(跨站请求伪造):用{" "}
+                  <code>SameSite=Lax</code> 或 <code>Strict</code>,或者另发一个防 CSRF 的令牌。
                 </>
               }
             />
@@ -799,9 +742,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
               }
               zh={
                 <>
-                  选定一种,然后有意识地补上它的短板。
-                  「我们用 Cookie,所以是安全的」这种说法,
-                  恰恰是第二类问题被漏掉的原因。
+                  选定一种,然后有意识地补上它的短板。「我们用 Cookie,所以是安全的」这种说法,恰恰是第二类问题被漏掉的原因。
                 </>
               }
             />
@@ -836,11 +777,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
             }
             zh={
               <>
-                问题是这样的:另一个应用想读取属于你的数据,
-                而这些数据存在你已经在用的服务里 —— 照片、日历、代码仓库。
-                你不能把那个服务的密码交给它,因为密码给出的是全部权限,
-                而且是永久的。OAuth 2.0 的解法是引入一个专门签发
-                「受限、会过期」令牌的角色。先认四个角色:
+                问题是这样的:另一个应用想读取属于你的数据,而这些数据存在你已经在用的服务里 —— 照片、日历、代码仓库。你不能把那个服务的密码交给它,因为密码给出的是全部权限,而且是永久的。OAuth 2.0 的解法是引入一个专门签发「受限、会过期」令牌的角色。先认四个角色:
               </>
             }
           />
@@ -922,11 +859,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
               zh={
                 <>
                   这是关于 OAuth 最常见的误解。access token
-                  回答的是<b>「持有者可以做什么」</b>,
-                  不是<b>「这个用户是谁」</b>。OAuth 2.0
-                  里没有任何东西要求令牌标识某个人;
-                  如果资源服务器把「这枚令牌能用」当成身份证明,
-                  那么一枚发给别的应用的令牌就可能骗过它。
+                  回答的是<b>「持有者可以做什么」</b>,不是<b>「这个用户是谁」</b>。OAuth 2.0
+                  里没有任何东西要求令牌标识某个人;如果资源服务器把「这枚令牌能用」当成身份证明,那么一枚发给别的应用的令牌就可能骗过它。
                 </>
               }
             />
@@ -949,10 +883,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
                   建在 OAuth 2.0 之上的身份层叫{" "}
                   <b>OpenID Connect(OIDC)</b>。它多发一枚令牌 ——
                   <b>ID token</b>,一枚要求客户端去校验的 JWT ——
-                  里面写着用户是谁、这个声明是谁签发的、
-                  签发给哪个客户端、什么时候签发的。
-                  网站上的「用 Google 账号登录」,用的就是 OIDC;
-                  底层跑的还是你刚才逐帧看过的那套流程。
+                  里面写着用户是谁、这个声明是谁签发的、签发给哪个客户端、什么时候签发的。网站上的「用 Google 账号登录」,用的就是 OIDC;底层跑的还是你刚才逐帧看过的那套流程。
                 </>
               }
             />
@@ -985,13 +916,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
               zh={
                 <>
                   用<b>授权码流程 + PKCE</b>。PKCE(读作 pixy)
-                  就是你刚才看到的那一步:客户端生成一个随机的秘密值,
-                  发起流程时先发它的哈希,换令牌时再发秘密值本身。
-                  这样一来,半路被截走的授权码单独没有用。PKCE
-                  最初是为「保不住密钥」的客户端设计的,
-                  比如移动应用和纯浏览器应用;
-                  但现在的建议是<b>所有客户端都用,
-                  包括那些确实有 client secret 的</b>。
+                  就是你刚才看到的那一步:客户端生成一个随机的秘密值,发起流程时先发它的哈希,换令牌时再发秘密值本身。这样一来,半路被截走的授权码单独没有用。PKCE
+                  最初是为「保不住密钥」的客户端设计的,比如移动应用和纯浏览器应用;但现在的建议是<b>所有客户端都用,包括那些确实有 client secret 的</b>。
                 </>
               }
             />
@@ -1016,9 +942,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
                   ——直接在重定向 URL 里返回令牌——已被废弃:
                   URL 会流进历史记录、日志和 Referer。
                   <b>密码模式(resource owner password credentials)</b>
-                  ——由应用自己去收集用户密码——同样已被废弃,
-                  它把 OAuth 存在的理由整个否定了。
-                  如果哪份教程还把这两种当成正常选择,那它已经过时了。
+                  ——由应用自己去收集用户密码——同样已被废弃,它把 OAuth 存在的理由整个否定了。如果哪份教程还把这两种当成正常选择,那它已经过时了。
                 </>
               }
             />
@@ -1060,11 +984,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
                 浏览器执行一条<b>同源策略(same-origin policy)</b>:
                 {"页面里运行的脚本,不能读取来自另一个源的响应。"}
                 这里的<b>源(origin)</b>是协议、主机、端口三者的组合 ——
-                只要有一个不同,就是不同的源。这条规则保护的是你这个用户:
-                没有它,你打开的某个页面就能利用
+                只要有一个不同,就是不同的源。这条规则保护的是你这个用户:没有它,你打开的某个页面就能利用
                 <b>浏览器里已有的 Cookie</b> 去读你在别处的邮件。
-                <b>CORS(跨源资源共享)</b>是服务器主动放宽这条限制的方式:
-                它在响应头里声明,哪些源可以读它的响应。完整走一遍:
+                <b>CORS(跨源资源共享)</b>是服务器主动放宽这条限制的方式:它在响应头里声明,哪些源可以读它的响应。完整走一遍:
               </>
             }
           />
@@ -1092,9 +1014,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
                 }
                 zh={
                   <>
-                    出现 CORS 报错时,请求通常已经到达服务器,
-                    甚至已经被处理了,只是浏览器没把响应交给你的脚本。
-                    该改的是服务器的响应头,不是你的 fetch。
+                    出现 CORS 报错时,请求通常已经到达服务器,甚至已经被处理了,只是浏览器没把响应交给你的脚本。该改的是服务器的响应头,不是你的 fetch。
                   </>
                 }
               />
@@ -1119,9 +1039,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
                 }
                 zh={
                   <>
-                    这条规则由浏览器执行。命令行工具、
-                    以及任何跑在服务器上的代码都不看它。
-                    「Postman 能通、网页不行」正是 CORS 问题最明显的信号。
+                    这条规则由浏览器执行。命令行工具、以及任何跑在服务器上的代码都不看它。「Postman 能通、网页不行」正是 CORS 问题最明显的信号。
                   </>
                 }
               />
@@ -1147,10 +1065,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
                 }
                 zh={
                   <>
-                    CORS 决定的是页面脚本能不能读跨源响应,
-                    它保护用户不被别的网页利用。
-                    它挡不住爬虫,也挡不住攻击者 —— 这两者都不需要浏览器。
-                    服务端的认证和授权,一样都不能省。
+                    CORS 决定的是页面脚本能不能读跨源响应,它保护用户不被别的网页利用。它挡不住爬虫,也挡不住攻击者 —— 这两者都不需要浏览器。服务端的认证和授权,一样都不能省。
                   </>
                 }
               />
@@ -1186,15 +1101,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
               }
               zh={
                 <>
-                  <b>简单请求</b>直接发出去,浏览器只在收到响应时把关。
-                  它必须是 <Method m="GET" />、<Method m="HEAD" /> 或{" "}
-                  <Method m="POST" />,不带那一小份允许清单之外的头;
-                  如果有正文,<code>Content-Type</code> 必须是三种表单类型之一。
-                  其余的一律要预检:带 Authorization 头、
+                  <b>简单请求</b>直接发出去,浏览器只在收到响应时把关。它必须是 <Method m="GET" />、<Method m="HEAD" /> 或{" "}
+                  <Method m="POST" />,不带那一小份允许清单之外的头;如果有正文,<code>Content-Type</code> 必须是三种表单类型之一。其余的一律要预检:带 Authorization 头、
                   <code>Content-Type: application/json</code>、
-                  <code>X-API-Key</code> 这样的自定义头,
-                  或者用了 <Method m="PUT" />、<Method m="DELETE" /> 之类的方法。
-                  也就是说,你日常写的跨源 JSON 请求,大多要先走一条 <Method m="OPTIONS" /> 预检;同源请求不需要。
+                  <code>X-API-Key</code> 这样的自定义头,或者用了 <Method m="PUT" />、<Method m="DELETE" /> 之类的方法。也就是说,你日常写的跨源 JSON 请求,大多要先走一条 <Method m="OPTIONS" /> 预检;同源请求不需要。
                 </>
               }
             />
@@ -1212,9 +1122,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
               }
               zh={
                 <>
-                  注意同源策略拦的是什么:它拦的是你的脚本<b>读取</b>响应,
-                  并不拦一个简单请求<b>发出去</b>,服务器也可能照做不误。
-                  所以防 CSRF 是一件独立于 CORS 的工作。
+                  注意同源策略拦的是什么:它拦的是你的脚本<b>读取</b>响应,并不拦一个简单请求<b>发出去</b>,服务器也可能照做不误。所以防 CSRF 是一件独立于 CORS 的工作。
                 </>
               }
             />
@@ -1246,15 +1154,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
               }
               zh={
                 <>
-                  如果请求用了 <code>credentials: &quot;include&quot;</code>、
-                  会带上 Cookie,那么服务器必须回{" "}
-                  <code>Access-Control-Allow-Credentials: true</code>,
-                  并且必须明确写出那个源。此时通配符{" "}
+                  如果请求用了 <code>credentials: &quot;include&quot;</code>、会带上 Cookie,那么服务器必须回{" "}
+                  <code>Access-Control-Allow-Credentials: true</code>,并且必须明确写出那个源。此时通配符{" "}
                   <code>Access-Control-Allow-Origin: *</code> 会被
                   <b>拒绝</b> —— 头虽然在,浏览器照样不收这份响应。
                   <code>-Headers</code> 和 <code>-Methods</code>{" "}
-                  里的通配符同理。为了绕过这条限制而「来什么源就回什么源」,
-                  等于对所有站点开放 —— 没有一份核对过的名单,别这么做。
+                  里的通配符同理。为了绕过这条限制而「来什么源就回什么源」,等于对所有站点开放 —— 没有一份核对过的名单,别这么做。
                 </>
               }
             />
@@ -1456,8 +1361,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
             ),
             zh: (
               <>
-                跑在浏览器里的代码保不住秘密:API key 一旦进了页面就是公开的。
-                把它留在你自己的服务器上,由服务器去调第三方。
+                跑在浏览器里的代码保不住秘密:API key 一旦进了页面就是公开的。把它留在你自己的服务器上,由服务器去调第三方。
               </>
             ),
           },
@@ -1488,10 +1392,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
             zh: (
               <>
                 JWT 是<b>签名的,不是加密的</b>:
-                payload 谁拿到令牌谁都能读。
-                签名证明的是「由持有密钥的一方签发、之后没被改过」;
-                而且服务器必须按自己预期的算法验签,
-                不能按 header 里写的那个。
+                payload 谁拿到令牌谁都能读。签名证明的是「由持有密钥的一方签发、之后没被改过」;而且服务器必须按自己预期的算法验签,不能按 header 里写的那个。
               </>
             ),
           },
@@ -1506,8 +1407,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
             zh: (
               <>
                 会话可以删掉,而签名令牌在过期之前一直有效 ——
-                这就是那笔取舍。补的办法是:短命的 access token,
-                加一枚服务器可以作废的 refresh token。
+                这就是那笔取舍。补的办法是:短命的 access token,加一枚服务器可以作废的 refresh token。
               </>
             ),
           },
@@ -1543,8 +1443,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.kXbG
             zh: (
               <>
                 CORS 是浏览器的规则,不是服务端的防线 ——
-                它决定的是页面脚本能不能读跨源响应。curl 不受它管;
-                非简单请求要先走 <Method m="OPTIONS" /> 预检;
+                它决定的是页面脚本能不能读跨源响应。curl 不受它管;非简单请求要先走 <Method m="OPTIONS" /> 预检;
                 <code>Access-Control-Allow-Origin: *</code> 不能和凭证一起用。
               </>
             ),

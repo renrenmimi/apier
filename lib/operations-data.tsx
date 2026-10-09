@@ -34,8 +34,7 @@ export const LABS: Lab[] = [
           zh={
             <>
               打开 <code>https://rickandmortyapi.com/graphql</code> —— Rick and
-              Morty 的在线 GraphiQL,免费、免注册。写一个<b>使用变量</b>的查询:
-              声明 <code>$id: ID!</code>,用它调 <code>character(id: $id)</code>
+              Morty 的在线 GraphiQL,免费、免注册。写一个<b>使用变量</b>的查询:声明 <code>$id: ID!</code>,用它调 <code>character(id: $id)</code>
               ,并选取 <code>name</code>、<code>species</code>、
               <code>status</code>。id 不许写进查询文本,要放在{" "}
               <b>Variables</b> 面板里。
@@ -55,8 +54,7 @@ export const LABS: Lab[] = [
         }
         zh={
           <>
-            Variables 面板在编辑器左下角,看不到就点一下底部的 Variables 标签。
-            里面写的是一份 JSON:<code>{`{ "id": 1 }`}</code>。
+            Variables 面板在编辑器左下角,看不到就点一下底部的 Variables 标签。里面写的是一份 JSON:<code>{`{ "id": 1 }`}</code>。
           </>
         }
       />
@@ -92,10 +90,8 @@ export const LABS: Lab[] = [
             }
             zh={
               <>
-                应该查到 <code>Rick Sanchez / Human / Alive</code>。
-                再把 Variables 改成 <code>{`{ "id": 2 }`}</code> 跑一次 ——
-                查询文本一个字没动,回来的却是另一个角色。
-                这就是变量的意义:<b>文本恒定,值可变</b>。
+                应该查到 <code>Rick Sanchez / Human / Alive</code>。再把 Variables 改成 <code>{`{ "id": 2 }`}</code> 跑一次 ——
+                查询文本一个字没动,回来的却是另一个角色。这就是变量的意义:<b>文本恒定,值可变</b>。
               </>
             }
           />
@@ -125,10 +121,8 @@ export const LABS: Lab[] = [
           }
           zh={
             <>
-              还是那个练习场。在一次请求里把 1 号<b>和</b> 2 号角色都查回来:
-              把那组字段(name、species、status)用一个 <b>fragment</b>{" "}
-              定义一次,再给两次 <code>character</code> 调用各起一个<b>别名</b>,
-              让它们在响应里的键不冲突。
+              还是那个练习场。在一次请求里把 1 号<b>和</b> 2 号角色都查回来:把那组字段(name、species、status)用一个 <b>fragment</b>{" "}
+              定义一次,再给两次 <code>character</code> 调用各起一个<b>别名</b>,让它们在响应里的键不冲突。
             </>
           }
         />
@@ -145,8 +139,7 @@ export const LABS: Lab[] = [
         }
         zh={
           <>
-            没有别名时,两个 <code>character</code> 字段会抢同一个响应键。
-            GraphiQL 在你运行之前就会标红 —— 可以先故意试一次。
+            没有别名时,两个 <code>character</code> 字段会抢同一个响应键。GraphiQL 在你运行之前就会标红 —— 可以先故意试一次。
           </>
         }
       />
@@ -189,8 +182,7 @@ fragment basics on Character {
             zh={
               <>
                 响应里是 <code>data.rick</code> 和 <code>data.morty</code>{" "}
-                两个键。键名来自别名,那三个字段只写了一遍来自 fragment。
-                以后往 fragment 里加个字段,两个角色同时生效。
+                两个键。键名来自别名,那三个字段只写了一遍来自 fragment。以后往 fragment 里加个字段,两个角色同时生效。
               </>
             }
           />
@@ -222,11 +214,9 @@ fragment basics on Character {
           }
           zh={
             <>
-              Rick and Morty API 用的是<b>页码</b>,不是 Relay connections。
-              在 GraphiQL 里查 <code>characters(page: 1)</code> 的{" "}
+              Rick and Morty API 用的是<b>页码</b>,不是 Relay connections。在 GraphiQL 里查 <code>characters(page: 1)</code> 的{" "}
               <code>info {"{ count pages next prev }"}</code> 和{" "}
-              <code>results {"{ name }"}</code>,然后把 page 改成 2、再改成 3,
-              记下 <code>info.next</code> 和 <code>info.prev</code> 怎么变。
+              <code>results {"{ name }"}</code>,然后把 page 改成 2、再改成 3,记下 <code>info.next</code> 和 <code>info.prev</code> 怎么变。
             </>
           }
         />
@@ -288,11 +278,8 @@ fragment basics on Character {
               <>
                 三页看下来:<code>page: 1</code> 时 <code>next: 2, prev: null</code>
                 ;<code>page: 2</code> 时 <code>next: 3, prev: 1</code>;
-                <code>page: 3</code> 时 <code>next: 4, prev: 2</code>。
-                服务器每次都告诉你下一步往哪走 —— 这和 §05 的{" "}
-                <code>pageInfo.endCursor</code> 是同一个思路,
-                只是书签从不透明 cursor 换成了页码。两种风格都真实存在,
-                看到不是 connections 不用怀疑哪里出错了。
+                <code>page: 3</code> 时 <code>next: 4, prev: 2</code>。服务器每次都告诉你下一步往哪走 —— 这和 §05 的{" "}
+                <code>pageInfo.endCursor</code> 是同一个思路,只是书签从不透明 cursor 换成了页码。两种风格都真实存在,看到不是 connections 不用怀疑哪里出错了。
               </>
             }
           />
@@ -343,8 +330,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            第 ② 步是在<b>改</b>服务器上的数据,写操作属于 mutation。
-            subscription 只负责接收事件,它不发送任何东西。
+            第 ② 步是在<b>改</b>服务器上的数据,写操作属于 mutation。subscription 只负责接收事件,它不发送任何东西。
           </>
         ),
       },
@@ -358,8 +344,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            第 ① 步只是读,什么都没改,所以是 query。
-            用 mutation 读数据语法上确实跑得通,但会误导每一个读你 API 的人。
+            第 ① 步只是读,什么都没改,所以是 query。用 mutation 读数据语法上确实跑得通,但会误导每一个读你 API 的人。
           </>
         ),
       },
@@ -375,9 +360,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            query 技术上确实能传这些数据,但别人和工具依赖的正是这条约定:
-            读用 query,写用 mutation,被推送的事件用 subscription。
-            而且 query 送不了之后才发生的事件 —— 那次往返早就结束了。
+            query 技术上确实能传这些数据,但别人和工具依赖的正是这条约定:读用 query,写用 mutation,被推送的事件用 subscription。而且 query 送不了之后才发生的事件 —— 那次往返早就结束了。
           </>
         ),
       },
@@ -392,8 +375,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          读、写、订阅,一一对应:加载数据是 query,改数据是 mutation,
-          接收服务器推送的事件是 subscription。这三种操作类型就是全部接口。
+          读、写、订阅,一一对应:加载数据是 query,改数据是 mutation,接收服务器推送的事件是 subscription。这三种操作类型就是全部接口。
         </>
       ),
     },
@@ -463,8 +445,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            查询文本本来就是明文发给服务器的,藏不住。
-            别名只改<b>响应里</b>的键名。
+            查询文本本来就是明文发给服务器的,藏不住。别名只改<b>响应里</b>的键名。
           </>
         ),
       },
@@ -478,8 +459,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            别名通常让查询稍微变长(多写了一个名字)。
-            它买到的是「同一个字段能请求多次」的能力。
+            别名通常让查询稍微变长(多写了一个名字)。它买到的是「同一个字段能请求多次」的能力。
           </>
         ),
       },
@@ -498,8 +478,7 @@ export const QUIZ: QuizItem[] = [
         <>
           响应的形状跟着查询走,键默认就是字段名。同一个字段取两份,键就撞了。
           <code>latest: post(id: &quot;42&quot;)</code> 和{" "}
-          <code>pinned: post(id: &quot;1&quot;)</code> 各占一个键,
-          响应的形状就没有歧义了。
+          <code>pinned: post(id: &quot;1&quot;)</code> 各占一个键,响应的形状就没有歧义了。
         </>
       ),
     },
@@ -541,9 +520,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            查询文本保持恒定:值改变不了查询的结构,
-            服务器在执行前先检查声明的类型,
-            固定的文本可以只解析一次并缓存 —— 持久化查询正是靠这一点
+            查询文本保持恒定:值改变不了查询的结构,服务器在执行前先检查声明的类型,固定的文本可以只解析一次并缓存 —— 持久化查询正是靠这一点
           </>
         ),
       },
@@ -569,8 +546,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            拼字符串本身很快。问题不在速度,
-            而在于用户输入成了查询文本的一部分,从而能改变这个查询在要什么。
+            拼字符串本身很快。问题不在速度,而在于用户输入成了查询文本的一部分,从而能改变这个查询在要什么。
           </>
         ),
       },
@@ -600,8 +576,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            写死参数完全合法,<code>post(id: &quot;1&quot;)</code> 到处都是。
-            语法并不强制使用变量,那是一个工程上的选择。
+            写死参数完全合法,<code>post(id: &quot;1&quot;)</code> 到处都是。语法并不强制使用变量,那是一个工程上的选择。
           </>
         ),
       },
@@ -618,10 +593,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          和参数化 SQL 是同一个原则:<b>代码和数据分开</b>。
-          变量声明在操作上,值作为另一份 JSON 一起发送。
-          正因为文本不变,服务器才能提前校验类型、缓存解析结果,
-          并接受持久化查询。
+          和参数化 SQL 是同一个原则:<b>代码和数据分开</b>。变量声明在操作上,值作为另一份 JSON 一起发送。正因为文本不变,服务器才能提前校验类型、缓存解析结果,并接受持久化查询。
         </>
       ),
     },
@@ -638,8 +610,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          规范要求 mutation 的顶层字段<b>串行</b>执行,
-          而 query 的顶层字段可以并行执行。为什么要区别对待?
+          规范要求 mutation 的顶层字段<b>串行</b>执行,而 query 的顶层字段可以并行执行。为什么要区别对待?
         </>
       ),
     },
@@ -658,8 +629,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            写操作之间可能互相依赖 ——「先扣款、后入账」顺序变了结果就不同;
-            读操作互不影响,并行是安全的
+            写操作之间可能互相依赖 ——「先扣款、后入账」顺序变了结果就不同;读操作互不影响,并行是安全的
           </>
         ),
       },
@@ -684,8 +654,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            规范关心的是正确性,不是重要性。
-            两个写操作碰到同一份数据又同时执行,结果就取决于时序了。
+            规范关心的是正确性,不是重要性。两个写操作碰到同一份数据又同时执行,结果就取决于时序了。
           </>
         ),
       },
@@ -700,8 +669,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            解析速度和执行顺序是两回事。串行执行是一条<b>语义</b>保证:
-            第一个字段执行完,第二个才开始。
+            解析速度和执行顺序是两回事。串行执行是一条<b>语义</b>保证:第一个字段执行完,第二个才开始。
           </>
         ),
       },
@@ -734,10 +702,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          读一百次余额,结果都一样;先取款后存款和反过来,结果不一样。
-          正因为写操作依赖顺序,规范保证一个顶层 mutation 字段执行完,
-          下一个才开始。注意边界:这只管顶层字段。
-          在每个 mutation 返回的负载内部,字段的解析和 query 一样。
+          读一百次余额,结果都一样;先取款后存款和反过来,结果不一样。正因为写操作依赖顺序,规范保证一个顶层 mutation 字段执行完,下一个才开始。注意边界:这只管顶层字段。在每个 mutation 返回的负载内部,字段的解析和 query 一样。
         </>
       ),
     },
@@ -804,8 +769,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            这是 REST 的思维:在那边,一个请求要么成功要么失败。
-            一次 GraphQL 执行会跑很多 resolver,一个失败并不会拖垮其余的 ——
+            这是 REST 的思维:在那边,一个请求要么成功要么失败。一次 GraphQL 执行会跑很多 resolver,一个失败并不会拖垮其余的 ——
             除非非空约束把失败往上推。
           </>
         ),
@@ -836,8 +800,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            恰恰相反,规范明确允许二者并存。
-            部分结果是 GraphQL 响应的一个定义性特征,REST 里没有对应物。
+            恰恰相反,规范明确允许二者并存。部分结果是 GraphQL 响应的一个定义性特征,REST 里没有对应物。
           </>
         ),
       },
@@ -853,9 +816,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          <code>{`{ data, errors }`}</code> 是一对搭档,不是单选题。
-          每个字段各自执行:失败的字段记进 <code>errors</code>,
-          并用 <code>path</code> 指出它的位置;成功的字段留在 <code>data</code>{" "}
+          <code>{`{ data, errors }`}</code> 是一对搭档,不是单选题。每个字段各自执行:失败的字段记进 <code>errors</code>,并用 <code>path</code> 指出它的位置;成功的字段留在 <code>data</code>{" "}
           里。
         </>
       ),
@@ -873,8 +834,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          schema 里声明的是 <code>author: User!</code>(非空),
-          而 <code>post</code> 本身可空。执行时 <code>author</code> 的 resolver
+          schema 里声明的是 <code>author: User!</code>(非空),而 <code>post</code> 本身可空。执行时 <code>author</code> 的 resolver
           抛了错,响应会是什么样?
         </>
       ),
@@ -894,8 +854,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            author 位置放不下 null,于是它向上移到最近的可空父字段:
-            整个 post 变成 null,errors 里记下真正失败的那个字段的 path
+            author 位置放不下 null,于是它向上移到最近的可空父字段:整个 post 变成 null,errors 里记下真正失败的那个字段的 path
           </>
         ),
       },
@@ -920,8 +879,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            那是 <code>author: User</code>(可空版本)的结果。
-            加了 <code>!</code> 就没有这条路了 —— 非空位置放不下{" "}
+            那是 <code>author: User</code>(可空版本)的结果。加了 <code>!</code> 就没有这条路了 —— 非空位置放不下{" "}
             <code>null</code>。
           </>
         ),
@@ -972,10 +930,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          <code>!</code> 是一条承诺:这个位置绝不会是 <code>null</code>。
-          承诺兑现不了时,<code>null</code> 被交给父字段。
-          父字段如果也是非空,就继续往上,
-          直到遇见一个允许为空的字段 —— 或者直到 <code>data</code> 本身变成 null。
+          <code>!</code> 是一条承诺:这个位置绝不会是 <code>null</code>。承诺兑现不了时,<code>null</code> 被交给父字段。父字段如果也是非空,就继续往上,直到遇见一个允许为空的字段 —— 或者直到 <code>data</code> 本身变成 null。
         </>
       ),
     },
@@ -1021,8 +976,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          少了一个。往后翻要回答两个问题:「后面还有吗?」和
-          「下一页从哪里开始?」,一个字段答一个。
+          少了一个。往后翻要回答两个问题:「后面还有吗?」和「下一页从哪里开始?」,一个字段答一个。
         </>
       ),
     },
@@ -1037,10 +991,8 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          多选了一个。<code>startCursor</code> 是往<b>回</b>翻时用的
-          (<code>last</code> / <code>before</code>),<code>totalCount</code>{" "}
-          是部分 schema 在 connection 上额外加的统计字段。
-          往后翻这两个都不需要。
+          多选了一个。<code>startCursor</code> 是往<b>回</b>翻时用的(<code>last</code> / <code>before</code>),<code>totalCount</code>{" "}
+          是部分 schema 在 connection 上额外加的统计字段。往后翻这两个都不需要。
         </>
       ),
     },
@@ -1055,8 +1007,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          循环只有两步:<code>hasNextPage</code> 为 true 就继续,
-          并把 <code>endCursor</code> 原样填进下一次请求的 <code>after</code>{" "}
+          循环只有两步:<code>hasNextPage</code> 为 true 就继续,并把 <code>endCursor</code> 原样填进下一次请求的 <code>after</code>{" "}
           参数。一个决定还翻不翻,一个决定从哪里开始。
         </>
       ),
@@ -1073,8 +1024,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          subscription 让服务器可以在任意时刻把事件发给客户端。
-          底层通常靠什么来实现?
+          subscription 让服务器可以在任意时刻把事件发给客户端。底层通常靠什么来实现?
         </>
       ),
     },
@@ -1109,8 +1059,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            那是轮询,正是 subscription 要替代的做法:
-            没消息时白问一遍,有消息时还是晚一步。
+            那是轮询,正是 subscription 要替代的做法:没消息时白问一遍,有消息时还是晚一步。
           </>
         ),
       },
@@ -1124,8 +1073,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            FTP 是老的文件传输协议,根本没有「服务器推送事件」的概念,
-            也不用于这种场景。
+            FTP 是老的文件传输协议,根本没有「服务器推送事件」的概念,也不用于这种场景。
           </>
         ),
       },
@@ -1138,8 +1086,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            浏览器里的 JavaScript 发不了裸 UDP。
-            UDP 也不保证送达,聊天消息丢一条是不能接受的。
+            浏览器里的 JavaScript 发不了裸 UDP。UDP 也不保证送达,聊天消息丢一条是不能接受的。
           </>
         ),
       },
@@ -1156,10 +1103,8 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          一次请求 - 响应的往返在响应到达时就结束了,
-          所以送不了之后才发生的事件。WebSocket 保持一条双向连接;
-          SSE 让一个 HTTP 响应一直不结束,服务器单向往里写事件。
-          两种做法的共同点是:事件发生时,那条连接还在。
+          一次请求 - 响应的往返在响应到达时就结束了,所以送不了之后才发生的事件。WebSocket 保持一条双向连接;
+          SSE 让一个 HTTP 响应一直不结束,服务器单向往里写事件。两种做法的共同点是:事件发生时,那条连接还在。
         </>
       ),
     },

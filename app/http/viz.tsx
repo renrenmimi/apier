@@ -89,9 +89,7 @@ const URL_SEGS: UrlSeg[] = [
         <>
           scheme 说明这条报文<b>怎么传</b>。<code>http</code>{" "}
           是明文,链路上的任何设备都能读、都能改;<code>https</code> 是把同样的
-          HTTP 装进 TLS:连接被加密,服务器的证书还能让客户端确认自己连对了机器。
-          TLS 不负责证明「用户是谁」,也保护不了数据进入服务器之后的安全。
-          今天的公开 API 基本只提供 https —— 毕竟请求里常常带着 token。
+          HTTP 装进 TLS:连接被加密,服务器的证书还能让客户端确认自己连对了机器。TLS 不负责证明「用户是谁」,也保护不了数据进入服务器之后的安全。今天的公开 API 基本只提供 https —— 毕竟请求里常常带着 token。
         </>
       ),
     },
@@ -112,8 +110,7 @@ const URL_SEGS: UrlSeg[] = [
       ),
       zh: (
         <>
-          host 说明这条报文<b>送到哪台服务器</b>。DNS 负责把这串人类能记住的名字
-          翻译成 IP 地址。开头的 <code>api.</code> 是行业惯例:网页放在{" "}
+          host 说明这条报文<b>送到哪台服务器</b>。DNS 负责把这串人类能记住的名字翻译成 IP 地址。开头的 <code>api.</code> 是行业惯例:网页放在{" "}
           <code>www.</code>,API 单独用一个子域名。(<code>.example</code> 是专门留给示例用的域名,不会指向任何真实网站。)
         </>
       ),
@@ -134,8 +131,7 @@ const URL_SEGS: UrlSeg[] = [
       ),
       zh: (
         <>
-          路径的第一段,这家 API 用它放<b>版本号</b>。
-          将来某次改动会让老客户端用不了,就把新版本放到 /v2,老客户端继续用
+          路径的第一段,这家 API 用它放<b>版本号</b>。将来某次改动会让老客户端用不了,就把新版本放到 /v2,老客户端继续用
           /v1。版本也可以放在 header 里,第 05 章细讲。
         </>
       ),
@@ -156,8 +152,7 @@ const URL_SEGS: UrlSeg[] = [
       ),
       zh: (
         <>
-          一个资源集合:<b>所有商品</b>。名字是名词复数。
-          路径里没有动词,因为动词由 HTTP 方法承担:<code>GET /products</code>{" "}
+          一个资源集合:<b>所有商品</b>。名字是名词复数。路径里没有动词,因为动词由 HTTP 方法承担:<code>GET /products</code>{" "}
           就是「读商品」。§03 马上讲方法。
         </>
       ),
@@ -177,9 +172,7 @@ const URL_SEGS: UrlSeg[] = [
       ),
       zh: (
         <>
-          集合里的<b>具体某一个</b>。<code>/products/42</code> 读作
-          「42 号商品」,<code>/users/7</code> 就是「7 号用户」。
-          这套「集合 / 编号」的路径写法,你在真实 API 里会见到无数次。
+          集合里的<b>具体某一个</b>。<code>/products/42</code> 读作「42 号商品」,<code>/users/7</code> 就是「7 号用户」。这套「集合 / 编号」的路径写法,你在真实 API 里会见到无数次。
         </>
       ),
     },
@@ -349,8 +342,7 @@ const MP_SCENARIOS: MpScenario[] = [
       ),
       zh: (
         <>
-          新账号还没有 id,得由服务器分配。「创建一个新的」是 POST 的活,
-          成功通常回 201 Created。
+          新账号还没有 id,得由服务器分配。「创建一个新的」是 POST 的活,成功通常回 201 Created。
         </>
       ),
     },
@@ -365,8 +357,7 @@ const MP_SCENARIOS: MpScenario[] = [
         ),
         zh: (
           <>
-            GET 是安全方法,不该造出新账号;而且表单数据得塞进 URL,
-            密码会原样写进服务器日志。
+            GET 是安全方法,不该造出新账号;而且表单数据得塞进 URL,密码会原样写进服务器日志。
           </>
         ),
       },
@@ -379,8 +370,7 @@ const MP_SCENARIOS: MpScenario[] = [
         ),
         zh: (
           <>
-            PUT 适合「往已知地址放一份资源」。新账号连地址(id)都还没有,
-            要服务器来分配 —— 这是 POST 的活。
+            PUT 适合「往已知地址放一份资源」。新账号连地址(id)都还没有,要服务器来分配 —— 这是 POST 的活。
           </>
         ),
       },
@@ -413,8 +403,7 @@ const MP_SCENARIOS: MpScenario[] = [
       ),
       zh: (
         <>
-          「整体替换已知地址上的资源」正是 PUT 的语义。
-          而且它幂等:同一份资料放两次,状态一样。
+          「整体替换已知地址上的资源」正是 PUT 的语义。而且它幂等:同一份资料放两次,状态一样。
         </>
       ),
     },
@@ -438,8 +427,7 @@ const MP_SCENARIOS: MpScenario[] = [
         ),
         zh: (
           <>
-            POST 不幂等,重复提交可能多出一条数据。
-            覆盖一个已存在的资源,PUT 的语义更准。
+            POST 不幂等,重复提交可能多出一条数据。覆盖一个已存在的资源,PUT 的语义更准。
           </>
         ),
       },
@@ -526,8 +514,7 @@ const MP_SCENARIOS: MpScenario[] = [
       ),
       zh: (
         <>
-          让资源消失正是 DELETE 的语义。它还幂等:删一次和删两次,
-          评论都已不在,所以超时之后可以放心重试。
+          让资源消失正是 DELETE 的语义。它还幂等:删一次和删两次,评论都已不在,所以超时之后可以放心重试。
         </>
       ),
     },
@@ -542,8 +529,7 @@ const MP_SCENARIOS: MpScenario[] = [
         ),
         zh: (
           <>
-            确实有老 API 写成 <code>POST /comments/7/delete</code>,
-            多半是因为当年有些客户端发不了 DELETE。语义上 DELETE 才是正牌。
+            确实有老 API 写成 <code>POST /comments/7/delete</code>,多半是因为当年有些客户端发不了 DELETE。语义上 DELETE 才是正牌。
           </>
         ),
       },
@@ -557,8 +543,7 @@ const MP_SCENARIOS: MpScenario[] = [
         ),
         zh: (
           <>
-            用 GET 干删除是真实发生过的事故:爬虫顺着链接一路「读」,
-            数据一路没 —— GET 必须无害,这是铁律。
+            用 GET 干删除是真实发生过的事故:爬虫顺着链接一路「读」,数据一路没 —— GET 必须无害,这是铁律。
           </>
         ),
       },
@@ -694,8 +679,7 @@ const STATUSES: StatusInfo[] = [
       ),
       zh: (
         <>
-          POST 创建成功的标准答复。响应应该带一个 <code>Location</code> 头,
-          给出新资源的地址(比如 <code>/products/43</code>)。
+          POST 创建成功的标准答复。响应应该带一个 <code>Location</code> 头,给出新资源的地址(比如 <code>/products/43</code>)。
         </>
       ),
     },
@@ -717,8 +701,7 @@ const STATUSES: StatusInfo[] = [
       ),
       zh: (
         <>
-          DELETE 成功、PUT 更新成功的常见答复。响应<b>没有正文</b>,
-          所以别对它调 <code>res.json()</code> —— 解析空正文会抛错。
+          DELETE 成功、PUT 更新成功的常见答复。响应<b>没有正文</b>,所以别对它调 <code>res.json()</code> —— 解析空正文会抛错。
         </>
       ),
     },
@@ -741,8 +724,7 @@ const STATUSES: StatusInfo[] = [
       ),
       zh: (
         <>
-          新地址写在 <code>Location</code> 头里,浏览器和多数客户端会自动跟过去。
-          注意方法:遇到 301 和 302,客户端历史上会把后续请求改成 GET;
+          新地址写在 <code>Location</code> 头里,浏览器和多数客户端会自动跟过去。注意方法:遇到 301 和 302,客户端历史上会把后续请求改成 GET;
           308 和 307 就是为了「保持原方法和原正文」才定义出来的。
         </>
       ),
@@ -766,8 +748,7 @@ const STATUSES: StatusInfo[] = [
       ),
       zh: (
         <>
-          前提是请求带了 <code>If-None-Match</code>(值是上次拿到的 ETag)。
-          服务器一比对,资源没变,就只回一句「没变」,正文全省 ——
+          前提是请求带了 <code>If-None-Match</code>(值是上次拿到的 ETag)。服务器一比对,资源没变,就只回一句「没变」,正文全省 ——
           第 05 章细讲。
         </>
       ),
@@ -814,8 +795,7 @@ const STATUSES: StatusInfo[] = [
       ),
       zh: (
         <>
-          名字叫 Unauthorized,真实含义其实是「未认证」:凭证缺失、过期或无效。
-          规范要求响应必须带 <code>WWW-Authenticate</code> 头,说明该怎么认证 ——
+          名字叫 Unauthorized,真实含义其实是「未认证」:凭证缺失、过期或无效。规范要求响应必须带 <code>WWW-Authenticate</code> 头,说明该怎么认证 ——
           带上有效凭证再来,请求就能成功。
         </>
       ),
@@ -838,8 +818,7 @@ const STATUSES: StatusInfo[] = [
       ),
       zh: (
         <>
-          凭证没问题、身份很明确,就是权限不够,重新登录也没用。
-          下面的警告牌专门比较它和 401。
+          凭证没问题、身份很明确,就是权限不够,重新登录也没用。下面的警告牌专门比较它和 401。
         </>
       ),
     },
@@ -882,8 +861,7 @@ const STATUSES: StatusInfo[] = [
       ),
       zh: (
         <>
-          比如对一个只读资源发 DELETE。规范要求响应必须带 <code>Allow</code> 头,
-          列出支持的方法(例如 <code>Allow: GET, HEAD</code>)。
+          比如对一个只读资源发 DELETE。规范要求响应必须带 <code>Allow</code> 头,列出支持的方法(例如 <code>Allow: GET, HEAD</code>)。
         </>
       ),
     },
@@ -952,8 +930,7 @@ const STATUSES: StatusInfo[] = [
       ),
       zh: (
         <>
-          触发了限流(rate limit)。响应常带 <code>Retry-After</code> 头,
-          告诉你等多久再来 —— 写循环调用和爬虫时最容易撞见它。
+          触发了限流(rate limit)。响应常带 <code>Retry-After</code> 头,告诉你等多久再来 —— 写循环调用和爬虫时最容易撞见它。
         </>
       ),
     },
@@ -1020,8 +997,7 @@ const STATUSES: StatusInfo[] = [
       ),
       zh: (
         <>
-          和 502 的区别:这是服务器<b>自己</b>说「现在不行」,
-          而不是中转拿不到可用的响应。它也常带 <code>Retry-After</code>。
+          和 502 的区别:这是服务器<b>自己</b>说「现在不行」,而不是中转拿不到可用的响应。它也常带 <code>Retry-After</code>。
         </>
       ),
     },

@@ -39,8 +39,7 @@ export const LABS: Lab[] = [
       zh: (
         <>
           <p>
-            纸笔或心算都行 —— 给下面五个 URL 写出问题诊断和修改后的写法
-            (方法 + 路径):
+            纸笔或心算都行 —— 给下面五个 URL 写出问题诊断和修改后的写法(方法 + 路径):
           </p>
           <p>
             ① <code>GET /getAllUsers</code>
@@ -96,10 +95,8 @@ export const LABS: Lab[] = [
           <br />③ <code>GET /posts/7</code> —— fetch、ById 都与方法重复;
           id 用来指认资源,应该放进路径,而不是查询参数。
           <br />④ <code>DELETE /posts/7</code> —— 这个最危险:GET
-          是安全方法,浏览器会预取、爬虫会跟进,
-          把删除挂在 GET 上,等于让根本没打算删东西的程序把数据删掉。
-          <br />⑤ 直接改成 <code>POST /users/7/comments</code> 就行。
-          不过在博客里,评论通常从属于文章,更常见的设计是{" "}
+          是安全方法,浏览器会预取、爬虫会跟进,把删除挂在 GET 上,等于让根本没打算删东西的程序把数据删掉。
+          <br />⑤ 直接改成 <code>POST /users/7/comments</code> 就行。不过在博客里,评论通常从属于文章,更常见的设计是{" "}
           <code>POST /posts/42/comments</code>,评论人从请求体或登录态里取。
         </p>
       ),
@@ -142,8 +139,7 @@ export const LABS: Lab[] = [
       ),
       zh: (
         <>
-          记得带 <code>Content-Type: application/json</code> 请求头,
-          否则服务器不知道你发的是 JSON。
+          记得带 <code>Content-Type: application/json</code> 请求头,否则服务器不知道你发的是 JSON。
         </>
       ),
     },
@@ -190,8 +186,7 @@ console.log(patch); // { userId: 1, id: 1, title: "hi", body: "quia et..." }`}
           <p>
             PUT 的响应只剩 <code>id</code> 和 <code>title</code> ——
             你没发的字段被当作「不存在」,而不是「不改」;PATCH
-            的响应里这些字段全都还在。JSONPlaceholder 是练习用的服务器,
-            不会真的存下你的改动,但它演示的语义差别是真实的。
+            的响应里这些字段全都还在。JSONPlaceholder 是练习用的服务器,不会真的存下你的改动,但它演示的语义差别是真实的。
           </p>
         </>
       ),
@@ -221,11 +216,8 @@ console.log(patch); // { userId: 1, id: 1, title: "hi", body: "quia et..." }`}
       ),
       zh: (
         <p>
-          一个电影评分网站有三种资源:movies、ratings、users。
-          请给它画一张端点总表:方法、路径、成功码、主要失败码。需求:
-          浏览电影列表(可按年份过滤)、看单部电影、给电影打 1–5 分(
-          <b>一个用户对一部电影只能有一条评分</b>)、改自己的分、删自己的分、
-          看某部电影的全部评分。
+          一个电影评分网站有三种资源:movies、ratings、users。请给它画一张端点总表:方法、路径、成功码、主要失败码。需求:浏览电影列表(可按年份过滤)、看单部电影、给电影打 1–5 分(
+          <b>一个用户对一部电影只能有一条评分</b>)、改自己的分、删自己的分、看某部电影的全部评分。
         </p>
       ),
     },
@@ -282,16 +274,14 @@ console.log(patch); // { userId: 1, id: 1, title: "hi", body: "quia et..." }`}
             <br />
             <code>GET /movies/42/ratings</code> → 200;查无此片 404。
             <br />
-            <code>POST /movies/42/ratings</code> → 201;没登录 401;
-            该用户已经评过这部片 <b>409</b>;分数写 6 → <b>422</b>。
+            <code>POST /movies/42/ratings</code> → 201;没登录 401;该用户已经评过这部片 <b>409</b>;分数写 6 → <b>422</b>。
             <br />
             <code>PATCH /ratings/1001</code> → 200;改别人的分 403。
             <br />
             <code>DELETE /ratings/1001</code> → 204;再删一次 404。
           </p>
           <p>
-            三条底线必须成立:动词在方法里、名词在路径里、
-            状态码如实说明发生了什么。做到这三条,其余细节由你定。
+            三条底线必须成立:动词在方法里、名词在路径里、状态码如实说明发生了什么。做到这三条,其余细节由你定。
           </p>
         </>
       ),
@@ -347,9 +337,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            一次犯三条:暴露实现(<code>.php</code>)、
-            用了与 API 其余部分不一致的下划线、名词还是单数。
-            哪天不用 PHP 了,这个 URL 就成了甩不掉的历史包袱。
+            一次犯三条:暴露实现(<code>.php</code>)、用了与 API 其余部分不一致的下划线、名词还是单数。哪天不用 PHP 了,这个 URL 就成了甩不掉的历史包袱。
           </>
         ),
       },
@@ -363,8 +351,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            读数据却用 POST:缓存、书签、安全重试全都放弃了,
-            因为 POST 既不安全也不幂等。动词和大写驼峰同样是问题。
+            读数据却用 POST:缓存、书签、安全重试全都放弃了,因为 POST 既不安全也不幂等。动词和大写驼峰同样是问题。
           </>
         ),
       },
@@ -379,8 +366,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          <code>GET /movies</code>:名词、复数、全小写、没有动词、
-          不暴露实现。路径说明要哪个资源,方法说明要对它做什么。
+          <code>GET /movies</code>:名词、复数、全小写、没有动词、不暴露实现。路径说明要哪个资源,方法说明要对它做什么。
         </>
       ),
     },
@@ -433,8 +419,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            PUT 是「把这个 URL 上的东西整个换成我发的这份」。
-            对评论集合发 PUT,等于要求用你这一条评论替换掉整个评论区。
+            PUT 是「把这个 URL 上的东西整个换成我发的这份」。对评论集合发 PUT,等于要求用你这一条评论替换掉整个评论区。
           </>
         ),
       },
@@ -464,8 +449,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          创建一个资源,就是向它所属的集合发 POST。评论从属于文章,
-          一层嵌套刚好说清这层关系。创建成功回 201。
+          创建一个资源,就是向它所属的集合发 POST。评论从属于文章,一层嵌套刚好说清这层关系。创建成功回 201。
         </>
       ),
     },
@@ -532,8 +516,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            200 勉强能用,但 HTTP 有一个专门表示「新资源诞生了」的码,
-            这里正该用它。<code>success</code> 字段还重复了状态码已经说过的话。
+            200 勉强能用,但 HTTP 有一个专门表示「新资源诞生了」的码,这里正该用它。<code>success</code> 字段还重复了状态码已经说过的话。
           </>
         ),
       },
@@ -563,8 +546,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            301 的含义是「这个资源永久搬走了」。
-            对一个刚刚创建出来的资源这么说,与实际发生的事情对不上。
+            301 的含义是「这个资源永久搬走了」。对一个刚刚创建出来的资源这么说,与实际发生的事情对不上。
           </>
         ),
       },
@@ -675,8 +657,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            对已存在的单个资源发 POST 没有约定俗成的含义,
-            读代码的人无法判断这个请求打算做什么。
+            对已存在的单个资源发 POST 没有约定俗成的含义,读代码的人无法判断这个请求打算做什么。
           </>
         ),
       },
@@ -689,8 +670,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            目的能达到,代价太大:id 变了,createdAt 变了,
-            所有指向旧文章的链接全部失效。
+            目的能达到,代价太大:id 变了,createdAt 变了,所有指向旧文章的链接全部失效。
           </>
         ),
       },
@@ -705,8 +685,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          PATCH 描述的是一次改动,并把它应用到已有资源上,
-          没提到的字段原样保留 —— 部分修改正是它存在的意义。
+          PATCH 描述的是一次改动,并把它应用到已有资源上,没提到的字段原样保留 —— 部分修改正是它存在的意义。
         </>
       ),
     },
@@ -742,8 +721,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            回 400 说得通,很多 API 也确实这么做。但 400 的含义是请求本身格式不对,
-            而这份请求解析得好好的,只是有一个值不合法。422
+            回 400 说得通,很多 API 也确实这么做。但 400 的含义是请求本身格式不对,而这份请求解析得好好的,只是有一个值不合法。422
             恰好表达了这个区别,本课把校验失败统一记在 422 上。
           </>
         ),
@@ -759,8 +737,7 @@ export const QUIZ: QuizItem[] = [
         zh: (
           <>
             409 用于与服务器当前状态的冲突,比如用户名已被占用。
-            <code>&quot;hello&quot;</code> 跟任何已有数据都不冲突,
-            它单纯不是一个邮箱地址。
+            <code>&quot;hello&quot;</code> 跟任何已有数据都不冲突,它单纯不是一个邮箱地址。
           </>
         ),
       },
@@ -774,8 +751,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            5xx 表示服务器自身出了问题。这里是客户端发来的数据没通过规则,
-            责任在客户端一侧。
+            5xx 表示服务器自身出了问题。这里是客户端发来的数据没通过规则,责任在客户端一侧。
           </>
         ),
       },
@@ -790,8 +766,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          422 Unprocessable Content:请求解析成功,内容没通过校验。
-          在响应体里说明是哪个字段没过 —— §05 给出了 Problem Details 的写法。
+          422 Unprocessable Content:请求解析成功,内容没通过校验。在响应体里说明是哪个字段没过 —— §05 给出了 Problem Details 的写法。
         </>
       ),
     },
@@ -838,8 +813,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          <code>application/problem+json</code>。客户端一看见这个媒体类型,
-          就知道 body 里是 type、title、status、detail、instance
+          <code>application/problem+json</code>。客户端一看见这个媒体类型,就知道 body 里是 type、title、status、detail、instance
           这套标准成员,不必再学一套你们专有的格式。
         </>
       ),
@@ -856,8 +830,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          <code>DELETE /posts/43</code> 第一次返回 204,第二次返回 404。
-          DELETE 还算幂等吗?
+          <code>DELETE /posts/43</code> 第一次返回 204,第二次返回 404。DELETE 还算幂等吗?
         </>
       ),
     },
@@ -875,8 +848,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            算 —— 幂等看的是服务器状态:执行一次和执行 N 次,
-            结果都是「43 号不存在」
+            算 —— 幂等看的是服务器状态:执行一次和执行 N 次,结果都是「43 号不存在」
           </>
         ),
       },
@@ -901,8 +873,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            这是最常见的误解。幂等是按「对服务器状态的影响」定义的,
-            不看两次响应长得一不一样。状态码只是对某一次请求的回话。
+            这是最常见的误解。幂等是按「对服务器状态的影响」定义的,不看两次响应长得一不一样。状态码只是对某一次请求的回话。
           </>
         ),
       },
@@ -916,8 +887,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            幂等描述的是「重复发送同一个请求」的性质,
-            单独一次请求谈不上幂不幂等。
+            幂等描述的是「重复发送同一个请求」的性质,单独一次请求谈不上幂不幂等。
           </>
         ),
       },
@@ -931,8 +901,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            RFC 9110 把 DELETE 定义为幂等方法。
-            这是实现应当遵守的方法语义,不是各家自行决定的事。
+            RFC 9110 把 DELETE 定义为幂等方法。这是实现应当遵守的方法语义,不是各家自行决定的事。
           </>
         ),
       },
@@ -948,8 +917,7 @@ export const QUIZ: QuizItem[] = [
       zh: (
         <>
           删一次和删十次,服务器都停在同一个状态:43 号不存在 ——
-          这就是 DELETE 幂等的意思。状态码回报的是某一次请求,
-          而这个保证针对的是状态。
+          这就是 DELETE 幂等的意思。状态码回报的是某一次请求,而这个保证针对的是状态。
         </>
       ),
     },
@@ -965,8 +933,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          <code>/users/1/posts/2/comments/3/replies/4</code> 这个 URL,
-          最该做的改动是?
+          <code>/users/1/posts/2/comments/3/replies/4</code> 这个 URL,最该做的改动是?
         </>
       ),
     },
@@ -1020,8 +987,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            四层嵌套意味着客户端要先集齐 4 个 id 才拼得出 URL,
-            而且 URL 把一套可能会变的层级关系写死了 ——
+            四层嵌套意味着客户端要先集齐 4 个 id 才拼得出 URL,而且 URL 把一套可能会变的层级关系写死了 ——
             哪天回复可以挂在评论以外的东西上,这类 URL 全部作废。
           </>
         ),
@@ -1036,8 +1002,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            用 slug 代替 id 是另一个话题(可读性),
-            嵌套过深的问题一点没有解决。
+            用 slug 代替 id 是另一个话题(可读性),嵌套过深的问题一点没有解决。
           </>
         ),
       },
@@ -1051,8 +1016,7 @@ export const QUIZ: QuizItem[] = [
         ),
         zh: (
           <>
-            这是退回第 03 章成熟度模型的 L0:所有请求都打同一个端点。
-            本章其余内容赖以成立的「资源可寻址」也一并放弃了。
+            这是退回第 03 章成熟度模型的 L0:所有请求都打同一个端点。本章其余内容赖以成立的「资源可寻址」也一并放弃了。
           </>
         ),
       },
@@ -1068,9 +1032,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          嵌套一层就够,也就是 <code>collection/id/collection</code>。
-          更深的资源如果 id 本身唯一,就给它一个顶层 URL;
-          需要表达从属关系时,用过滤条件即可,例如{" "}
+          嵌套一层就够,也就是 <code>collection/id/collection</code>。更深的资源如果 id 本身唯一,就给它一个顶层 URL;需要表达从属关系时,用过滤条件即可,例如{" "}
           <code>GET /replies?commentId=3</code>。
         </>
       ),

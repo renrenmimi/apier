@@ -175,9 +175,7 @@ export default function FirstCallPage() {
           ),
           zh: (
             <>
-              第 01 章讲了 HTTP 请求长什么样,这一章真的发一个出去。
-              十来行 JavaScript,就能把真实服务器上的数据取进你的网页。
-              中间有一步几乎人人都会踩,所以这一章早早把它讲清楚。
+              第 01 章讲了 HTTP 请求长什么样,这一章真的发一个出去。十来行 JavaScript,就能把真实服务器上的数据取进你的网页。中间有一步几乎人人都会踩,所以这一章早早把它讲清楚。
             </>
           ),
         }}
@@ -247,8 +245,7 @@ export default function FirstCallPage() {
               }
               zh={
                 <>
-                  在柜台点一杯饮料,店员不会让你站在那儿盯着看,
-                  而是给你一张取餐码 —— 你先去做别的,叫到号再回来取。
+                  在柜台点一杯饮料,店员不会让你站在那儿盯着看,而是给你一张取餐码 —— 你先去做别的,叫到号再回来取。
                 </>
               }
             />
@@ -270,10 +267,8 @@ export default function FirstCallPage() {
               }
               zh={
                 <>
-                  fetch 也是这样。一次网络往返动辄几百毫秒,
-                  而 JavaScript 只有一条线程,不能停下来干等。所以{" "}
-                  <code>fetch(url)</code> 一执行,立刻返回一个对象:
-                  它代表一个还没到手、将来会成功或失败的结果。这个对象叫{" "}
+                  fetch 也是这样。一次网络往返动辄几百毫秒,而 JavaScript 只有一条线程,不能停下来干等。所以{" "}
+                  <code>fetch(url)</code> 一执行,立刻返回一个对象:它代表一个还没到手、将来会成功或失败的结果。这个对象叫{" "}
                   <b>Promise</b>。响应到达时,这个 Promise 就有了结果 ——
                   要么带着值<b>兑现(resolve)</b>,要么带着错误
                   <b>失败(reject)</b>。
@@ -328,9 +323,7 @@ export default function FirstCallPage() {
                       await 会暂停它所在的 async 函数,直到 Promise
                       有了结果,再把值交给你。
                     </b>
-                    它不会阻塞浏览器:函数暂停期间,其他代码、点击和动画照常运行。
-                    async/await 只是写 Promise 的更短写法,
-                    并没有把异步变成同步。本书之后统一用 await。
+                    它不会阻塞浏览器:函数暂停期间,其他代码、点击和动画照常运行。async/await 只是写 Promise 的更短写法,并没有把异步变成同步。本书之后统一用 await。
                   </>
                 ),
               }}
@@ -387,8 +380,7 @@ export default function FirstCallPage() {
               zh={
                 <>
                   三点补充:① <code>await</code> 通常必须写在 <code>async</code>{" "}
-                  函数里;ES 模块和浏览器 Console 也允许顶层 await,
-                  所以动手任务可以直接在 Console 里敲。② async 函数的返回值
+                  函数里;ES 模块和浏览器 Console 也允许顶层 await,所以动手任务可以直接在 Console 里敲。② async 函数的返回值
                   <b>一定</b>是 Promise,不管你在里面 return
                   了什么。③ 因此调用它的人通常也要 await。async
                   会沿着调用链一路往外传,这是正常现象,不是写错了。
@@ -434,11 +426,8 @@ export default function FirstCallPage() {
               }
               zh={
                 <>
-                  你可能以为 404、500 会跳进 <code>catch</code>,其实不会。
-                  在 fetch 看来,只要请求送到了服务器、并且收到了回应,
-                  这次调用就算成功 —— 哪怕回应写着 404。fetch 返回的 Promise
-                  只在<b>网络层</b>失败时才 reject:连不上、域名解析不了、
-                  请求被中止,或者响应被浏览器按 CORS 规则拦下。
+                  你可能以为 404、500 会跳进 <code>catch</code>,其实不会。在 fetch 看来,只要请求送到了服务器、并且收到了回应,这次调用就算成功 —— 哪怕回应写着 404。fetch 返回的 Promise
+                  只在<b>网络层</b>失败时才 reject:连不上、域名解析不了、请求被中止,或者响应被浏览器按 CORS 规则拦下。
                 </>
               }
             />
@@ -459,8 +448,7 @@ export default function FirstCallPage() {
                 <>
                   所以状态必须你自己检查。<code>res.ok</code> 在状态码落在
                   200–299 时为 true。不查这一步,404
-                  响应的正文就会被当成正常数据继续往下传,
-                  程序往往在离出错点很远的地方才崩,而且崩出一串{" "}
+                  响应的正文就会被当成正常数据继续往下传,程序往往在离出错点很远的地方才崩,而且崩出一串{" "}
                   <code>undefined</code>。
                 </>
               }
@@ -489,8 +477,7 @@ export default function FirstCallPage() {
             ),
             zh: (
               <>
-                高亮的三行是这个模板的关键:HTTP 状态本身不是错误,
-                所以你把它手动升级成错误。这样一来,各种失败最后都汇进同一个{" "}
+                高亮的三行是这个模板的关键:HTTP 状态本身不是错误,所以你把它手动升级成错误。这样一来,各种失败最后都汇进同一个{" "}
                 <code>catch</code>。<b>try → if (!res.ok) throw → catch</b>{" "}
                 这个结构,本书后面的 fetch 例子都长这样。
               </>
@@ -521,12 +508,9 @@ export default function FirstCallPage() {
               }
               zh={
                 <>
-                  <code>res.json()</code> 读取响应正文,并按 JSON 解析。
-                  如果正文不是合法的 JSON,它返回的 Promise 就会以{" "}
-                  <code>SyntaxError</code> 失败。这种情况比想象中常见:
-                  配置有问题的服务器可能返回一个 HTML 错误页,状态码却仍然是
-                  200 —— <code>res.ok</code> 是 true,解析却过不去。
-                  空正文同理:204 No Content 没有正文,对它调用{" "}
+                  <code>res.json()</code> 读取响应正文,并按 JSON 解析。如果正文不是合法的 JSON,它返回的 Promise 就会以{" "}
+                  <code>SyntaxError</code> 失败。这种情况比想象中常见:配置有问题的服务器可能返回一个 HTML 错误页,状态码却仍然是
+                  200 —— <code>res.ok</code> 是 true,解析却过不去。空正文同理:204 No Content 没有正文,对它调用{" "}
                   <code>res.json()</code> 一样会失败。
                 </>
               }
@@ -547,8 +531,7 @@ export default function FirstCallPage() {
               }
               zh={
                 <>
-                  注意上面的例子写的是 <code>return await res.json()</code>,
-                  不是 <code>return res.json()</code>。加了 await,解析就发生在{" "}
+                  注意上面的例子写的是 <code>return await res.json()</code>,不是 <code>return res.json()</code>。加了 await,解析就发生在{" "}
                   <code>try</code> 里面,这类错误也会落进同一个{" "}
                   <code>catch</code>。不加,这个 Promise 会在 <code>try</code>{" "}
                   还没看到它失败时就被返回出去。
@@ -586,8 +569,7 @@ export default function FirstCallPage() {
             zh={
               <>
                 一个完整的小项目:输入名字,向 <b>PokeAPI</b>
-                (免费、免注册的宝可梦资料库)请求数据,
-                再把身高、体重和图片显示出来。两个文件。
+                (免费、免注册的宝可梦资料库)请求数据,再把身高、体重和图片显示出来。两个文件。
               </>
             }
           />
@@ -685,8 +667,7 @@ export default function FirstCallPage() {
             ),
             zh: (
               <>
-                fetch 的第二个参数是选项对象。高亮的三行就是 POST 的三件套:
-                换方法、声明正文格式、把对象转成文本。回来的 201 和那个新{" "}
+                fetch 的第二个参数是选项对象。高亮的三行就是 POST 的三件套:换方法、声明正文格式、把对象转成文本。回来的 201 和那个新{" "}
                 <code>id</code>,正是第 01 章讲过的「创建成功」的标准回应。
               </>
             ),
@@ -727,11 +708,8 @@ export default function FirstCallPage() {
                   <b>忘了 Content-Type</b>:服务器可能把你的 JSON
                   当纯文本或表单去解析,轻则字段全空,重则直接回 400。
                   <b>忘了 method</b>:请求就是 GET,而 GET 不允许带正文,
-                  fetch 会在发出去之前抛出 <code>TypeError</code>。
-                  各浏览器措辞不同,Chrome 的说法是{" "}
-                  <code>Request with GET/HEAD method cannot have body</code>。
-                  这一个反而好发现,因为它立刻掉进 <code>catch</code>;
-                  前两个要安静得多。
+                  fetch 会在发出去之前抛出 <code>TypeError</code>。各浏览器措辞不同,Chrome 的说法是{" "}
+                  <code>Request with GET/HEAD method cannot have body</code>。这一个反而好发现,因为它立刻掉进 <code>catch</code>;前两个要安静得多。
                 </>
               }
             />
@@ -746,8 +724,7 @@ export default function FirstCallPage() {
               }
               zh={
                 <>
-                  以后遇到「明明传了数据,服务器却说没收到」,
-                  先按这三件查一遍,多半是缺了其中一件。
+                  以后遇到「明明传了数据,服务器却说没收到」,先按这三件查一遍,多半是缺了其中一件。
                 </>
               }
             />
@@ -798,13 +775,9 @@ export default function FirstCallPage() {
                   <code>res.json()</code> 是把正文当作<b>流(stream)</b>
                   来读的:数据流过一次就没了。对同一个响应第二次调用{" "}
                   <code>res.json()</code>,会抛出{" "}
-                  <code>TypeError: body stream already read</code>。
-                  要用两次,第一次就存起来:
-                  <code>const data = await res.json()</code>。
-                  如果确实需要把原始正文读两遍,可以用 <code>res.clone()</code>{" "}
-                  复制一份,但必须在两份都还没被读之前调用。
-                  DevTools 之所以能反复看正文,是因为浏览器自己留了一份,
-                  不是你的代码有第二次机会。
+                  <code>TypeError: body stream already read</code>。要用两次,第一次就存起来:
+                  <code>const data = await res.json()</code>。如果确实需要把原始正文读两遍,可以用 <code>res.clone()</code>{" "}
+                  复制一份,但必须在两份都还没被读之前调用。DevTools 之所以能反复看正文,是因为浏览器自己留了一份,不是你的代码有第二次机会。
                 </>
               }
             />
@@ -838,8 +811,7 @@ export default function FirstCallPage() {
             }
             zh={
               <>
-                某天你调一个新 API:<code>curl</code> 通,Postman 通,
-                偏偏浏览器里的 fetch 打出一大段红字,里面有 <b>CORS policy</b>{" "}
+                某天你调一个新 API:<code>curl</code> 通,Postman 通,偏偏浏览器里的 fetch 打出一大段红字,里面有 <b>CORS policy</b>{" "}
                 几个词。第一反应往往是「API 出故障了?」——
                 并没有。API 回答了,是你自己的浏览器不让脚本读这份回答。
               </>
@@ -870,8 +842,7 @@ export default function FirstCallPage() {
                 <>
                   浏览器有一条规则叫<b>同源策略(same-origin policy)</b>:
                   {"页面里运行的脚本,不能读取来自另一个源(源 = 协议 + 主机 + 端口)的响应,除非那份响应明确表示允许。表示允许的方式是一个响应头:"}
-                  <code>Access-Control-Allow-Origin</code>。
-                  围绕这个头的一整套规则,就叫{" "}
+                  <code>Access-Control-Allow-Origin</code>。围绕这个头的一整套规则,就叫{" "}
                   <b>CORS(Cross-Origin Resource Sharing,跨源资源共享)</b>。
                 </>
               }
@@ -893,13 +864,9 @@ export default function FirstCallPage() {
               }
               zh={
                 <>
-                  由此有两个推论。第一,规则由<b>浏览器</b>执行,
-                  所以它保护的是用户,不是服务器:<code>curl</code>、Postman
-                  以及任何跑在服务器上的程序根本不看 CORS,
-                  加了这个头也拦不住谁。第二,CORS 失败
-                  <b>不是一个 HTTP 错误状态</b>,并不存在什么「CORS 状态码」。
-                  响应很可能就是 200,只是浏览器没把它交给你的代码,
-                  于是 fetch 的 Promise reject,原因打印在 Console 里。
+                  由此有两个推论。第一,规则由<b>浏览器</b>执行,所以它保护的是用户,不是服务器:<code>curl</code>、Postman
+                  以及任何跑在服务器上的程序根本不看 CORS,加了这个头也拦不住谁。第二,CORS 失败
+                  <b>不是一个 HTTP 错误状态</b>,并不存在什么「CORS 状态码」。响应很可能就是 200,只是浏览器没把它交给你的代码,于是 fetch 的 Promise reject,原因打印在 Console 里。
                 </>
               }
             />
@@ -918,8 +885,7 @@ export default function FirstCallPage() {
               zh={
                 <>
                   本章用到的 PokeAPI、JSONPlaceholder、Open-Meteo
-                  都发了这个头,所以在网页里能直接用。谁在拦、服务器怎么放行、
-                  OPTIONS 预检请求又是怎么回事 —— 第 06 章会连同认证一起讲。
+                  都发了这个头,所以在网页里能直接用。谁在拦、服务器怎么放行、OPTIONS 预检请求又是怎么回事 —— 第 06 章会连同认证一起讲。
                 </>
               }
             />
@@ -985,8 +951,7 @@ export default function FirstCallPage() {
             zh: (
               <>
                 两次 await,两个步骤:第一次在<b>响应头</b>到达时兑现;
-                <code>res.json()</code> 是第二个异步步骤,负责读取并解析正文,
-                正文不是合法 JSON 时它自己也会失败。
+                <code>res.json()</code> 是第二个异步步骤,负责读取并解析正文,正文不是合法 JSON 时它自己也会失败。
               </>
             ),
           },
@@ -1001,8 +966,7 @@ export default function FirstCallPage() {
             ),
             zh: (
               <>
-                fetch 只在网络层失败时 reject。404、500 是正常收到的响应,
-                所以 <code>res.ok</code> 要你自己查。记住这个结构:
+                fetch 只在网络层失败时 reject。404、500 是正常收到的响应,所以 <code>res.ok</code> 要你自己查。记住这个结构:
                 <b>try → if (!res.ok) throw → catch</b>。
               </>
             ),
@@ -1019,8 +983,7 @@ export default function FirstCallPage() {
             zh: (
               <>
                 把数据放上页面就三步:
-                <code>fetch → res.json() → 改 DOM</code>。
-                正文是流,只能读一次,要用两次就先存进变量。
+                <code>fetch → res.json() → 改 DOM</code>。正文是流,只能读一次,要用两次就先存进变量。
               </>
             ),
           },
@@ -1037,8 +1000,7 @@ export default function FirstCallPage() {
               <>
                 一个 POST 需要三样东西:<code>method</code>、
                 <code>Content-Type: application/json</code>、
-                <code>JSON.stringify(body)</code>。少一样,
-                数据就不会以 JSON 的形式到达。
+                <code>JSON.stringify(body)</code>。少一样,数据就不会以 JSON 的形式到达。
               </>
             ),
           },
@@ -1069,8 +1031,7 @@ export default function FirstCallPage() {
             ),
             zh: (
               <>
-                CORS 报错是浏览器在执行同源策略,不是 API 出了故障,
-                也不是一个 HTTP 状态码。第 06 章会细讲。
+                CORS 报错是浏览器在执行同源策略,不是 API 出了故障,也不是一个 HTTP 状态码。第 06 章会细讲。
               </>
             ),
           },

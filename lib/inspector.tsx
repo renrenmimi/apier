@@ -510,8 +510,7 @@ export function Inspector({
                       <>
                         <code>Accept-Language</code>{" 跟随界面语言,所以 mock 返回的提示文字与你正在阅读的语言一致。"}
                         浏览器还会偷偷加上一堆(<code>Host</code>、
-                        <code>User-Agent</code>、<code>Accept</code>…)。
-                        JavaScript 读不到它们,只有 DevTools 能看见。
+                        <code>User-Agent</code>、<code>Accept</code>…)。JavaScript 读不到它们,只有 DevTools 能看见。
                       </>
                     }
                   />
@@ -543,8 +542,7 @@ export function Inspector({
                         同一份 HTTP 报文,换到终端里发。它<b>到不了</b>上面那个请求
                         —— 上面是你浏览器里的 Service Worker 答的,而 curl
                         是另一个程序,碰不到它。这条命令打的是本地克隆跑起
-                        <code>npm run dev</code> 之后的 <code>/api</code>:
-                        同一套引擎,另一份独立数据。
+                        <code>npm run dev</code> 之后的 <code>/api</code>:同一套引擎,另一份独立数据。
                       </>
                     }
                   />
@@ -580,8 +578,7 @@ function MockStatus() {
           }
           zh={
             <>
-              可以用了,但这个浏览器不让写本地存储,所以刷新之后你的改动会丢失。
-              无痕窗口常常这样。
+              可以用了,但这个浏览器不让写本地存储,所以刷新之后你的改动会丢失。无痕窗口常常这样。
             </>
           }
         />
@@ -615,9 +612,7 @@ function MockStatus() {
           }
           zh={
             <>
-              这个浏览器在当前环境下不支持 Service Worker,跑不了 Mock API。
-              发送按钮已禁用 —— 我们不会偷偷改打服务器,那样返回的东西和本章讲的
-              不是一回事。下面的代码示例依然准确。
+              这个浏览器在当前环境下不支持 Service Worker,跑不了 Mock API。发送按钮已禁用 —— 我们不会偷偷改打服务器,那样返回的东西和本章讲的不是一回事。下面的代码示例依然准确。
             </>
           }
         />
@@ -637,8 +632,7 @@ function MockStatus() {
         }
         zh={
           <>
-            Mock API 没能启动{mock.reason ? `(${mock.reason})` : ""}。
-            刷新页面可以重试。发送保持禁用 ——
+            Mock API 没能启动{mock.reason ? `(${mock.reason})` : ""}。刷新页面可以重试。发送保持禁用 ——
             免得把服务器的响应冒充成你本地的那份给你看。
           </>
         }
