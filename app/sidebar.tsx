@@ -4,7 +4,7 @@
 // 章节清单来自 lib/curriculum.ts;进度来自 lib/progress.tsx。
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { CHAPTERS, chapterByPath } from "@/lib/curriculum";
 import { useProgress } from "@/lib/progress";
 import { useL, T } from "@/lib/i18n";
@@ -13,6 +13,7 @@ import { BrandMark } from "./logo";
 
 export default function Sidebar() {
   const path = usePathname();
+  const router = useRouter();
   const L = useL();
   const { sidebarOpen, setSidebarOpen } = useShell();
   const { ready, chapterState, totalLabs, data } = useProgress();
@@ -32,7 +33,15 @@ export default function Sidebar() {
         className={`sidebar${sidebarOpen ? " open" : ""}`}
         aria-label={L({ en: "APIer chapter navigation", zh: "APIer 章节导航" })}
       >
-        <Link href="/" className="brand" onClick={close} aria-label="APIer">
+        <Link
+          href="/"
+          className="brand"
+          onClick={close}
+          aria-label="APIer"
+          prefetch={false}
+          onMouseEnter={() => router.prefetch("/")}
+          onFocus={() => router.prefetch("/")}
+        >
           <span className="brand-mark" aria-hidden>
             <BrandMark />
           </span>
@@ -56,6 +65,11 @@ export default function Sidebar() {
                 style={{ "--ch-hue": c.hue } as React.CSSProperties}
                 aria-current={active ? "page" : undefined}
                 onClick={close}
+                // 默认的视口预取会在每次加载后把其余 11 章全部取一遍(约 350 KB JS,
+                // 手机上也一样,因为关着的抽屉也算「可见」);改为读者指向某一章时再取。
+                prefetch={false}
+                onMouseEnter={() => router.prefetch(c.href)}
+                onFocus={() => router.prefetch(c.href)}
               >
                 <span className="side-num" aria-hidden>
                   {c.num}
