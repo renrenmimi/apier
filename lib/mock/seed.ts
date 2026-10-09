@@ -37,9 +37,21 @@ export interface Comment {
 export interface IdempotentRecord {
   status: number;
   body: unknown;
+  /** Fingerprint of the request body, so a reused key with a different payload is refused. */
+  fingerprint: string;
+  location?: string;
 }
 
+/**
+ * Shape and content version of the seed. A Service Worker that finds a stored
+ * store with a different version re-seeds it, so a deploy that changes the
+ * seed (or repairs a store an older engine could corrupt) reaches every visitor.
+ */
+export const SEED_VERSION = 2;
+
 export interface MockStore {
+  /** SEED_VERSION the store was created with; absent on stores from before versioning. */
+  version: number;
   users: User[];
   posts: Post[];
   comments: Comment[];
@@ -76,40 +88,49 @@ const NAMES: [string, string][] = [
   ["Katherine Johnson", "katherine"],
 ];
 
-// Post titles double as course cross-references, so they stay bilingual-neutral
-// (they are data, not UI copy, and are identical in both languages).
+// Stored data is not translated: every visitor sees the same records whatever
+// the interface language, exactly as the chapters' JSON examples are identical
+// in both languages. The text is therefore English, the language of the wire
+// examples throughout the course. Ids, authors and statuses depend only on the
+// sequence of rand() calls, so rewording these strings (keeping each list's
+// length) never moves them.
 const TOPICS = [
-  "为什么 REST 不是协议",
-  "第一次调用 API 踩的三个坑",
-  "状态码不是随便挑的",
-  "PUT 和 PATCH 到底差在哪",
-  "分页:offset 还是 cursor",
-  "把 ETag 用起来",
-  "幂等键救过我一次线上事故",
-  "GraphQL 解决的到底是什么问题",
-  "N+1 是怎么炸的",
-  "一个端点的心理落差",
-  "JWT 里别放密码",
-  "CORS 报错不是 API 挂了",
-  "OpenAPI 值不值得写",
-  "限流要给出 Retry-After",
-  "错误响应也要好好说话",
-  "缓存是 REST 的隐藏福利",
-  "Schema 是一纸契约",
-  "DataLoader 的两把刷子",
-  "别在 URL 里放动词",
-  "版本号放哪儿都行,但要一致",
+  "Why REST is not a protocol",
+  "Three common mistakes in a first API call",
+  "Status codes are not chosen at random",
+  "What really separates PUT from PATCH",
+  "Pagination: offset or cursor",
+  "Putting ETag to work",
+  "How an idempotency key prevented a double charge",
+  "What problem GraphQL actually solves",
+  "How the N+1 problem arises",
+  "Getting used to a single endpoint",
+  "Keep passwords out of a JWT",
+  "A CORS error is not a broken API",
+  "Is OpenAPI worth writing?",
+  "A rate limit should send Retry-After",
+  "Error responses deserve care too",
+  "Caching, the quiet advantage of REST",
+  "A schema is a contract",
+  "The two mechanisms behind DataLoader",
+  "Keep verbs out of URLs",
+  "Put the version anywhere, but be consistent",
 ];
 
 const BODY_SEEDS = [
-  "把这件事讲清楚要先回到最开始的问题:客户端和服务器之间,靠什么约定说话。",
-  "我一开始也以为这是小事,直到线上真的出了问题,才明白规范存在的理由。",
-  "结论先放这儿:没有银弹,只有取舍。下面把两种做法的代价摊开算一遍。",
-  "这个坑我踩过两次,第二次还是同样的原因,所以决定写下来提醒自己。",
-  "先看现象,再看原理,最后给一段能直接跑的代码。",
+  "To explain this properly we have to go back to the first question: what agreement lets a client and a server talk to each other.",
+  "This looked like a minor detail until it caused a real outage; that is when the reason for the convention became clear.",
+  "The conclusion first: there is no silver bullet, only trade-offs. The rest of this post works out the cost of each approach.",
+  "The same mistake happened twice, for the same reason both times, so it is written down here.",
+  "First the symptom, then the mechanism, and finally a piece of code you can run as it is.",
 ];
 
-const COMMENT_SEEDS = ["同意。", "这段讲得好,收藏了。", "请教一下,这个在生产上怎么落地?", "补充一个反例。"];
+const COMMENT_SEEDS = [
+  "Agreed.",
+  "Clearly explained; saved for later.",
+  "How would you apply this in production?",
+  "Here is a counterexample.",
+];
 
 /**
  * Build a fresh store from the fixed seed.
@@ -133,7 +154,7 @@ export function createSeedStore(now: number = Date.now()): MockStore {
     const topic = TOPICS[Math.floor(rand() * TOPICS.length)];
     posts.push({
       id: i,
-      title: i <= TOPICS.length ? TOPICS[i - 1] : `${topic} · 续篇 ${i}`,
+      title: i <= TOPICS.length ? TOPICS[i - 1] : `${topic} · follow-up ${i}`,
       body: BODY_SEEDS[Math.floor(rand() * BODY_SEEDS.length)],
       authorId: 1 + Math.floor(rand() * users.length),
       status: statuses[Math.floor(rand() * statuses.length)],
@@ -158,6 +179,7 @@ export function createSeedStore(now: number = Date.now()): MockStore {
   }
 
   return {
+    version: SEED_VERSION,
     users,
     posts,
     comments,

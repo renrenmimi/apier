@@ -709,30 +709,32 @@ Content-Type: application/json
                 en: "Response to the PUT",
                 zh: "PUT 的响应",
               }}
-              hl={[5, 6]}
+              hl={[6, 7]}
               code={`HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
   "id": 43,
-  "title": "Just changing the title"
+  "title": "Just changing the title",
+  "body": "",
+  "authorId": 1,
+  "createdAt": "2026-07-01T09:30:00Z"
 }`}
               note={{
                 en: (
                   <>
-                    <code>body</code>, <code>authorId</code>, and{" "}
-                    <code>createdAt</code> are no longer in the resource. This
-                    is what PUT is defined to do: the resource at this URL now
-                    equals the representation you sent. A field you left out
-                    means <b>absent</b>, not &quot;leave it as it was&quot;.
+                    The text of <code>body</code> is gone. This is what PUT is
+                    defined to do: the resource at this URL now equals the
+                    representation you sent, so a field you left out means{" "}
+                    <b>no value</b>, not &quot;leave it as it was&quot;.{" "}
+                    <code>id</code>, <code>authorId</code>, and{" "}
+                    <code>createdAt</code> survive only because the server owns
+                    them; the client never writes them.
                   </>
                 ),
                 zh: (
                   <>
-                    <code>body</code>、<code>authorId</code>、
-                    <code>createdAt</code> 已经不在资源里了。这正是 PUT
-                    的定义:这个 URL 上的资源,从此就等于你发来的那份表述。
-                    你没写的字段,含义是<b>不存在</b>,不是「保持原样」。
+                    <code>body</code> 里的内容没了。这正是 PUT 的定义:这个 URL 上的资源,从此就等于你发来的那份表述。你没写的字段,含义是<b>没有值</b>,不是「保持原样」。<code>id</code>、<code>authorId</code>、<code>createdAt</code> 还在,只是因为它们由服务器保管,客户端从来不写它们。
                   </>
                 ),
               }}
@@ -950,22 +952,22 @@ Content-Type: application/problem+json
               method: "PUT",
               path: "/mock-api/posts/7",
               headers: { Authorization: "Bearer apier-demo-token" },
-              body: '{"title":"只改一下标题"}',
+              body: '{"title":"Just changing the title"}',
               note: {
                 en: (
                   <>
-                    <b>The body is now an empty string and authorId is 0.</b> You
-                    did not delete them — PUT <i>replaces</i> the resource, and
-                    whatever you leave out of the request is simply not there
-                    afterwards. This is the most common way beginners lose data.
+                    <b>The body is now an empty string.</b> You did not delete
+                    it — PUT <i>replaces</i> the resource, so a field you leave
+                    out of the request does not keep its old value.{" "}
+                    <code>id</code>, <code>createdAt</code>, and{" "}
+                    <code>authorId</code> are still there because the server
+                    owns them, not the client. This is the most common way
+                    beginners lose data.
                   </>
                 ),
                 zh: (
                   <>
-                    <b>body 现在是空字符串,authorId 变成了 0。</b>
-                    你并没有删它们 —— PUT 是<i>整体替换</i>,
-                    请求体里没写的字段,替换完就真的不在了。
-                    新手丢数据,十有八九是这么丢的。
+                    <b>body 现在是空字符串。</b>你并没有删它 —— PUT 是<i>整体替换</i>,请求体里没写的字段不会保留原来的值。<code>id</code>、<code>createdAt</code> 和 <code>authorId</code> 还在,因为它们由服务器保管,而不是由客户端写。这是新手丢数据最常见的原因。
                   </>
                 ),
               },
@@ -986,7 +988,7 @@ Content-Type: application/problem+json
               method: "PATCH",
               path: "/mock-api/posts/7",
               headers: { Authorization: "Bearer apier-demo-token" },
-              body: '{"title":"只改一下标题"}',
+              body: '{"title":"Just changing the title"}',
               note: {
                 en: (
                   <>

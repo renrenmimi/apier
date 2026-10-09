@@ -148,11 +148,19 @@ Full architecture: `docs/mock-api.md`. The rules that matter when writing chapte
   ambient or module-level state -- that is precisely the bug this design removed.
 - Data is the course-wide blog world (User/Post/Comment), 10 users and 50 posts, so ids
   the chapters quote (such as `/posts/42`) exist.
-- Implemented for real: 201+Location, 204, PUT replacement (fields genuinely disappear),
-  PATCH merge, ETag/If-None-Match -> 304, Idempotency-Key, 429+Retry-After,
-  401 (with WWW-Authenticate) / 403, RFC 9457 problem+json, Link pagination headers.
+- Implemented for real: 201+Location, 204, PUT replacement (omitted writable fields go
+  back to their defaults; `id`, `createdAt`, `authorId` belong to the server), PATCH
+  merge, HEAD, OPTIONS/405 with `Allow`, ETag/If-None-Match -> 304, Idempotency-Key,
+  429+Retry-After, 401 (with WWW-Authenticate) / 403, RFC 9457 problem+json, Link
+  pagination headers. Full list: `docs/mock-api.md`.
 - `POST /mock-api/graphql` shares the same store as REST. `extensions.dbCalls` exposes
   the query count; `?dataloader=1` drops it from 11 to 2 for the chapter 10 N+1 lesson.
+  Mutations need the write token, as REST writes do.
+- **Mock messages follow `Accept-Language`** (the inspector sends the interface
+  language); stored data is English for everyone. A preset's request body is data, so
+  it is English in both languages. If you change the seed, bump `SEED_VERSION` in
+  `lib/mock/seed.ts` and update any ETag a chapter quotes (`tests/unit` checks the
+  one in chapter 05).
 - Knobs: `?delay=800` for visible timings; tokens `apier-demo-token` (write) and
   `apier-readonly-token` (403 on write).
 - **Response header values must be ASCII.** `lib/mock/http.ts` normalises them at the

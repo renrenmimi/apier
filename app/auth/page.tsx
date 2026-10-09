@@ -240,7 +240,7 @@ export default function AuthPage() {
               label: { en: "No credentials", zh: "不带凭证" },
               method: "POST",
               path: "/mock-api/posts",
-              body: '{"title":"试试看","body":"正文"}',
+              body: '{"title":"Trying it out","body":"Hello, API world!"}',
               note: {
                 en: (
                   <>
@@ -264,19 +264,21 @@ export default function AuthPage() {
               method: "POST",
               path: "/mock-api/posts",
               headers: { Authorization: "Bearer apier-readonly-token" },
-              body: '{"title":"试试看","body":"正文"}',
+              body: '{"title":"Trying it out","body":"Hello, API world!"}',
               note: {
                 en: (
                   <>
                     <b>403 Forbidden.</b> The token is valid, so the server knows
-                    exactly who you are — and still says no. Logging in again
-                    will not help; only different permissions will.
+                    exactly who you are — and still says no. Its{" "}
+                    <code>WWW-Authenticate</code> header names the reason:{" "}
+                    <code>error=&quot;insufficient_scope&quot;</code>, a token
+                    without enough permissions. Logging in again will not help;
+                    only different permissions will.
                   </>
                 ),
                 zh: (
                   <>
-                    <b>403 Forbidden。</b>凭证是有效的,服务器很清楚你是谁 ——
-                    但依然不让。重新登录一百次也没用,得换权限。
+                    <b>403 Forbidden。</b>凭证是有效的,服务器很清楚你是谁 —— 但依然不让。响应头 <code>WWW-Authenticate</code> 写明了原因:<code>error=&quot;insufficient_scope&quot;</code>,即这枚 token 的权限不够。用同一个身份重新登录也没用,需要的是另一种权限。
                   </>
                 ),
               },
@@ -287,7 +289,7 @@ export default function AuthPage() {
               method: "POST",
               path: "/mock-api/posts",
               headers: { Authorization: "Bearer apier-demo-token" },
-              body: '{"title":"试试看","body":"正文"}',
+              body: '{"title":"Trying it out","body":"Hello, API world!"}',
               note: {
                 en: (
                   <>

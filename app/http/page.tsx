@@ -1281,7 +1281,7 @@ export default function HttpPage() {
               label: { en: "Write without a token", zh: "不带凭证去写" },
               method: "POST",
               path: "/mock-api/posts",
-              body: '{"title":"我的第一篇","body":"正文"}',
+              body: '{"title":"My first post","body":"Hello, API world!"}',
               note: {
                 en: (
                   <>
@@ -1309,15 +1309,17 @@ export default function HttpPage() {
                 en: (
                   <>
                     <b>204</b>, no body — the answer lives entirely in the
-                    headers. <code>Access-Control-Allow-Methods</code> lists what
-                    this resource accepts. This is the preflight from chapter 06.
+                    headers. <code>Allow</code> lists the methods this resource
+                    supports. The <code>Access-Control-Allow-*</code> headers are
+                    a separate answer, meant for browsers: they say what a
+                    cross-origin request may use. A real CORS preflight is an
+                    OPTIONS request the browser sends on its own before a
+                    cross-origin request; chapter 06 covers it.
                   </>
                 ),
                 zh: (
                   <>
-                    <b>204</b>,没有正文 —— 答案全在响应头里。
-                    <code>Access-Control-Allow-Methods</code> 列出了这个资源
-                    接受哪些方法。这就是第 06 章要讲的预检请求。
+                    <b>204</b>,没有正文 —— 答案全在响应头里。<code>Allow</code> 列出这个资源支持的方法;<code>Access-Control-Allow-*</code> 是另一回事,它们是给浏览器看的 CORS 头,说明跨源请求可以使用什么。真正的 CORS 预检是浏览器在跨源请求之前自动发出的 OPTIONS 请求,第 06 章会讲。
                   </>
                 ),
               },

@@ -14,7 +14,7 @@
 // it wants to demonstrate.
 
 import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
-import { useL, T, type Loc } from "@/lib/i18n";
+import { useL, useLang, T, type Loc } from "@/lib/i18n";
 import { CodeLines } from "@/lib/code";
 import { MOCK_BASE } from "@/lib/mock/engine";
 import { useMockApi } from "@/lib/mock/client";
@@ -86,6 +86,9 @@ export function Inspector({
   title?: Loc<ReactNode>;
 }) {
   const L = useL();
+  const { lang } = useLang();
+  // The mock words its messages in the language the visitor is reading.
+  const acceptLanguage = lang === "zh" ? "zh-CN" : "en";
   const mock = useMockApi();
   const blocked = mock.phase !== "ready";
   const [method, setMethod] = useState<InspectorMethod>(defaultMethod);
@@ -110,7 +113,7 @@ export function Inspector({
       noteRef.current = over?.note ?? null;
 
       setState({ phase: "loading" });
-      const reqHeaders: Record<string, string> = { ...h };
+      const reqHeaders: Record<string, string> = { "Accept-Language": acceptLanguage, ...h };
       if (TAKES_BODY.has(m) && b.trim()) reqHeaders["Content-Type"] = "application/json";
 
       const t0 = performance.now();
@@ -163,7 +166,7 @@ export function Inspector({
         setState({ phase: "error", message: (e as Error).message });
       }
     },
-    [method, path, body, extraHeaders, mock.phase],
+    [method, path, body, extraHeaders, mock.phase, acceptLanguage],
   );
 
   const runPreset = (p: InspectorPreset) => {
@@ -190,13 +193,15 @@ export function Inspector({
       ? `/api${path.slice(MOCK_BASE.length)}`
       : path;
     const parts = [`curl -i -X ${method} http://localhost:${DEV_PORT}${localPath}`];
-    for (const [k, v] of Object.entries(extraHeaders)) parts.push(`  -H '${k}: ${v}'`);
+    for (const [k, v] of Object.entries({ "Accept-Language": acceptLanguage, ...extraHeaders })) {
+      parts.push(`  -H '${k}: ${v}'`);
+    }
     if (TAKES_BODY.has(method) && body.trim()) {
       parts.push(`  -H 'Content-Type: application/json'`);
       parts.push(`  -d '${body.replace(/\n\s*/g, "")}'`);
     }
     return parts.join(" \\\n");
-  }, [method, path, body, extraHeaders]);
+  }, [method, path, body, extraHeaders, acceptLanguage]);
 
   return (
     <div className="insp">
@@ -376,26 +381,23 @@ export function Inspector({
             {tab === "req" && (
               <>
                 <div className="insp-sub">
-                  <T en="Headers you set" zh="你设置的请求头" />
+                  <T en="Headers the inspector sent" zh="检查器发出的请求头" />
                 </div>
-                {state.result.reqHeaders.length ? (
-                  <HeaderTable rows={state.result.reqHeaders} />
-                ) : (
-                  <div className="insp-empty">
-                    <T en="None — a bare GET needs no headers." zh="一个都没设 —— 裸 GET 本来就不需要。" />
-                  </div>
-                )}
+                <HeaderTable rows={state.result.reqHeaders} />
                 <div className="insp-foot">
                   <T
                     en={
                       <>
-                        The browser silently adds more (<code>Host</code>,{" "}
+                        <code>Accept-Language</code> follows the interface
+                        language, which is why the mock&apos;s messages are in
+                        the language you are reading. The browser silently adds more (<code>Host</code>,{" "}
                         <code>User-Agent</code>, <code>Accept</code>…). JavaScript
                         cannot read those — only DevTools can show them.
                       </>
                     }
                     zh={
                       <>
+                        <code>Accept-Language</code>{" 跟随界面语言,所以 mock 返回的提示文字与你正在阅读的语言一致。"}
                         浏览器还会偷偷加上一堆(<code>Host</code>、
                         <code>User-Agent</code>、<code>Accept</code>…)。
                         JavaScript 读不到它们,只有 DevTools 能看见。
