@@ -141,13 +141,15 @@ export default function RestPage() {
                 <>
                   The order matters. <b>REST did not come first, with the web
                   built to follow it.</b> The web came first. REST is
-                  Fielding&apos;s description of why the web works.
+                  Fielding&apos;s description of why the web works. After that
+                  the two grew together: Fielding worked out REST while helping
+                  to write HTTP/1.1, and used it to guide that design (section
+                  6.1 of his dissertation).
                 </>
               }
               zh={
                 <>
-                  注意这个顺序:<b>不是先有 REST,再照着它造出 Web</b>。
-                  是 Web 先跑通了,REST 是对「它为什么跑得通」的总结。
+                  注意这个顺序:<b>不是先有 REST,再照着它造出 Web</b>。是 Web 先跑通了,REST 是对「它为什么跑得通」的总结。此后两者一起成长:Fielding 在参与制定 HTTP/1.1 的同时提炼出 REST,又用它指导了 HTTP/1.1 的设计(见他论文的 §6.1)。
                 </>
               }
             />
@@ -795,7 +797,8 @@ Content-Type: application/json
                 public web APIs (<i>RESTful or RESTless — Current State of
                 Today&apos;s Top Web APIs</i>, arXiv:1902.10514) found that only
                 a small share of them put links to related resources in their
-                responses. HATEOAS is the least implemented of the constraints.
+                responses. HATEOAS is the least implemented part of the uniform
+                interface.
                 Four reasons come up again and again. First, the client and the
                 API are usually written by the same team, so discovering
                 endpoints at runtime has little value. Second, links make
@@ -811,7 +814,7 @@ Content-Type: application/json
                 (《RESTful or RESTless — Current State of Today&apos;s Top Web
                 APIs》,arXiv:1902.10514)发现,
                 会在响应里给出相关资源链接的 API 只占很小一部分 ——
-                HATEOAS 是六条约束里落地最差的一条。常见原因有四个:
+                {"HATEOAS 是统一接口的几个子约束里落地最差的一条。常见原因有四个:"}
                 第一,客户端和 API 多半出自同一个团队,运行时动态发现没什么用武之地;
                 第二,链接让响应变大,还多出往返;第三,没有统一格式 ——
                 HAL、JSON:API、Siren 各行其是;第四,
@@ -948,16 +951,15 @@ Content-Type: application/json
             en: (
               <>
                 HATEOAS asks the server to put the available next steps into the
-                response as links. Few APIs do it, and Fielding considers those
-                APIs not REST. GitHub&apos;s <code>*_url</code> fields are a
-                partial example.
+                response as links. Few APIs do it, and in Fielding&apos;s view
+                an API that does not is not REST. GitHub&apos;s{" "}
+                <code>*_url</code> fields are a partial example.
               </>
             ),
             zh: (
               <>
                 HATEOAS 要求服务器把「接下来能做什么」以链接的形式放进响应。
-                真正做到的 API 很少,而 Fielding 认为那些 API 不算 REST。
-                GitHub 的一排 <code>*_url</code> 字段是一个局部的例子。
+                真正做到的 API 很少;在 Fielding 看来,没有做到这一点的 API 就不能叫 REST。GitHub 的一排 <code>*_url</code> 字段是一个局部的例子。
               </>
             ),
           },

@@ -4,7 +4,7 @@
 // http 是行结构(起始行 / Header / 空行 / 正文),单独按行解析;
 // 最后统一切成「行 × token」二维数组,供 CodeBlock 渲染行号与高亮行。
 
-export type CodeLangId = "js" | "json" | "graphql" | "bash" | "http";
+export type CodeLangId = "js" | "json" | "graphql" | "bash" | "http" | "html";
 
 export type TokType =
   | "kw" // 关键字
@@ -175,5 +175,7 @@ function highlightGeneric(code: string, lang: CodeLangId): Tok[][] {
 /** 把整段代码高亮成「行 × token」二维数组 */
 export function highlight(code: string, lang: CodeLangId): Tok[][] {
   if (lang === "http") return highlightHttp(code);
+  // HTML 不着色:按 JS 或 bash 的规则高亮只会给出错误的颜色
+  if (lang === "html") return code.split("\n").map((s) => [{ t: "", s }]);
   return highlightGeneric(code, lang);
 }
