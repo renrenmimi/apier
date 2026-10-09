@@ -58,7 +58,34 @@ async function probe(): Promise<{ ok: boolean; durable: boolean }> {
   }
 }
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
+/** How long to wait for the worker to take control before probing anyway. */
+const CONTROL_TIMEOUT_MS = 5000;
+
+/**
+ * Resolves once a worker controls this page, or after a timeout.
+ *
+ * On a first visit control arrives through clients.claim() during activation.
+ * After a hard reload (Shift+Reload) the page starts uncontrolled and the
+ * worker is already active, so it has to be asked to claim the page. Probing
+ * before either happens would send the probe to the network, which answers
+ * 404 and logs an error in the console.
+ */
+async function takeControl(): Promise<void> {
+  const sw = navigator.serviceWorker;
+  if (sw.controller) return;
+  const changed = new Promise<void>((resolve) => {
+    sw.addEventListener("controllerchange", () => resolve(), { once: true });
+  });
+  const registration = await Promise.race([
+    sw.ready,
+    sleep(CONTROL_TIMEOUT_MS).then(() => null),
+  ]);
+  if (sw.controller) return;
+  registration?.active?.postMessage({ type: "claim" });
+  await Promise.race([changed, sleep(CONTROL_TIMEOUT_MS)]);
+}
 
 export function MockApiProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<MockState>({ phase: "starting", durable: true });
@@ -92,9 +119,11 @@ export function MockApiProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      // Poll rather than trust `controller`: skipWaiting + clients.claim make
-      // control arrive shortly after activation, and the probe is the only
-      // thing that proves the worker is actually answering /mock-api.
+      await takeControl();
+      if (cancelled) return;
+
+      // Control alone is not proof: the probe is the only thing that shows the
+      // worker is actually answering /mock-api, so keep checking briefly.
       for (let i = 0; i < PROBE_ATTEMPTS && !cancelled; i++) {
         const { ok, durable } = await probe();
         if (cancelled) return;
