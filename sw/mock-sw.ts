@@ -27,6 +27,19 @@ self.addEventListener("activate", (event) => {
 });
 
 /**
+ * Take over a page that loaded without a controller.
+ *
+ * A hard reload (Shift+Reload) deliberately bypasses the worker, so the page
+ * comes up uncontrolled. The worker is already active and never sees
+ * `activate` again, so nothing would ever claim that page and /mock-api would
+ * fall through to the network. The client asks for a claim instead.
+ */
+self.addEventListener("message", (event) => {
+  const data = event.data as { type?: unknown } | null;
+  if (data && data.type === "claim") event.waitUntil(self.clients.claim());
+});
+
+/**
  * In-memory mirror of the visitor's store.
  *
  * A Service Worker can be stopped at any moment, so IndexedDB remains the

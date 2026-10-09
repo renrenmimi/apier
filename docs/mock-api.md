@@ -42,9 +42,13 @@ A Service Worker does not control the page the instant it is registered. Until
 it does, a request to `/mock-api` would reach the network and return a 404 HTML
 page — a wrong answer dressed up as a lesson.
 
-So readiness is proven, not assumed. The client probes `/mock-api/__ready` and
-requires the worker's own `X-Mock-Scope: browser-local` header before enabling
-**Send**. Until then, and whenever the worker cannot start at all, the inspector
+So readiness is proven, not assumed. The client first waits until the worker
+controls the page. On a first visit that happens through `clients.claim()`
+during activation. A hard reload (Shift+Reload) loads the page without a
+controller while the worker is already active, so the client asks that worker
+to claim the page. Only then does it probe `/mock-api/__ready`, so the probe
+never reaches the network, and it requires the worker's own
+`X-Mock-Scope: browser-local` header before enabling **Send**. Until then, and whenever the worker cannot start at all, the inspector
 disables its controls and says why. It never falls back to the server.
 
 If IndexedDB is unavailable (a private window, blocked storage), the worker
