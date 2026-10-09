@@ -382,18 +382,15 @@ const JSON_LINES: JsonLine[] = [
       <T
         en={
           <>
-            The closing brace. The important part: JSON is <b>text</b>. Only
-            text travels over the network. In your JavaScript you call{" "}
+            The closing brace. The important part: JSON is <b>text</b>. A
+            JSON response reaches your JavaScript as a string, so you call{" "}
             <code>response.json()</code> or <code>JSON.parse()</code> to turn
-            that text back into a real object before you can read fields from
-            it.
+            that text into a real object before you can read fields from it.
           </>
         }
         zh={
           <>
-            收尾。重要的事:JSON 本质上是<b>一段文本</b>。在网线上跑的永远是文本,
-            到了你的 JS 里,要用 <code>response.json()</code> 或{" "}
-            <code>JSON.parse()</code> 把文本「复活」成真正的对象,才能用点号取值。
+            收尾。重要的事:JSON 本质上是<b>一段文本</b>。JSON 响应到了你的 JS 里是一段字符串,要用 <code>response.json()</code> 或 <code>JSON.parse()</code> 把它解析成真正的对象,才能用点号取值。
           </>
         }
       />

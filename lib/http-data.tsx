@@ -62,7 +62,8 @@ export const LABS: Lab[] = [
           (the format of the response body), <code>cache-control</code> (whether
           the response may be stored), and <code>accept</code> (the formats the
           client will take). DevTools shows every header name in lowercase. That
-          is normal, because header names are case-insensitive. If you also
+          is normal: header names are case-insensitive, and HTTP/2 and HTTP/3
+          send them in lowercase on the wire. If you also
           found <code>etag</code> or <code>authorization</code>, you have now
           seen two of the five headers from section 05 in a real message.
         </p>
@@ -72,8 +73,7 @@ export const LABS: Lab[] = [
           典型的收获长这样:方法 <b>GET</b>,状态码 <b>200</b>,header 比如{" "}
           <code>content-type: application/json; charset=utf-8</code>
           (响应正文是什么格式)、<code>cache-control</code>(这份响应能不能存)、
-          <code>accept</code>(客户端能接受什么格式)。注意 DevTools 里 header
-          名全显示成小写 —— 这是正常的,header 名本来就不区分大小写。要是你还抄到了{" "}
+          <code>accept</code>(客户端能接受什么格式)。注意 DevTools 里 header 名全显示成小写 —— 这是正常的:header 名本来就不区分大小写,而且 HTTP/2 与 HTTP/3 在线路上就用小写传输头名。要是你还抄到了{" "}
           <code>etag</code> 或 <code>authorization</code>,§05
           的五位常客你已经在真实报文里见到两位了。
         </p>
@@ -623,14 +623,14 @@ export const QUIZ: QuizItem[] = [
       en: (
         <>
           In the URL{" "}
-          <code>https://api.shop.com/v1/products/42?sort=price</code>, which
-          part is <code>api.shop.com</code>?
+          <code>https://api.shop.example/v1/products/42?fields=name,price</code>, which
+          part is <code>api.shop.example</code>?
         </>
       ),
       zh: (
         <>
-          URL <code>https://api.shop.com/v1/products/42?sort=price</code> 中,
-          <code>api.shop.com</code> 属于哪个部分?
+          URL <code>https://api.shop.example/v1/products/42?fields=name,price</code> 中,
+          <code>api.shop.example</code> 属于哪个部分?
         </>
       ),
     },
@@ -668,14 +668,13 @@ export const QUIZ: QuizItem[] = [
       {
         en: (
           <>
-            The query string is <code>sort=price</code>, after the{" "}
+            The query string is <code>fields=name,price</code>, after the{" "}
             <code>?</code>. It carries options for the result.
           </>
         ),
         zh: (
           <>
-            查询字符串是 <code>?</code> 后面的 <code>sort=price</code> ——
-            对结果的附加选项。
+            查询字符串是 <code>?</code> 后面的 <code>fields=name,price</code> —— 对结果的附加选项。
           </>
         ),
       },

@@ -195,15 +195,13 @@ console.log(pika.height, pika.weight); // 4 60`}
               The answer is 4 and 60. The units are <b>decimetres</b> and{" "}
               <b>hectograms</b>, so 0.4 m and 6 kg. There is an important lesson
               here: <b>a number alone does not tell you its unit. Read the
-              documentation.</b> API documentation is the menu, and chapter 01
-              shows you how to read it.
+              documentation.</b> API documentation is the menu; chapter 05
+              introduces OpenAPI, the machine-readable form of it.
             </p>
           }
           zh={
             <p>
-              答案是 4 和 60 —— 单位是<b>分米</b>和<b>百克</b>(0.4 米、6 公斤)。
-              这里有个重要教训:<b>光看数字猜不出单位,得读文档</b>。API
-              文档就是餐厅的菜单,第 01 章会教你怎么读。
+              答案是 4 和 60 —— 单位是<b>分米</b>和<b>百克</b>(0.4 米、6 公斤)。这里有个重要教训:<b>光看数字猜不出单位,得读文档</b>。API 文档就是餐厅的菜单;第 05 章会讲机器可读的接口文档 OpenAPI。
             </p>
           }
         />
@@ -608,11 +606,11 @@ export const QUIZ: QuizItem[] = [
     q: {
       en: (
         <>
-          Which of these everyday actions almost certainly involve an API call?
-          (Select all that apply.)
+          Which of these everyday actions almost certainly involve a network API
+          call? (Select all that apply.)
         </>
       ),
-      zh: <>下面哪些日常场景的背后,几乎必然有 API 调用?(多选)</>,
+      zh: <>下面哪些日常场景的背后,几乎必然有一次网络 API 调用?(多选)</>,
     },
     opts: [
       {
@@ -662,9 +660,7 @@ export const QUIZ: QuizItem[] = [
       ),
       zh: (
         <>
-          判断标准就一条:<b>这件事需要「别人家的数据或服务」吗?</b>
-          支付要问银行,登录要问微信,加载评论要问网站服务器 —— 都是 API。
-          本地算 3+4,自己就能办,不用发请求。
+          判断标准就一条:<b>这件事需要「别人家的数据或服务」吗?</b>支付要问银行,登录要问微信,加载评论要问网站服务器 —— 都是网络 API 调用。本地算 3+4,自己就能办,不用发请求。
         </>
       ),
     },
@@ -788,15 +784,15 @@ export const QUIZ: QuizItem[] = [
     why: {
       en: (
         <>
-          Remember this rule: <b>only text (bytes) travels over the network</b>.{" "}
-          <code>response.json()</code> turns that text into an object. Skip this
-          step and every field you read will be undefined.
+          What travels over the network is bytes, and a JSON response arrives in
+          your code as <b>text</b>. <code>response.json()</code> turns that
+          text into an object; skip this step and every field you read will be
+          undefined.
         </>
       ),
       zh: (
         <>
-          记住这条铁律:<b>网络上跑的永远是文本(字节)</b>。response.json()
-          做的事就是「文本 → 对象」,这一步漏掉,后面全是 undefined。
+          网络上传输的是字节,JSON 响应到了你的代码里是<b>一段文本</b>。response.json() 做的事就是「文本 → 对象」,漏掉这一步,后面读到的字段全是 undefined。
         </>
       ),
     },
